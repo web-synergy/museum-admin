@@ -20,7 +20,7 @@ export default defineConfig(({ command }) => {
   };
 
   if (command !== 'serve') {
-    config.base = '/kavaleridze-admin/';
+    config.base = '/museum-admin/';
   }
 
   return config;

@@ -57,7 +57,7 @@ const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: import.meta.env.DEV ? '/' : '/kavaleridze-admin/' }
+  { basename: import.meta.env.DEV ? '/' : '/museum-admin/' }
 );
 
 function App() {
