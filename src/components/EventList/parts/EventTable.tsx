@@ -40,9 +40,7 @@ const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
             events.map((event) => (
               <TableRow key={event.id}>
                 <TableCell sx={{ fontWeight: 400 }}>
-                  {event.begin
-                    ? DateTime.fromISO(event.begin).toLocaleString()
-                    : ''}
+                  {DateTime.fromISO(event.created).toLocaleString()}
                 </TableCell>
                 <TableCell>{event.title}</TableCell>
                 <TableCell align="right">

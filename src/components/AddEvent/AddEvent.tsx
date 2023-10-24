@@ -1,11 +1,13 @@
-import { FC } from 'react';
-import { Container } from '@mui/material';
+import { FC, useState } from 'react';
+import { Container, Box, Typography } from '@mui/material';
 import PageTemplate from '../Common/PageTemplate';
 import EventForm from '../EventForm/EventForm';
+import ModalBase from '../Common/ModalBase';
 import { IEventValues } from '@/types/events';
 import { addEvent } from '@/api';
 
 const AddEvent: FC = () => {
+  const [confirmModal, setConfirmModal] = useState(false);
   const defaultValues: IEventValues = {
     type: '',
     title: '',
@@ -17,8 +19,8 @@ const AddEvent: FC = () => {
   };
 
   const onAddEventSubmit = async (data: IEventValues) => {
-    const { data: responseData } = await addEvent(data);
-    console.log(responseData);
+    await addEvent(data);
+    setConfirmModal(true);
   };
 
   return (
@@ -35,6 +37,11 @@ const AddEvent: FC = () => {
           type="add"
         />
       </Container>
+      <ModalBase open={confirmModal} onClose={() => setConfirmModal(false)}>
+        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
+          <Typography>Подія була успішно опублікована.</Typography>
+        </Box>
+      </ModalBase>
     </PageTemplate>
   );
 };
