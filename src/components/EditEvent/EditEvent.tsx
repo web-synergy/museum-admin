@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageTemplate from '../Common/PageTemplate';
 import { Container, Box, Typography } from '@mui/material';
 import { IEvent, IEventValues } from '@/types/events';
-import { getEventById } from '@/api';
+import { getEventById, editEvent } from '@/api';
 import EventForm from '../EventForm/EventForm';
 import ModalBase from '../Common/ModalBase';
 
@@ -38,7 +38,7 @@ const EditEvent = () => {
     if (event) {
       console.log('event', event);
       console.log('data', data);
-      // await editEvent(data, event.id);
+      await editEvent(data, event.id);
       onOpenModal();
     }
   };
