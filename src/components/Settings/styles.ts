@@ -15,7 +15,7 @@ export const CustomDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.gray.light,
 }))
 
-export const SettingsContainer = styled(Box)<BoxProps>(({ theme }) => ({
+export const SettingsHeaderContainer = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
     padding: '24px 16px',
   },
@@ -27,7 +27,7 @@ export const SettingsContainer = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }))
 
-export const TabsContainer = styled(Box)<BoxProps>(({ theme }) => ({
+export const MainContainer = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
     paddingTop: '24px',
     paddingLeft: '16px',
@@ -40,7 +40,7 @@ export const TabsContainer = styled(Box)<BoxProps>(({ theme }) => ({
 
 export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
   position: 'relative',
-  margin: '0px auto',
+  // margin: '0px auto',
   [theme.breakpoints.up('xs')]: {
     width: '288px',
   },
