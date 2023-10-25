@@ -1,15 +1,14 @@
 import { FC, useState, useRef, DragEvent, ChangeEvent, useEffect } from 'react';
 import { InputLabel, Box, Typography, IconButton } from '@mui/material';
-import { Controller } from 'react-hook-form';
-import SvgSpriteIcon from '../../Common/SvgSprite';
-import picture from '@/assets/images/picture.svg';
-import { InputFormProps } from '@/types/events';
-import { VisuallyHiddenInput, DragDropWrapper, UploadImageBox } from './styles';
+import { Controller, useController } from 'react-hook-form';
+import SvgSpriteIcon from '@/components/Common/SvgSprite';
+// import Loader from '@/components/Common/Loader';
 import EditImage from './EditImage';
-import { IImageState } from '@/types/events';
-import { saveNewImage } from '@/helpers/imageUrl';
-import { useController } from 'react-hook-form';
+import { VisuallyHiddenInput, DragDropWrapper, UploadImageBox } from './styles';
+import { IImageState, InputFormProps } from '@/types/events';
 import { getImage } from '@/api';
+import { saveNewImage } from '@/helpers/imageUrl';
+import picture from '@/assets/images/picture.svg';
 
 interface ImageFieldProps extends InputFormProps {
   error: boolean;
@@ -25,6 +24,7 @@ const ImageField: FC<ImageFieldProps> = ({
   const {
     field: { value, onChange },
   } = useController({ control, name });
+  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<IImageState | null>(null);
   const [banner, setBanner] = useState<IImageState | null>(null);
   const [open, setOpen] = useState(false);
@@ -46,8 +46,6 @@ const ImageField: FC<ImageFieldProps> = ({
         setBanner(image);
       };
       getImageFile();
-      //ToDo convert image into base64 and save it as image and banner
-      console.log('edit page need to convert image');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
@@ -60,16 +58,21 @@ const ImageField: FC<ImageFieldProps> = ({
   const onCloseModal = () => setOpen(false);
 
   const setFile = async (file: File) => {
+    setLoading(true);
     const serverImage = await saveNewImage(file);
     setImage(serverImage);
     setBanner(serverImage);
+    setLoading(false);
   };
 
-  const onChangeImage = (image: IImageState) => {
-    setBanner(image);
+  const onChangeImage = async (file: Blob) => {
+    setLoading(true);
+    const serverImage = await saveNewImage(file);
+    setBanner(serverImage);
+    setLoading(false);
   };
 
-  const onDrop = (e: DragEvent<HTMLDivElement>) => {
+  const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const { files } = e.dataTransfer;
     if (files.length > 0) {
@@ -86,7 +89,6 @@ const ImageField: FC<ImageFieldProps> = ({
     const { files } = e.target;
     if (!files || files.length === 0) return;
     if (files[0].type.split('/')[0] !== 'image') return;
-
     setFile(files[0]);
   };
 
@@ -113,49 +115,64 @@ const ImageField: FC<ImageFieldProps> = ({
             >
               {banner ? (
                 <Box position="relative">
-                  <Box
-                    component="img"
-                    src={banner.url}
-                    alt="events image"
-                    sx={{
-                      width: '100%',
-                      height: 'auto',
-                      maxHeight: 900,
-                    }}
-                  />
-                  <IconButton
-                    aria-label="edit-image"
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      boxShadow:
-                        '0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 4px 0px rgba(0, 0, 0, 0.03), 0px 10px 6px 0px rgba(0, 0, 0, 0.02), 0px 17px 7px 0px rgba(0, 0, 0, 0.01), 0px 27px 7px 0px rgba(0, 0, 0, 0.00)',
-                    }}
-                    onClick={onOpenModal}
-                  >
-                    <SvgSpriteIcon iconId="edit" />
-                  </IconButton>
+                  {loading ? (
+                    // <Loader visible={loading} />
+                    <div>loading...</div>
+                  ) : (
+                    <>
+                      <Box
+                        component="img"
+                        src={banner.url}
+                        alt="events image"
+                        sx={{
+                          width: '100%',
+                          height: 'auto',
+                          maxHeight: 900,
+                        }}
+                      />
+                      <IconButton
+                        aria-label="edit-image"
+                        sx={{
+                          position: 'absolute',
+                          top: 16,
+                          right: 16,
+                          boxShadow:
+                            '0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 4px 0px rgba(0, 0, 0, 0.03), 0px 10px 6px 0px rgba(0, 0, 0, 0.02), 0px 17px 7px 0px rgba(0, 0, 0, 0.01), 0px 27px 7px 0px rgba(0, 0, 0, 0.00)',
+                        }}
+                        onClick={onOpenModal}
+                      >
+                        <SvgSpriteIcon iconId="edit" />
+                      </IconButton>
+                    </>
+                  )}
                 </Box>
               ) : (
                 <UploadImageBox component="label">
-                  <Box
-                    component="img"
-                    src={picture}
-                    alt="picture"
-                    sx={{ mr: 1 }}
-                  />
-                  <Box>
-                    <Typography sx={{ fontWeight: 600 }}>
-                      Завантажити файл
-                    </Typography>
-                    <Typography>допустимий формат файлів — .jpeg</Typography>
-                  </Box>
-                  <VisuallyHiddenInput
-                    type="file"
-                    ref={imageRef}
-                    onChange={onUploadImage}
-                  />
+                  {loading ? (
+                    <Loader visible={loading} />
+                  ) : (
+                    <>
+                      <Box
+                        component="img"
+                        src={picture}
+                        alt="picture"
+                        sx={{ mr: 1 }}
+                      />
+                      <Box>
+                        <Typography sx={{ fontWeight: 600 }}>
+                          Завантажити файл
+                        </Typography>
+                        <Typography>
+                          допустимий формат файлів — .jpeg
+                        </Typography>
+                      </Box>
+                      <VisuallyHiddenInput
+                        type="file"
+                        ref={imageRef}
+                        onChange={onUploadImage}
+                      />
+                    </>
+                  )}
                 </UploadImageBox>
               )}
             </DragDropWrapper>
@@ -169,6 +186,7 @@ const ImageField: FC<ImageFieldProps> = ({
           imageSrc={image.url}
           onChangeImage={onChangeImage}
           onUploadFile={onUploadImage}
+          loading={loading}
         />
       )}
     </>

@@ -37,6 +37,7 @@ const AddEvent: FC = () => {
           type="add"
         />
       </Container>
+
       <ModalBase open={confirmModal} onClose={() => setConfirmModal(false)}>
         <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
           <Typography>Подія була успішно опублікована.</Typography>

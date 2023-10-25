@@ -10,17 +10,17 @@ import {
   VisuallyHiddenInput,
 } from './styles';
 import RatioSelect from './RatioSelect';
+// import Loader from '@/components/Common/Loader';
 import { aspectRatioMenu } from '@/assets/constants/aspectRatio';
 import { getCroppedImage } from '@/helpers/cropImage';
-import { IImageState } from '@/types/events';
-import { saveNewImage } from '@/helpers/imageUrl';
 
 interface EditImageProps {
   open: boolean;
   onClose: () => void;
   imageSrc: string;
-  onChangeImage: (url: IImageState) => void;
+  onChangeImage: (url: Blob) => void;
   onUploadFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  loading: boolean;
 }
 
 const EditImage: FC<EditImageProps> = ({
@@ -29,6 +29,7 @@ const EditImage: FC<EditImageProps> = ({
   imageSrc,
   onChangeImage,
   onUploadFile,
+  loading,
 }) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [aspectRatio, setAspectRatio] = useState<number>(
@@ -61,8 +62,8 @@ const EditImage: FC<EditImageProps> = ({
     if (!croppedImage) {
       return;
     }
-    const newImage = await saveNewImage(croppedImage);
-    onChangeImage(newImage);
+
+    await onChangeImage(croppedImage);
     onClose();
   };
 
@@ -95,17 +96,22 @@ const EditImage: FC<EditImageProps> = ({
           </IconButton>
         </Stack>
         <CropWrapper ref={containerRef} ratio={aspectRatio}>
-          <Cropper
-            image={imageSrc}
-            crop={crop}
-            aspect={aspectRatio}
-            rotation={rotation}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            zoom={zoom}
-            showGrid={false}
-            objectFit="cover"
-          />
+          {loading ? (
+            // <Loader visible={loading} />
+            <div>loading...</div>
+          ) : (
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              aspect={aspectRatio}
+              rotation={rotation}
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              zoom={zoom}
+              showGrid={false}
+              objectFit="cover"
+            />
+          )}
         </CropWrapper>
         <Stack direction={{ xs: 'column', md: 'row' }} gap={2}>
           <RatioSelect onChangeValue={onChangeAspectRatio} />

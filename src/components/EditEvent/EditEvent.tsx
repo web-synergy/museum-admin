@@ -6,8 +6,10 @@ import { IEvent, IEventValues } from '@/types/events';
 import { getEventById, editEvent } from '@/api';
 import EventForm from '../EventForm/EventForm';
 import ModalBase from '../Common/ModalBase';
+// import Loader from '../Common/Loader';
 
 const EditEvent = () => {
+  const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState<IEvent | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
@@ -22,11 +24,13 @@ const EditEvent = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     const getEvent = async () => {
       if (slug) {
         const event = await getEventById(slug);
         if (event) {
           setEvent(event);
+          setLoading(false);
         }
       }
     };
@@ -36,8 +40,6 @@ const EditEvent = () => {
 
   const unPublishEvent = async (data: IEventValues) => {
     if (event) {
-      console.log('event', event);
-      console.log('data', data);
       await editEvent(data, event.id);
       onOpenModal();
     }
@@ -45,20 +47,26 @@ const EditEvent = () => {
 
   return (
     <PageTemplate title="Редагувати подію">
-      <Container
-        sx={{
-          pt: { xs: 4, md: 4, lg: 5 },
-          pb: { xs: '60px', md: 10, lg: 15 },
-        }}
-      >
-        {event && (
-          <EventForm
-            defaultValues={event}
-            onPublish={unPublishEvent}
-            type="edit"
-          />
-        )}
-      </Container>
+      {loading ? (
+        // <Loader visible={loading} />
+        <div>Loading...</div>
+      ) : (
+        <Container
+          sx={{
+            pt: { xs: 4, md: 4, lg: 5 },
+            pb: { xs: '60px', md: 10, lg: 15 },
+          }}
+        >
+          {event && (
+            <EventForm
+              defaultValues={event}
+              onPublish={unPublishEvent}
+              type="edit"
+            />
+          )}
+        </Container>
+      )}
+
       <ModalBase open={openModal} onClose={onCloseModal}>
         <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
           <Typography>Зміни збережено.</Typography>
