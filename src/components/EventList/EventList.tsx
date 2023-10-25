@@ -16,25 +16,18 @@ const EventList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const initialRef = useRef<boolean | null>(null);
 
-  console.log(loading);
-
   useEffect(() => {
-    console.log('useEffect');
-
     if (!initialRef.current && page === 0) {
-      console.log('initial request');
       initialRef.current = true;
       getEventList(page);
     }
 
     if (page > 0) {
-      console.log('change page');
       getEventList(page);
     }
   }, [page]);
 
   const getEventList = async (page: number) => {
-    console.log('getEventList');
     setLoading(true);
     const {
       data: { content, totalPages },
@@ -54,6 +47,7 @@ const EventList = () => {
       console.log(error);
     }
   };
+
   return (
     <PageTemplate title="Редагувати події">
       <ListContainer>

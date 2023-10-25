@@ -3,6 +3,7 @@ import { InputLabel, Box, Typography, IconButton } from '@mui/material';
 import { Controller, useController } from 'react-hook-form';
 import SvgSpriteIcon from '@/components/Common/SvgSprite';
 // import Loader from '@/components/Common/Loader';
+import ModalBase from '@/components/Common/ModalBase';
 import EditImage from './EditImage';
 import { VisuallyHiddenInput, DragDropWrapper, UploadImageBox } from './styles';
 import { IImageState, InputFormProps } from '@/types/events';
@@ -27,7 +28,8 @@ const ImageField: FC<ImageFieldProps> = ({
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<IImageState | null>(null);
   const [banner, setBanner] = useState<IImageState | null>(null);
-  const [open, setOpen] = useState(false);
+  const [editImageModal, setEditImageModal] = useState(false);
+  const [openErrorModal, setOpenErrorModal] = useState(false);
   const imageRef = useRef(null);
 
   useEffect(() => {
@@ -54,21 +56,27 @@ const ImageField: FC<ImageFieldProps> = ({
     if (banner) onChange(banner.id);
   }, [banner, onChange]);
 
-  const onOpenModal = () => setOpen(true);
-  const onCloseModal = () => setOpen(false);
-
   const setFile = async (file: File) => {
     setLoading(true);
     const serverImage = await saveNewImage(file);
-    setImage(serverImage);
-    setBanner(serverImage);
+    if (serverImage) {
+      setImage(serverImage);
+      setBanner(serverImage);
+    } else {
+      setOpenErrorModal(true);
+    }
+
     setLoading(false);
   };
 
   const onChangeImage = async (file: Blob) => {
     setLoading(true);
     const serverImage = await saveNewImage(file);
-    setBanner(serverImage);
+    if (serverImage) {
+      setBanner(serverImage);
+    } else {
+      setEditImageModal(true);
+    }
     setLoading(false);
   };
 
@@ -139,7 +147,7 @@ const ImageField: FC<ImageFieldProps> = ({
                           boxShadow:
                             '0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 4px 0px rgba(0, 0, 0, 0.03), 0px 10px 6px 0px rgba(0, 0, 0, 0.02), 0px 17px 7px 0px rgba(0, 0, 0, 0.01), 0px 27px 7px 0px rgba(0, 0, 0, 0.00)',
                         }}
-                        onClick={onOpenModal}
+                        onClick={() => setEditImageModal(true)}
                       >
                         <SvgSpriteIcon iconId="edit" />
                       </IconButton>
@@ -149,7 +157,8 @@ const ImageField: FC<ImageFieldProps> = ({
               ) : (
                 <UploadImageBox component="label">
                   {loading ? (
-                    <Loader visible={loading} />
+                    // <Loader visible={loading} />
+                    <div>loading...</div>
                   ) : (
                     <>
                       <Box
@@ -181,14 +190,22 @@ const ImageField: FC<ImageFieldProps> = ({
       />
       {image && (
         <EditImage
-          open={open}
-          onClose={onCloseModal}
+          open={editImageModal}
+          onClose={() => setEditImageModal(false)}
           imageSrc={image.url}
           onChangeImage={onChangeImage}
           onUploadFile={onUploadImage}
           loading={loading}
         />
       )}
+      <ModalBase open={openErrorModal} onClose={() => setOpenErrorModal(false)}>
+        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
+          <Typography>
+            Невірний формат картинки. Додавати можна картинки в форматах .jpg,
+            .png, .jpeg, .bmp, .jiff.
+          </Typography>
+        </Box>
+      </ModalBase>
     </>
   );
 };
