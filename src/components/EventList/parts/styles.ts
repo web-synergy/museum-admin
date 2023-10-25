@@ -16,7 +16,6 @@ export const ListContainer = styled(Box)(({ theme }) => ({
     paddingBottom: 120,
     paddingRight: 80,
     maxWidth: 1129,
-    margin: '0 auto',
   },
 }));
 

@@ -26,9 +26,6 @@ export const logout = () => {
 };
 
 export const getContactInfo = () => {
-  console.log('BASE-URL from environment', BASE_URL);
-  console.log('axios base url', instance.getUri());
-
   return instance.get('/museum_data');
 };
 
