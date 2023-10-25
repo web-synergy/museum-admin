@@ -12,6 +12,7 @@ export interface IEventValues {
 
 export interface IEvent extends IEventValues {
   id: string;
+  created: string;
 }
 
 interface IContactInfo {

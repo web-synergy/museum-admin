@@ -12,6 +12,7 @@ interface AuthContextType {
   isAuth: boolean;
   signIn: (username: string, password: string) => Promise<boolean>;
   signOut: () => void;
+  removeCredentials: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>(null!);
@@ -35,6 +36,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   });
 
+  const removeCredentials = () => {
+    localStorage.removeItem(localStorageKey);
+    setToken(null);
+    setIsAuth(false);
+    instance.defaults.headers.common['Authorization'] = undefined;
+  };
   const signIn = async (username: string, password: string) => {
     //ToDo: change to request for sing in
 
@@ -49,10 +56,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       setIsAuth(true);
       return true;
     } catch (error) {
-      localStorage.removeItem(localStorageKey);
-      setToken(null);
-      setIsAuth(false);
-      instance.defaults.headers.common['Authorization'] = undefined;
+      removeCredentials();
       return false;
     }
   };
@@ -60,13 +64,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const signOut = async () => {
     //ToDo: add request for sign out
     await logout();
-    localStorage.removeItem(localStorageKey);
-    setToken(null);
-    setIsAuth(false);
-    instance.defaults.headers.common['Authorization'] = undefined;
+    removeCredentials();
   };
 
-  const value = { isAuth, signIn, signOut };
+  const value = { isAuth, signIn, signOut, removeCredentials };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

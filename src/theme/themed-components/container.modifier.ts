@@ -21,6 +21,7 @@ export const MuiContainer: Components<Theme>['MuiContainer'] = {
         paddingLeft: '24px',
         paddingRight: '80px',
         maxWidth: 1129,
+        marginLeft: 0,
       },
     }),
   },

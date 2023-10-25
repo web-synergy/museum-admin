@@ -15,6 +15,7 @@ export const MuiInputBase: Components<Theme>['MuiInputBase'] = {
         outline: 'none',
         padding: 0,
         lineHeight: 1.5,
+        fontVariantNumeric: 'lining-nums proportional-nums',
       },
 
       [`& .${inputAdornmentClasses.root}`]: {

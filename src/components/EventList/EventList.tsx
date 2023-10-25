@@ -7,8 +7,10 @@ import { ListContainer, ShowMoreBtn } from './parts/styles';
 import { IEvent } from '@/types/events';
 import { getEvents, deleteEvent } from '@/api';
 import EventTable from './parts/EventTable';
+// import Loader from '../Common/Loader';
 
 const EventList = () => {
+  const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState<IEvent[]>([] as IEvent[]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -23,17 +25,17 @@ const EventList = () => {
     if (page > 0) {
       getEventList(page);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const getEventList = async (page: number) => {
+    setLoading(true);
     const {
       data: { content, totalPages },
     } = await getEvents(page);
 
     setEvents((prev) => [...prev, ...content]);
     setTotalPages(totalPages - 1);
+    setLoading(false);
   };
 
   const onDeleteEvent = async (id: string) => {
@@ -45,19 +47,27 @@ const EventList = () => {
       console.log(error);
     }
   };
+
   return (
     <PageTemplate title="Редагувати події">
       <ListContainer>
-        <EventTable events={events} onDeleteEvent={onDeleteEvent} />
-        {totalPages > page && (
-          <Stack alignItems="center">
-            <ShowMoreBtn
-              variant="secondary"
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              Показати більше
-            </ShowMoreBtn>
-          </Stack>
+        {loading ? (
+          // <Loader visible={loading} />
+          <div>loading...</div>
+        ) : (
+          <>
+            <EventTable events={events} onDeleteEvent={onDeleteEvent} />
+            {totalPages > page && (
+              <Stack alignItems="center">
+                <ShowMoreBtn
+                  variant="secondary"
+                  onClick={() => setPage((prev) => prev + 1)}
+                >
+                  Показати більше
+                </ShowMoreBtn>
+              </Stack>
+            )}
+          </>
         )}
       </ListContainer>
     </PageTemplate>
