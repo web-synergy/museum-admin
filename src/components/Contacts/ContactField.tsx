@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import SvgSpriteIcon from "../Common/SvgSprite";
-import { TextMaskCustom } from "./Contacts";
+import { PhoneInputMask } from "./PhoneInputMask";
 
 interface ContactFieldProps {
   label: string;
@@ -59,7 +59,7 @@ const ContactField: React.FC<ContactFieldProps> = memo(
                 variant="outlined"
                 rows={rows}
                 InputProps={{
-                  inputComponent: TextMaskCustom as never,
+                  inputComponent: PhoneInputMask as never,
                   endAdornment: (
                     <SvgSpriteIcon
                       fontSize="small"

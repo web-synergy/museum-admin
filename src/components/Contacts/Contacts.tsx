@@ -1,9 +1,9 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import PageTemplate from "../Common/PageTemplate";
 import ContactField from "./ContactField";
 import { Box, Button, Container } from "@mui/material";
-import { IMaskInput } from "react-imask";
+
 import { getContactInfo, updateContactInfo } from "@/api";
 import { theme } from "@/theme";
 import Loader from "../Common/Loader";
@@ -14,22 +14,6 @@ type FieldName =
   | "subwayRoute"
   | "funicularRoute"
   | "busRoute";
-
-export const TextMaskCustom = React.forwardRef<HTMLInputElement>(
-  function TextMaskCustom(props, ref) {
-    const { ...other } = props;
-    return (
-      <IMaskInput
-        {...other}
-        mask="(###) ###-##-##"
-        definitions={{
-          "#": /[0-9]/,
-        }}
-        inputRef={ref}
-      />
-    );
-  }
-);
 
 const Contacts: FC = () => {
   const [contactInfo, setContactInfo] = useState({
