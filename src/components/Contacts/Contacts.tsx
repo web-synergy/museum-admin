@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import PageTemplate from '../Common/PageTemplate';
-import ContactField from './ContactField';
-import { Box, Container } from '@mui/material';
+import { FC, useState, useEffect } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import PageTemplate from "../Common/PageTemplate";
+import ContactField from "./ContactField";
+import { Box, Button, Container } from "@mui/material";
 
-import { getContactInfo, updateContactInfo } from '@/api';
+import { getContactInfo, updateContactInfo } from "@/api";
+import { theme } from "@/theme";
+import Loader from "../Common/Loader";
 
 type FieldName =
-  | 'phoneNumber'
-  | 'email'
-  | 'subwayRoute'
-  | 'funicularRoute'
-  | 'busRoute';
+  | "phoneNumber"
+  | "email"
+  | "subwayRoute"
+  | "funicularRoute"
+  | "busRoute";
 
-const Contacts: React.FC = () => {
+const Contacts: FC = () => {
   const [contactInfo, setContactInfo] = useState({
-    phoneNumber: '',
-    email: '',
-    subwayRoute: '',
-    funicularRoute: '',
-    busRoute: '',
+    phoneNumber: "",
+    email: "",
+    subwayRoute: "",
+    funicularRoute: "",
+    busRoute: "",
   });
 
-  // const [formData, setFormData] = useState<Record<FieldName, string>>({
-  //   phoneNumber: "(044) 425-33-97",
-  //   email: "kavaleridzemuseum@gmail.com",
-  //   subwayRoute:
-  //     "до станції “Контрактова площа”, далі пройти пішки близько 1 км",
-  //   funicularRoute:
-  //     "від станції “Поштова площа” піднятися  до  Михайлівської площі, далі пройти по вулиці Володимирській до Андріївського узвозу, 21.",
-  //   busRoute: "114 119 18ТР",
-  // });
+  const [loading, setLoading] = useState(true);
+  const [fieldChanges, setFieldChanges] = useState<{
+    [key in FieldName]: boolean;
+  }>({
+    phoneNumber: false,
+    email: false,
+    subwayRoute: false,
+    funicularRoute: false,
+    busRoute: false,
+  });
+
+  const [isFormChanged, setIsFormChanged] = useState(false);
 
   const { control, handleSubmit, setValue, getValues } = useForm<FieldValues>({
-    mode: 'all',
+    mode: "all",
     defaultValues: {
       phoneNumber: contactInfo.phoneNumber,
       email: contactInfo.email,
@@ -48,30 +53,24 @@ const Contacts: React.FC = () => {
       try {
         const response = await getContactInfo();
 
+        // console.log("response.data", response.data);
+
         setContactInfo(response.data);
 
-        setValue('phoneNumber', response.data.phoneNumber || '');
-        setValue('email', response.data.email || '');
-        setValue('subwayRoute', response.data.subwayRoute || '');
-        setValue('funicularRoute', response.data.funicularRoute || '');
-        setValue('busRoute', response.data.busRoute || '');
+        setValue("phoneNumber", response.data.phoneNumber || "");
+        setValue("email", response.data.email || "");
+        setValue("subwayRoute", response.data.subwayRoute || "");
+        setValue("funicularRoute", response.data.funicularRoute || "");
+        setValue("busRoute", response.data.busRoute || "");
+
+        setLoading(false);
       } catch (error) {
-        console.error('Помилка при отриманні даних з серверу:', error);
+        console.error("Помилка при отриманні даних з серверу:", error);
       }
     };
 
     fetchData();
   }, [setValue]);
-
-  const [fieldChanges, setFieldChanges] = useState<{
-    [key in FieldName]: boolean;
-  }>({
-    phoneNumber: false,
-    email: false,
-    subwayRoute: false,
-    funicularRoute: false,
-    busRoute: false,
-  });
 
   const handleInputChange = (field: FieldName, value: string) => {
     const isValueChanged = value !== getValues(field);
@@ -80,6 +79,8 @@ const Contacts: React.FC = () => {
       ...prevChanges,
       [field]: isValueChanged,
     }));
+
+    setIsFormChanged(true);
 
     setContactInfo((prevData) => ({
       ...prevData,
@@ -93,83 +94,102 @@ const Contacts: React.FC = () => {
     try {
       // Надіслати усі дані об'єкта contactInfo на сервер
       await updateContactInfo(contactInfo);
-      console.log('Дані відправлені на сервер:', contactInfo);
+      console.log("Дані відправлені на сервер:", contactInfo);
 
       // Скинути флажки змін у полях
-      setFieldChanges({
-        phoneNumber: false,
-        email: false,
-        subwayRoute: false,
-        funicularRoute: false,
-        busRoute: false,
-      });
+      setIsFormChanged(false);
     } catch (error) {
       // Обробка помилок
-      console.error('Помилка при відправленні даних на сервер:', error);
+      console.error("Помилка при відправленні даних на сервер:", error);
     }
   };
 
   return (
     <PageTemplate title="Редагувати контакти">
-      <Container
-        sx={{
-          pt: { xs: 4, md: 4, lg: 5 },
-          pb: { xs: '60px', md: 10, lg: 15 },
-        }}
-      >
-        <form onSubmit={handleSubmit(() => {})}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            <ContactField
-              label="Номер телефону"
-              fieldName="phoneNumber"
-              control={control}
-              onChange={(value) => handleInputChange('phoneNumber', value)}
-              onSave={() => handleSave()}
-              isChanged={fieldChanges.phoneNumber}
-              iconId="phone"
-            />
-            <ContactField
-              label="Електронна адреса"
-              fieldName="email"
-              control={control}
-              onChange={(value) => handleInputChange('email', value)}
-              onSave={() => handleSave()}
-              isChanged={fieldChanges.email}
-              iconId="email"
-            />
-            <ContactField
-              label="Метро"
-              fieldName="subwayRoute"
-              isMulti={true}
-              rows={4}
-              control={control}
-              onChange={(value) => handleInputChange('subwayRoute', value)}
-              onSave={() => handleSave()}
-              isChanged={fieldChanges.subwayRoute}
-            />
-            <ContactField
-              label="Фунікулер"
-              fieldName="funicularRoute"
-              isMulti={true}
-              rows={4}
-              control={control}
-              onChange={(value) => handleInputChange('funicularRoute', value)}
-              onSave={() => handleSave()}
-              isChanged={fieldChanges.funicularRoute}
-            />
-            <ContactField
-              label="Автобус"
-              fieldName="busRoute"
-              isMulti={true}
-              rows={4}
-              control={control}
-              onChange={(value) => handleInputChange('busRoute', value)}
-              onSave={() => handleSave()}
-              isChanged={fieldChanges.busRoute}
-            />
-          </Box>
-        </form>
-      </Container>
+      {loading && <Loader visible={loading} />}
+      {!loading && (
+        <Container
+          sx={{
+            pt: { xs: 4, md: 4, lg: 5 },
+            pb: { xs: "60px", md: 10, lg: 15 },
+          }}
+        >
+          <form onSubmit={handleSubmit(() => {})}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: { xs: "24px", md: "32px" },
+                width: { xs: "100%", md: "552px" },
+              }}
+            >
+              <ContactField
+                label="Номер телефону"
+                fieldName="phoneNumber"
+                control={control}
+                onChange={(value) => handleInputChange("phoneNumber", value)}
+                onSave={() => handleSave()}
+                isChanged={fieldChanges.phoneNumber}
+                iconId="phone"
+              />
+              <ContactField
+                label="Електронна адреса"
+                fieldName="email"
+                control={control}
+                onChange={(value) => handleInputChange("email", value)}
+                onSave={() => handleSave()}
+                isChanged={fieldChanges.email}
+                iconId="email"
+              />
+              <ContactField
+                label="Метро"
+                fieldName="subwayRoute"
+                isMulti={true}
+                rows={4}
+                control={control}
+                onChange={(value) => handleInputChange("subwayRoute", value)}
+                onSave={() => handleSave()}
+                isChanged={fieldChanges.subwayRoute}
+              />
+              <ContactField
+                label="Фунікулер"
+                fieldName="funicularRoute"
+                isMulti={true}
+                rows={4}
+                control={control}
+                onChange={(value) => handleInputChange("funicularRoute", value)}
+                onSave={() => handleSave()}
+                isChanged={fieldChanges.funicularRoute}
+              />
+              <ContactField
+                label="Автобус"
+                fieldName="busRoute"
+                isMulti={true}
+                rows={4}
+                control={control}
+                onChange={(value) => handleInputChange("busRoute", value)}
+                onSave={() => handleSave()}
+                isChanged={fieldChanges.busRoute}
+              />{" "}
+              <Button
+                type="submit"
+                variant="secondary"
+                sx={{
+                  width: "100%",
+                  backgroundColor: theme.palette.primary.main,
+                  "&:hover": {
+                    backgroundColor: theme.palette.primary.dark,
+                  },
+                }}
+                onClick={handleSave}
+                disabled={!isFormChanged}
+              >
+                Зберегти зміни
+              </Button>
+            </Box>
+          </form>
+        </Container>
+      )}
     </PageTemplate>
   );
 };

@@ -3,12 +3,12 @@ import { Controller, Control } from "react-hook-form";
 import {
   Box,
   TextField,
-  Button,
   InputLabel,
   Typography,
   useTheme,
 } from "@mui/material";
 import SvgSpriteIcon from "../Common/SvgSprite";
+import { PhoneInputMask } from "./PhoneInputMask";
 
 interface ContactFieldProps {
   label: string;
@@ -20,21 +20,14 @@ interface ContactFieldProps {
   isMulti?: boolean;
   rows?: number;
   iconId?: string;
+  id?: string;
+  inputComponent?: React.ElementType;
 }
 
 const ContactField: React.FC<ContactFieldProps> = memo(
-  ({
-    label,
-    fieldName,
-    control,
-    onChange,
-    onSave,
-    isChanged,
-    isMulti,
-    rows,
-    iconId,
-  }) => {
+  ({ label, fieldName, control, onChange, isMulti, rows, iconId }) => {
     const theme = useTheme();
+    const shouldUseMaskedInput = fieldName === "phoneNumber";
     return (
       <Box>
         <Typography
@@ -52,16 +45,34 @@ const ContactField: React.FC<ContactFieldProps> = memo(
         <Controller
           name={fieldName}
           control={control}
-          render={({ field }) => (
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { md: "375px 154px", lg: "460px 350px" },
-                gap: "24px",
-              }}
-            >
+          render={({ field }) =>
+            shouldUseMaskedInput ? (
               <TextField
                 sx={{
+                  width: "100%",
+                  input: {
+                    fontSize: { xs: "14px", md: "16px" },
+                  },
+                }}
+                {...field}
+                multiline={isMulti}
+                variant="outlined"
+                rows={rows}
+                InputProps={{
+                  inputComponent: PhoneInputMask as never,
+                  endAdornment: (
+                    <SvgSpriteIcon
+                      fontSize="small"
+                      iconId={iconId ? iconId : ""}
+                    />
+                  ),
+                }}
+                onChange={(e) => onChange(e.target.value)}
+              />
+            ) : (
+              <TextField
+                sx={{
+                  width: "100%",
                   input: {
                     fontSize: { xs: "14px", md: "16px" },
                   },
@@ -79,23 +90,8 @@ const ContactField: React.FC<ContactFieldProps> = memo(
                 rows={rows}
                 onChange={(e) => onChange(e.target.value)}
               />
-              <Button
-                type="submit"
-                variant="secondary"
-                sx={{
-                  // fontSize: "40px",
-                  backgroundColor: theme.palette.primary.main,
-                  "&:hover": {
-                    backgroundColor: theme.palette.primary.dark,
-                  },
-                }}
-                onClick={onSave}
-                disabled={!isChanged}
-              >
-                Зберегти зміни
-              </Button>
-            </Box>
-          )}
+            )
+          }
         />
       </Box>
     );
