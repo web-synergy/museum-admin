@@ -3,12 +3,11 @@ import { resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
-  console.log(env.VITE_SERVER_URL);
   const config = {
     plugins: [react()],
-    base: '/',
     server: {
       port: 5174,
       host: true,
@@ -29,10 +28,6 @@ export default defineConfig(({ command, mode }) => {
       },
     },
   };
-
-  if (command !== 'serve') {
-    config.base = '/museum-admin/';
-  }
 
   return config;
 });
