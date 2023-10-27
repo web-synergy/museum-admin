@@ -1,6 +1,9 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/index.html" }
+  "rewrites": [
+    {
+      "source": "/api/:path",
+      "destination": "https://130.61.247.149/api/:path"
+    },
+    { "source": "/:path", "destination": "/index.html" }
   ]
 }
