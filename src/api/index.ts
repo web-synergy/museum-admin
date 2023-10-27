@@ -4,10 +4,8 @@ import axios from 'axios';
 // const BASE_URL = import.meta.env.VITE_SERVER_URL;
 // console.log(BASE_URL);
 
-const BASE_URL = import.meta.env.PROD ? '/museum-admin/api' : '/api';
-
 export const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: '/api',
 });
 
 interface LoginResponse {
@@ -16,6 +14,7 @@ interface LoginResponse {
 }
 
 export const login = (username: string, password: string) => {
+  console.log(import.meta.env.MODE);
   return instance.post<LoginResponse>(
     '/admin/login',
     {},
