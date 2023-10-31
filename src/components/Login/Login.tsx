@@ -34,7 +34,7 @@ const Login: FC = () => {
 
   return (
     <Section variant="light">
-      <Container>
+      <Container sx={{ '&.MuiContainer-root': { margin: '0px auto' } }}>
         <ContentBox>
           <Typography variant="h3" textAlign={'center'}>
             Вхід
