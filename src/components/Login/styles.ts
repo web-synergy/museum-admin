@@ -93,9 +93,9 @@ export const RecoveryPassTitle = styled(Typography)<TypographyProps>(({ theme })
 }))
 
 export const ButtonBox = styled(Box)<BoxProps>(({ theme }) => ({
-  paddingTop: '32px',
+  marginTop: '32px',
   [theme.breakpoints.down('md')]: {
-    paddingTop: '24px',
+    marginTop: '24px',
   },
 }))
 
