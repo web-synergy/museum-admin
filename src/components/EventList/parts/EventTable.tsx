@@ -6,11 +6,13 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Typography,
 } from '@mui/material';
 import { DateTime } from 'luxon';
 import { IEvent } from '@/types/events';
 
 import TableItemActivity from './TableItemActivity';
+import { EventStatus } from '@/assets/constants/formEnums';
 
 interface EventTableProps {
   events: IEvent[];
@@ -42,7 +44,19 @@ const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
                 <TableCell sx={{ fontWeight: 400 }}>
                   {DateTime.fromISO(event.created).toLocaleString()}
                 </TableCell>
-                <TableCell>{event.title}</TableCell>
+                <TableCell>
+                  {event.title}
+                  {event.status === EventStatus.DRAFT && (
+                    <Typography
+                      component="span"
+                      ml={1}
+                      color="error"
+                      fontWeight={500}
+                    >
+                      (чернетка)
+                    </Typography>
+                  )}
+                </TableCell>
                 <TableCell align="right">
                   <TableItemActivity
                     id={event.id}

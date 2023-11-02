@@ -32,7 +32,7 @@ const EventField: FC<InputFormProps> = ({
           />
           {maxLength && (
             <Typography textAlign="end" variant="body2" mt={1}>
-              {field.value.length}/{maxLength}
+              {field.value?.length ?? 0}/{maxLength}
             </Typography>
           )}
         </>

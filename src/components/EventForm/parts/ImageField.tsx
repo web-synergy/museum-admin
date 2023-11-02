@@ -1,8 +1,8 @@
 import { FC, useState, useRef, DragEvent, ChangeEvent, useEffect } from 'react';
-import { InputLabel, Box, Typography, IconButton } from '@mui/material';
+import { InputLabel, Box, Typography, IconButton, Stack } from '@mui/material';
 import { Controller, useController } from 'react-hook-form';
 import SvgSpriteIcon from '@/components/Common/SvgSprite';
-// import Loader from '@/components/Common/Loader';
+import Loader from '@/components/Common/Loader';
 import ModalBase from '@/components/Common/ModalBase';
 import EditImage from './EditImage';
 import { VisuallyHiddenInput, DragDropWrapper, UploadImageBox } from './styles';
@@ -33,11 +33,11 @@ const ImageField: FC<ImageFieldProps> = ({
   const imageRef = useRef(null);
 
   useEffect(() => {
-    if (value === '' && banner && banner.id) {
+    if (!value && banner && banner.id) {
       setImage(null);
       setBanner(null);
     }
-    if (value !== '' && !banner) {
+    if (value && !banner) {
       const getImageFile = async () => {
         const { data } = await getImage(value);
         const image: IImageState = {
@@ -124,8 +124,7 @@ const ImageField: FC<ImageFieldProps> = ({
               {banner ? (
                 <Box position="relative">
                   {loading ? (
-                    // <Loader visible={loading} />
-                    <div>loading...</div>
+                    <Loader visible={loading} />
                   ) : (
                     <>
                       <Box
@@ -157,30 +156,43 @@ const ImageField: FC<ImageFieldProps> = ({
               ) : (
                 <UploadImageBox component="label">
                   {loading ? (
-                    // <Loader visible={loading} />
-                    <div>loading...</div>
+                    <Loader visible={loading} />
                   ) : (
-                    <>
+                    <Stack
+                      alignItems="center"
+                      gap={1}
+                      sx={{ width: { xs: 206, md: 'auto' } }}
+                    >
                       <Box
                         component="img"
                         src={picture}
                         alt="picture"
-                        sx={{ mr: 1 }}
+                        sx={{ width: 80, height: 80 }}
                       />
-                      <Box>
-                        <Typography sx={{ fontWeight: 600 }}>
-                          Завантажити файл
-                        </Typography>
-                        <Typography>
-                          допустимий формат файлів — .jpeg
-                        </Typography>
-                      </Box>
+
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: (theme) => theme.palette.gray.dark,
+                        }}
+                      >
+                        Завантажити файл
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.gray.dark,
+                          textAlign: 'center',
+                        }}
+                      >
+                        допустимий формат файлів — .jpg, .png, .jpeg, .jiff
+                      </Typography>
+
                       <VisuallyHiddenInput
                         type="file"
                         ref={imageRef}
                         onChange={onUploadImage}
                       />
-                    </>
+                    </Stack>
                   )}
                 </UploadImageBox>
               )}

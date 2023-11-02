@@ -1,39 +1,88 @@
-import { FC, useMemo } from 'react';
-import { Box, Grid, Typography, Button, Stack, Alert } from '@mui/material';
+import { FC, useMemo, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateTime } from 'luxon';
-import TypeSelect from './parts/TypeSelect';
-import EventField from './parts/EventField';
-import CalendarField from './parts/CalendarField';
-import ImageField from './parts/ImageField';
-import EventTextArea from './parts/EventTextArea';
+
 import { IEventValues } from '@/types/events';
 import { validationSchemaEventForm } from './validation';
 
+import { EventStatus, FormEventFields } from '@/assets/constants/formEnums';
+import { editEvent, addEvent } from '@/api';
+import Form from './parts/Form';
+
 interface EventFormProps {
   defaultValues: IEventValues;
-  onPublish: (data: IEventValues) => void;
   type: 'add' | 'edit';
+  id: string | null;
 }
 
-const EventForm: FC<EventFormProps> = ({ defaultValues, onPublish, type }) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-    watch,
-  } = useForm<IEventValues>({
-    values: defaultValues,
+const EventForm: FC<EventFormProps> = ({ defaultValues, type, id }) => {
+  const { control, handleSubmit, reset, getValues, formState, watch } = useForm<
+    IEventValues,
+    FormEventFields
+  >({
+    defaultValues: defaultValues,
     mode: 'onSubmit',
     resolver: yupResolver(validationSchemaEventForm),
   });
   const navigate = useNavigate();
+  const eventId = useRef<string | null>(id);
+  const intervalRef = useRef<number | null>(null);
 
   const begin = watch('begin');
   const end = watch('end');
+  const status = watch('status');
+  const isFieldWasChanged = Object.keys(formState.dirtyFields);
+
+  // Start the interval
+  const startInterval = () => {
+    console.log(
+      'intervalRef in start interval in the beginning',
+      intervalRef.current
+    );
+
+    if (intervalRef.current !== null) return;
+    intervalRef.current = window.setInterval(() => {
+      onSaveDraft();
+    }, 5000);
+
+    console.log(
+      'intervalRef in start interval in the end',
+      intervalRef.current
+    );
+  };
+
+  // Stop the interval
+  const stopInterval = () => {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      console.log('stop interval');
+    }
+  };
+
+  //start interval
+  useEffect(() => {
+    console.log('useEffect to define is need to start timer');
+    if (
+      isFieldWasChanged.length > 0 &&
+      status === EventStatus.DRAFT &&
+      !intervalRef.current
+    ) {
+      console.log('start interval');
+      startInterval();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState, status]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   const onCancel = () => {
     if (type === 'add') {
@@ -45,17 +94,43 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, onPublish, type }) => {
   };
 
   const onSubmit = (data: IEventValues) => {
-    onPublish(data);
+    const event = { ...data, status: EventStatus.PUBLISHED };
+    if (eventId.current) {
+      editEvent(event, eventId.current);
+      console.log('navigation to event list');
+    } else {
+      addEvent(event);
+    }
     reset();
   };
 
-  const requiredFieldsError = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSaveDraft = () => {
+    const values = getValues();
+    console.log(values);
+    console.log('eventId onSaveDraft', eventId.current);
+    if (eventId.current) {
+      console.log('change event');
+    } else {
+      console.log('add event');
+      eventId.current = 'some id';
+    }
+  };
 
-    return Object.values(errors)
+  const onClickSaveDraft = () => {
+    stopInterval();
+    // if (isFieldWasChanged.length === 0) {
+    //   console.log('any field was not changed');
+    //   return;
+    // }
+    // console.log('fields were changed');
+    // onSaveDraft();
+  };
+
+  const requiredFieldsError = useMemo(() => {
+    return Object.values(formState.errors)
       .map((item) => item.message)
       .join(', ');
-  }, [errors]);
+  }, [formState]);
 
   const dateError = useMemo(() => {
     if (begin && end) {
@@ -65,117 +140,18 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, onPublish, type }) => {
   }, [begin, end]);
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Grid container columnSpacing="30px" rowSpacing={4}>
-        {requiredFieldsError && (
-          <Grid item xs={12}>
-            <Alert variant="outlined" severity="error" icon={false}>
-              Заповніть поля: {requiredFieldsError}
-            </Alert>
-          </Grid>
-        )}
-        <Grid item xs={12} lg={6}>
-          <EventField
-            control={control}
-            label="Назва події"
-            required={true}
-            name="title"
-            placeholder="Введіть назву події"
-            maxLength={100}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TypeSelect
-            label="Тип події"
-            control={control}
-            required={true}
-            name="type"
-            error={!!errors.type}
-          />
-        </Grid>
-        <Grid item container columnSpacing="30px" rowSpacing={1}>
-          <Grid item xs={12} lg={6}>
-            <CalendarField
-              control={control}
-              label="Дата початку події"
-              required={false}
-              name="begin"
-              placeholder="дд/мм/рррр"
-              error={dateError}
-            />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <CalendarField
-              control={control}
-              label="Дата закічення події"
-              required={false}
-              name="end"
-              placeholder="дд/мм/рррр"
-              error={dateError}
-              disabled={!begin}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography
-              variant="body2"
-              color={dateError ? 'error.main' : 'transparent'}
-            >
-              Дата початку повинна бути раніше за дату закінчення
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <EventTextArea
-            control={control}
-            label="Короткий опис події"
-            required={true}
-            name="summary"
-            placeholder="Введіть Ваш текст"
-            maxLength={150}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <EventTextArea
-            control={control}
-            label="Розгорнутий опис події"
-            required={true}
-            name="description"
-            placeholder="Введіть Ваш текст"
-            maxLength={2000}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <ImageField
-            control={control}
-            label="Додати зображення події*"
-            required={true}
-            name="banner"
-            placeholder="Введіть Ваш текст"
-            error={!!errors.banner}
-          />
-        </Grid>
-        <Grid item xs={12} textAlign="center">
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            justifyContent="center"
-            alignItems="center"
-            gap={{ xs: 2, md: 3 }}
-          >
-            <Button sx={{ width: { xs: '100%', md: 248 } }} type="submit">
-              Опублікувати
-            </Button>
-            <Button
-              sx={{ width: { xs: '100%', md: 248 } }}
-              variant="secondary"
-              onClick={onCancel}
-            >
-              Скасувати
-            </Button>
-          </Stack>
-        </Grid>
-      </Grid>
-    </Box>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      errorMessage={requiredFieldsError}
+      control={control}
+      errors={formState.errors}
+      dateError={dateError}
+      activeEndDate={!!begin}
+      activeDraftBtn={isFieldWasChanged.length > 0}
+      onSaveDraft={onClickSaveDraft}
+      onCancel={onCancel}
+      status={status}
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import { styled, Box, Dialog, IconButton, Select } from '@mui/material';
+import { styled, Box, Dialog, IconButton, Select, Button } from '@mui/material';
 
 export const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -204,4 +204,11 @@ export const CustomTextArea = styled('textarea')(({ theme, name }) => ({
     lineHeight: 1.5,
     height: name === 'summary' ? 100 : 292,
   },
+}));
+
+export const SaveDraftBtn = styled(Button)(({ theme }) => ({
+  padding: 8,
+  color: theme.palette.gray.dark,
+  fontSize: 18,
+  lineHeight: 'normal',
 }));

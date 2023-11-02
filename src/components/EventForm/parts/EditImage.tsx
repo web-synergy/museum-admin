@@ -10,7 +10,7 @@ import {
   VisuallyHiddenInput,
 } from './styles';
 import RatioSelect from './RatioSelect';
-// import Loader from '@/components/Common/Loader';
+import Loader from '@/components/Common/Loader';
 import { aspectRatioMenu } from '@/assets/constants/aspectRatio';
 import { getCroppedImage } from '@/helpers/cropImage';
 
@@ -97,8 +97,7 @@ const EditImage: FC<EditImageProps> = ({
         </Stack>
         <CropWrapper ref={containerRef} ratio={aspectRatio}>
           {loading ? (
-            // <Loader visible={loading} />
-            <div>loading...</div>
+            <Loader visible={loading} />
           ) : (
             <Cropper
               image={imageSrc}

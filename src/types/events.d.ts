@@ -1,13 +1,19 @@
 import { Control } from 'react-hook-form';
+import {
+  EventStatus,
+  TypeEvent,
+  FormEventFields,
+} from '@/assets/constants/formEnums';
 
 export interface IEventValues {
   title: string;
-  type: string;
+  type: TypeEvent | null;
   begin?: string | null;
   end?: string | null;
   summary: string;
   description: string;
-  banner: string;
+  banner: string | null;
+  status: EventStatus;
 }
 
 export interface IEvent extends IEventValues {
@@ -25,9 +31,9 @@ interface IContactInfo {
 }
 
 export interface InputFormProps {
-  name: string;
+  name: FormEventFields;
   label: string;
-  control: Control<EventValues>;
+  control: Control<IEventValues>;
   required: boolean;
   maxLength?: number;
   placeholder: string;

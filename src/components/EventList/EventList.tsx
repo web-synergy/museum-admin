@@ -7,7 +7,7 @@ import { ListContainer, ShowMoreBtn } from './parts/styles';
 import { IEvent } from '@/types/events';
 import { getEvents, deleteEvent } from '@/api';
 import EventTable from './parts/EventTable';
-// import Loader from '../Common/Loader';
+import Loader from '../Common/Loader';
 
 const EventList = () => {
   const [loading, setLoading] = useState(false);
@@ -52,8 +52,7 @@ const EventList = () => {
     <PageTemplate title="Редагувати події">
       <ListContainer>
         {loading ? (
-          // <Loader visible={loading} />
-          <div>loading...</div>
+          <Loader visible={loading} />
         ) : (
           <>
             <EventTable events={events} onDeleteEvent={onDeleteEvent} />

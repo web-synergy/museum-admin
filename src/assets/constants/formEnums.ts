@@ -1,4 +1,4 @@
-enum TypeEvent {
+export enum TypeEvent {
   EXHIBITION = 'Виставка',
   EXCURSION = 'Екскурсія',
   PRESENTATION = 'Презентація',
@@ -9,4 +9,17 @@ enum TypeEvent {
   OTHER = 'Інше',
 }
 
-export const typeEventArray = Object.entries(TypeEvent);
+export enum EventStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+}
+
+export enum FormEventFields {
+  TITLE = 'title',
+  TYPE = 'type',
+  BEGIN = 'begin',
+  END = 'end',
+  SUMMARY = 'summary',
+  DESCRIPTION = 'description',
+  BANNER = 'banner',
+}
