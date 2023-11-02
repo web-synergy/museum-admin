@@ -1,3 +1,4 @@
+import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
 import { AppBar, Dialog, styled } from '@mui/material';
 
 export const Wrapper = styled(Dialog)(({ theme }) => ({
@@ -7,7 +8,6 @@ export const Wrapper = styled(Dialog)(({ theme }) => ({
   },
   '& .MuiBackdrop-root': {
     backgroundColor: theme.palette.common.black,
-
   },
 
   color: theme.palette.common.white,
@@ -22,3 +22,28 @@ export const MobileHeader = styled(AppBar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
 }));
+export const BurgerIcon = styled(ButtonWithIcon)({
+  color: 'white',
+  justifyContent: 'flex-start',
+  padding: 0,
+  '& span': {
+    margin: 0,
+  },
+});
+export const CloseIcon = styled(ButtonWithIcon)({
+  color: 'white',
+  padding: 0,
+  marginBottom: '24px',
+  justifyContent: 'flex-end',
+});
+export const Logout = styled(ButtonWithIcon)(({ theme }) => ({
+  borderRadius: '8px',
+  border: `1px solid ${theme.palette.common.white}`,
+  color: theme.palette.common.white,
+  minWidth: '238px',
+  padding: '16px',
+  '&:hover': {
+    border: `1px solid ${theme.palette.primary.dark}`,
+  },
+}));
+

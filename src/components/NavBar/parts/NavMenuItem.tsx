@@ -14,9 +14,13 @@ interface NavMenuItemProp {
 const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click, }) => {
   const isActiveLink = useActiveLink(href);
   return (
-    <ListItem disablePadding onClick={click}>
+    <ListItem  disablePadding onClick={click}>
       <ButtonWithIcon
         sx={{
+          fontSize:'18px',
+          '& span': {
+            margin:0,
+          },
           backgroundColor: (theme) =>
             isActiveLink
               ? theme.palette.primary.main
