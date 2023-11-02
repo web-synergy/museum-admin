@@ -46,6 +46,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
     } else {
       openModal()
       setError(false)
+      setIsDisabled(true)
       setData({ ...data, newLogin: '', repeatLogin: '' })
     }
     console.log(data)

@@ -6,10 +6,13 @@ import {
   Divider,
   Stack,
   StackProps,
+  TextField,
+  TextFieldProps,
   Typography,
   TypographyProps,
   styled,
 } from '@mui/material'
+import { StyleRegistry } from 'styled-jsx'
 
 export const CustomDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.gray.light,
@@ -89,35 +92,83 @@ export const ErrorText = styled(Typography)<TypographyProps>(({ theme }) => ({
 
 export const CustomDialog = styled(Dialog)<DialogProps>(({ theme }) => ({
   '.MuiDialog-paper': {
-    padding: '16px',
     borderRadius: '8px',
     maxWidth: 'none',
-    margin: 0,
 
     [theme.breakpoints.up('xs')]: {
-      width: '280px',
-      height: '148px',
+      padding: '24px 16px 32px',
+      maxWidth: '280px',
     },
     [theme.breakpoints.up('md')]: {
-      width: '440px',
-      height: '156px',
+      padding: '32px 36px 56px',
+      maxWidth: '438px',
+
       marginLeft: '164px',
     },
     [theme.breakpoints.up('lg')]: {
-      width: '500px',
-      height: '156px',
+      padding: '32px 40px 56px',
+      maxWidth: '502px',
     },
   },
 }))
 
-export const ModalText = styled(Typography)<TypographyProps>(({ theme }) => ({
+// export const ModalText = styled(Typography)<TypographyProps>(({ theme }) => ({
+//   textAlign: 'center',
+//   margin: 'auto auto',
+//   lineHeight: 1.43,
+//   [theme.breakpoints.up('xs')]: {
+//     fontSize: '0.875rem',
+//   },
+//   [theme.breakpoints.up('md')]: {
+//     fontSize: '1.125rem',
+//   },
+// }))
+
+export const DialogStack = styled(Stack)<StackProps>(({ theme }) => ({
   textAlign: 'center',
-  margin: 'auto auto',
-  lineHeight: 1.43,
+
   [theme.breakpoints.up('xs')]: {
-    fontSize: '0.875rem',
+    rowGap: '12px',
   },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '1.125rem',
+}))
+
+export const DialogTextField = styled(TextField)<TextFieldProps>(({ theme, error }) => ({
+  caretColor: theme.palette.primary.dark,
+
+  '&.MuiTextField-root': {
+    [theme.breakpoints.up('xs')]: {
+      width: '32px',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '48px',
+    },
+    // [theme.breakpoints.up('lg')]: {
+    //   width: '48px',
+    // },
+  },
+  '.MuiInputBase-input': {
+    color: error ? theme.palette.error.main : '',
+    textAlign: 'center',
+    fontWeight: 500,
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1.125rem',
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.25rem',
+    },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '1.5rem',
+    },
+  },
+  '.MuiOutlinedInput-notchedOutline': {},
+  '.MuiOutlinedInput-root': {
+    [theme.breakpoints.up('xs')]: {
+      padding: '0px',
+      height: '32px',
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '8px 16px',
+      height: '48px',
+    },
   },
 }))
