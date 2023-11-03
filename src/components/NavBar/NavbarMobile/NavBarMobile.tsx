@@ -1,10 +1,10 @@
-import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
+
 import useAuth from '@/hooks/useAuth';
 import { Box, Toolbar, styled } from '@mui/material';
 import { FC, useState } from 'react';
 import Navigation from '../parts/Navigation';
 import { navigation } from '../parts/data';
-import { MobileHeader, Wrapper } from './style';
+import { BurgerIcon, CloseIcon, Logout, MobileHeader, Wrapper } from './style';
 
 import { Link } from 'react-router-dom';
 const NavBarMobile: FC = () => {
@@ -17,62 +17,25 @@ const NavBarMobile: FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const  Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
+  const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
   return (
     <>
       <Wrapper fullScreen open={open} onClose={handleClose}>
-        <ButtonWithIcon
-          sx={{
-            color: 'white',
-            p: 0,
-            mb: '24px',
-            justifyContent: 'flex-end',
-          }}
-          svgSpriteId="close"
-          title=""
-          variant="text"
-          onClick={handleClose}
-        />
-        <Navigation handleClose={handleClose} navigation={navigation} />
+        <CloseIcon svgSpriteId="close" title="" variant="text" onClick={handleClose} />
+        <Navigation  handleClose={handleClose} navigation={navigation} />
         <Box
           sx={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: 'block',
+            textAlign: 'center',
           }}>
-          <ButtonWithIcon
-            sx={{
-              borderRadius: '8px',
-              border: (theme) => `1px solid ${theme.palette.common.white}`,
-              color: (theme) => theme.palette.common.white,
-              minWidth: '238px',
-              p: '16px',
-              '&:hover': {
-                border: (theme) => `1px solid ${theme.palette.primary.dark}`,
-              },
-            }}
-            svgSpriteId="log-out"
-            title="Вийти"
-            variant="text"
-            iconPlace="startIcon"
-            component={Link}
-            onClick={() => signOut()}
-          />
+          <Logout svgSpriteId="log-out" title="Вийти" variant="text" iconPlace="startIcon" component={Link} onClick={() => signOut()} />
         </Box>
       </Wrapper>
 
       <MobileHeader position="fixed">
         <Toolbar>
-          <ButtonWithIcon
-            sx={{ color: 'white', p: 0 }}
-            svgSpriteId="burger-menu"
-            title=""
-            variant="text"
-            iconPlace="startIcon"
-            onClick={handleClickOpen}
-          />
+          <BurgerIcon svgSpriteId="burger-menu" title="" variant="text" iconPlace="startIcon" onClick={handleClickOpen} />
         </Toolbar>
       </MobileHeader>
       <Offset />
