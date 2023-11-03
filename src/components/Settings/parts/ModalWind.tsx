@@ -1,7 +1,14 @@
 import SvgSpriteIcon from '@/components/Common/SvgSprite'
-import { Box, IconButton, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, IconButton, Stack, TextField, Typography } from '@mui/material'
 import { ChangeEvent, ChangeEventHandler, FC, FormEvent, useRef, useState } from 'react'
-import { CustomDialog, DialogStack, DialogTextField, ModalText } from '../styles'
+import {
+  CustomDialog,
+  DialogErrorText,
+  DialogHintText,
+  DialogStack,
+  DialogTextField,
+  ModalText,
+} from '../styles'
 
 interface ModalWindProps {
   closeModal: () => void
@@ -9,6 +16,7 @@ interface ModalWindProps {
 }
 
 const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
+  const [error, setError] = useState(true)
   const [inputsValues, setInputsValues] = useState(Array(6).fill(''))
   const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(''))
 
@@ -30,16 +38,16 @@ const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
   return (
     <CustomDialog onClose={closeModal} open={open}>
       <DialogStack>
-        <Box sx={{ width: '100%', height: '24px' }}>
+        <Box sx={{ position: 'relative', width: '100%', height: '27px' }}>
           <IconButton
             onClick={closeModal}
             sx={{
               position: 'absolute',
-              right: 8,
-              top: 8,
+              right: 0,
+              top: 0,
             }}
           >
-            <SvgSpriteIcon iconId="close" />
+            <SvgSpriteIcon iconId="close" sx={{ padding: 0 }} />
           </IconButton>
         </Box>
         <Box>
@@ -48,21 +56,33 @@ const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
             На вказану Вами адресу було надіслано 6-ти значний код для підтвердження зміни логіну
           </Typography>
         </Box>
-        <Stack sx={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          {inputsValues.map((inputVal, index) => (
-            <DialogTextField
-              type="text"
-              variant="outlined"
-              key={index}
-              value={inputVal}
-              onChange={e => handleInputChange(e, index)}
-              inputRef={ref => (inputRefs.current[index] = ref)}
-              inputProps={{ maxLength: 1 }}
-              required
-              // error={true}
-            />
-          ))}
-        </Stack>
+
+        <Box>
+          <Stack
+            sx={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            {inputsValues.map((inputVal, index) => (
+              <DialogTextField
+                type="text"
+                variant="outlined"
+                key={index}
+                value={inputVal}
+                onChange={e => handleInputChange(e, index)}
+                inputRef={ref => (inputRefs.current[index] = ref)}
+                inputProps={{ maxLength: 1 }}
+                required
+                error={true}
+              />
+            ))}
+          </Stack>
+          {error && <DialogErrorText>Не вірний код!</DialogErrorText>}
+        </Box>
+        <Button type="button" variant="adminPrimaryBtn">
+          Змінити логін
+        </Button>
+        <DialogHintText variant="body1">
+          Якщо Ви не отримали код підтвердження — перевірте вірність вказаної електронної адреси
+        </DialogHintText>
       </DialogStack>
     </CustomDialog>
   )

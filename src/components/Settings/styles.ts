@@ -12,7 +12,6 @@ import {
   TypographyProps,
   styled,
 } from '@mui/material'
-import { StyleRegistry } from 'styled-jsx'
 
 export const CustomDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.gray.light,
@@ -112,23 +111,14 @@ export const CustomDialog = styled(Dialog)<DialogProps>(({ theme }) => ({
   },
 }))
 
-// export const ModalText = styled(Typography)<TypographyProps>(({ theme }) => ({
-//   textAlign: 'center',
-//   margin: 'auto auto',
-//   lineHeight: 1.43,
-//   [theme.breakpoints.up('xs')]: {
-//     fontSize: '0.875rem',
-//   },
-//   [theme.breakpoints.up('md')]: {
-//     fontSize: '1.125rem',
-//   },
-// }))
-
 export const DialogStack = styled(Stack)<StackProps>(({ theme }) => ({
   textAlign: 'center',
 
   [theme.breakpoints.up('xs')]: {
-    rowGap: '12px',
+    rowGap: '24px',
+  },
+  [theme.breakpoints.up('md')]: {
+    rowGap: '32px',
   },
 }))
 
@@ -142,9 +132,6 @@ export const DialogTextField = styled(TextField)<TextFieldProps>(({ theme, error
     [theme.breakpoints.up('md')]: {
       width: '48px',
     },
-    // [theme.breakpoints.up('lg')]: {
-    //   width: '48px',
-    // },
   },
   '.MuiInputBase-input': {
     color: error ? theme.palette.error.main : '',
@@ -169,6 +156,34 @@ export const DialogTextField = styled(TextField)<TextFieldProps>(({ theme, error
     [theme.breakpoints.up('md')]: {
       padding: '8px 16px',
       height: '48px',
+    },
+  },
+}))
+
+export const DialogErrorText = styled(Typography)<TypographyProps>(({ theme }) => ({
+  lineHeight: 1.42,
+  textAlign: 'left',
+  color: theme.palette.error.main,
+  [theme.breakpoints.up('xs')]: {
+    fontSize: '0.875rem',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '1rem',
+  },
+}))
+
+export const DialogHintText = styled(Typography)<TypographyProps>(({ theme }) => ({
+  padding: '2px',
+  color: theme.palette.gray.dark,
+  lineHeight: 1.5,
+  [theme.breakpoints.up('xs')]: {
+    '&.MuiTypography-root': {
+      lineHeight: 1.4,
+    },
+  },
+  [theme.breakpoints.up('md')]: {
+    '&.MuiTypography-root': {
+      lineHeight: 1.5,
     },
   },
 }))
