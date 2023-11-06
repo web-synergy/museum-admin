@@ -41,7 +41,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
 
   //start interval
   useEffect(() => {
-      if (wasResetRef.current) {
+    if (wasResetRef.current) {
       wasResetRef.current = false;
       return;
     }
@@ -96,13 +96,14 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       navigate('/events', { replace: true });
     } else {
       stopInterval();
+      reset();
       wasResetRef.current = true;
+      eventSlug.current = null;
     }
   };
 
   const onCancel = () => {
     stopInterval();
-    reset();
     navigationAfterSaving();
   };
 
@@ -117,7 +118,6 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     } else {
       await addEvent(event);
     }
-    reset();
     setIsPublishSuccess(true);
   };
 
@@ -163,6 +163,14 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     return false;
   }, [begin, end]);
 
+  const btnTitle = useMemo(() => {
+    return type === 'add'
+      ? { publish: 'Опублікувати', draft: 'Зберегти як чернетка' }
+      : status === EventStatus.DRAFT
+      ? { publish: 'Зберегти та опублікувати', draft: 'Зберегти зміни' }
+      : { publish: 'Зберегти зміни', draft: '' };
+  }, [status, type]);
+
   return (
     <>
       <Form
@@ -176,6 +184,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
         onSaveDraft={onClickSaveDraft}
         onCancel={onCancel}
         status={status}
+        btnTitle={btnTitle}
       />
       <InfoModal
         open={isPublishSuccess}

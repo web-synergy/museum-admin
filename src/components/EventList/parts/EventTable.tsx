@@ -15,7 +15,7 @@ import TableItemActivity from './TableItemActivity';
 import { EventStatus } from '@/assets/constants/formEnums';
 
 interface EventTableProps {
-  events: IEvent[];
+  events: IEvent[] | undefined;
   onDeleteEvent: (id: string) => void;
 }
 
@@ -38,7 +38,8 @@ const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {events.length > 0 &&
+          {events &&
+            events.length > 0 &&
             events.map((event) => (
               <TableRow key={event.slug}>
                 <TableCell sx={{ fontWeight: 400 }}>

@@ -21,6 +21,7 @@ interface FormProps {
   onCancel: () => void;
   status: EventStatus;
   activeDraftBtn: boolean;
+  btnTitle: { publish: string; draft: string };
 }
 
 const Form: FC<FormProps> = ({
@@ -34,6 +35,7 @@ const Form: FC<FormProps> = ({
   onCancel,
   status,
   activeDraftBtn,
+  btnTitle,
 }) => {
   return (
     <Box component="form" onSubmit={onSubmit} sx={{ minWidth: 320 }}>
@@ -139,7 +141,7 @@ const Form: FC<FormProps> = ({
               width={{ xs: '100%', md: 'auto' }}
             >
               <Button type="submit" sx={{ width: { xs: '100%', md: 248 } }}>
-                Опублікувати
+                {btnTitle.publish}
               </Button>
               <Button
                 sx={{ width: { xs: '100%', md: 248 } }}
@@ -157,7 +159,7 @@ const Form: FC<FormProps> = ({
                   onClick={onSaveDraft}
                   disabled={!activeDraftBtn}
                 >
-                  Зберегти як чернетку
+                  {btnTitle.draft}
                 </SaveDraftBtn>
               </Box>
             )}
