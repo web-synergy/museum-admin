@@ -25,7 +25,7 @@ const AddEvent: FC = () => {
           pb: { xs: '60px', md: 10, lg: 15 },
         }}
       >
-        <EventForm id={null} defaultValues={defaultValues} type="add" />
+        <EventForm slug={null} defaultValues={defaultValues} type="add" />
       </Container>
     </PageTemplate>
   );
