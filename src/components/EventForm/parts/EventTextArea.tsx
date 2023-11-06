@@ -25,6 +25,7 @@ const EventTextArea: FC<InputFormProps> = ({
           <TextAreaContainer errorValue={!!error}>
             <CustomTextArea
               {...field}
+              value={field.value ?? ''}
               id={field.name}
               maxLength={maxLength}
               placeholder={placeholder}
@@ -33,7 +34,7 @@ const EventTextArea: FC<InputFormProps> = ({
 
           {maxLength && (
             <Typography textAlign="end" variant="body2" mt={1}>
-              {field.value.length}/{maxLength}
+              {field.value?.length ?? 0}/{maxLength}
             </Typography>
           )}
         </>
