@@ -3,7 +3,7 @@ import { InputLabel, Box, Typography, IconButton, Stack } from '@mui/material';
 import { Controller, useController } from 'react-hook-form';
 import SvgSpriteIcon from '@/components/Common/SvgSprite';
 import Loader from '@/components/Common/Loader';
-import ModalBase from '@/components/Common/ModalBase';
+import InfoModal from './InfoModal';
 import EditImage from './EditImage';
 import { VisuallyHiddenInput, DragDropWrapper, UploadImageBox } from './styles';
 import { IImageState, InputFormProps } from '@/types/events';
@@ -184,7 +184,16 @@ const ImageField: FC<ImageFieldProps> = ({
                           textAlign: 'center',
                         }}
                       >
-                        допустимий формат файлів — .jpg, .png, .jpeg, .jiff
+                        Допустимий формат файлів — .jpg, .png, .jpeg, .jiff
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: (theme) => theme.palette.gray.dark,
+                          textAlign: 'center',
+                          maxWidth: { xs: 160, md: '100%' },
+                        }}
+                      >
+                        Максимальний розмір файлів — 5 МБ
                       </Typography>
 
                       <VisuallyHiddenInput
@@ -210,14 +219,11 @@ const ImageField: FC<ImageFieldProps> = ({
           loading={loading}
         />
       )}
-      <ModalBase open={openErrorModal} onClose={() => setOpenErrorModal(false)}>
-        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
-          <Typography>
-            Невірний формат картинки. Додавати можна картинки в форматах .jpg,
-            .png, .jpeg, .bmp, .jiff.
-          </Typography>
-        </Box>
-      </ModalBase>
+      <InfoModal
+        open={openErrorModal}
+        onClose={() => setOpenErrorModal(false)}
+        text="Формат файлу не підтримується. Будь ласка, завантажте файл у форматі .jpg, .png, .jpeg або .jiff"
+      />
     </>
   );
 };

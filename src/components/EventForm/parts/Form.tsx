@@ -36,7 +36,7 @@ const Form: FC<FormProps> = ({
   activeDraftBtn,
 }) => {
   return (
-    <Box component="form" onSubmit={onSubmit}>
+    <Box component="form" onSubmit={onSubmit} sx={{ minWidth: 320 }}>
       <Grid container columnSpacing="30px" rowSpacing={4}>
         {errorMessage && (
           <Grid item xs={12}>

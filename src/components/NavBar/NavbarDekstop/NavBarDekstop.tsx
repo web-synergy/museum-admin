@@ -5,7 +5,7 @@ import useAuth from '@/hooks/useAuth';
 import { CloseButton, ExitButton, ExitWrapper, Wrapper } from './style';
 import Navigation from '../parts/Navigation';
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { makeConstantsVie } from './helper';
 
 const NavBarDekstop: FC = () => {
@@ -16,7 +16,10 @@ const NavBarDekstop: FC = () => {
 
   const [isShort, setIsShort] = useState(isLaptop);
 
-  const { rotate, title, navItems, insertLogo, width } = makeConstantsVie(isShort, isLaptop);
+  const { rotate, title, navItems, insertLogo, width } = makeConstantsVie(
+    isShort,
+    isLaptop
+  );
   const Offset = styled('div')({
     height: '100vh',
     width,
@@ -24,7 +27,13 @@ const NavBarDekstop: FC = () => {
   return (
     <Box>
       <Wrapper sx={{ position: 'fixed', zIndex: 1 }}>
-        <Box component="img" sx={{ maxWidth: '240px', alignSelf: 'end' }} src={insertLogo} alt="logo" mb={2} />
+        <Box
+          component="img"
+          sx={{ maxWidth: '240px', alignSelf: 'end' }}
+          src={insertLogo}
+          alt="logo"
+          mb={2}
+        />
         <Navigation navigation={navItems} />
         <CloseButton
           sx={{
@@ -34,11 +43,16 @@ const NavBarDekstop: FC = () => {
           title=""
           variant="link"
           iconPlace="startIcon"
-          component={Link}
           onClick={() => setIsShort((prev) => !prev)}
         />
         <ExitWrapper>
-          <ExitButton svgSpriteId="log-out" title={title} variant="text" iconPlace="startIcon" onClick={() => signOut()} />
+          <ExitButton
+            svgSpriteId="log-out"
+            title={title}
+            variant="text"
+            iconPlace="startIcon"
+            onClick={() => signOut()}
+          />
         </ExitWrapper>
       </Wrapper>
       <Offset />

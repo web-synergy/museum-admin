@@ -1,23 +1,24 @@
-import { FC, useMemo, useEffect, useRef } from 'react';
+import { FC, useMemo, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateTime } from 'luxon';
-
 import { IEventValues } from '@/types/events';
 import { validationSchemaEventForm } from './validation';
-
 import { EventStatus, FormEventFields } from '@/assets/constants/formEnums';
-import { editEvent, addEvent } from '@/api';
+import { editEvent, addEvent, addDraft, editDraft } from '@/api';
 import Form from './parts/Form';
+import InfoModal from './parts/InfoModal';
 
 interface EventFormProps {
   defaultValues: IEventValues;
   type: 'add' | 'edit';
-  id: string | null;
+  slug: string | null;
 }
 
-const EventForm: FC<EventFormProps> = ({ defaultValues, type, id }) => {
+const TIMER = 1000 * 60 * 5;
+
+const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const { control, handleSubmit, reset, getValues, formState, watch } = useForm<
     IEventValues,
     FormEventFields
@@ -27,44 +28,23 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, id }) => {
     resolver: yupResolver(validationSchemaEventForm),
   });
   const navigate = useNavigate();
-  const eventId = useRef<string | null>(id);
+  const eventSlug = useRef<string | null>(slug);
   const intervalRef = useRef<number | null>(null);
+  const wasResetRef = useRef(false);
+  const [isPublishSuccess, setIsPublishSuccess] = useState(false);
+  const [isDraftSaveSuccess, setIsDraftSaveSuccess] = useState(false);
 
   const begin = watch('begin');
   const end = watch('end');
   const status = watch('status');
   const isFieldWasChanged = Object.keys(formState.dirtyFields);
 
-  // Start the interval
-  const startInterval = () => {
-    console.log(
-      'intervalRef in start interval in the beginning',
-      intervalRef.current
-    );
-
-    if (intervalRef.current !== null) return;
-    intervalRef.current = window.setInterval(() => {
-      onSaveDraft();
-    }, 5000);
-
-    console.log(
-      'intervalRef in start interval in the end',
-      intervalRef.current
-    );
-  };
-
-  // Stop the interval
-  const stopInterval = () => {
-    if (intervalRef.current) {
-      window.clearInterval(intervalRef.current);
-      intervalRef.current = null;
-      console.log('stop interval');
-    }
-  };
-
   //start interval
   useEffect(() => {
-    console.log('useEffect to define is need to start timer');
+      if (wasResetRef.current) {
+      wasResetRef.current = false;
+      return;
+    }
     if (
       isFieldWasChanged.length > 0 &&
       status === EventStatus.DRAFT &&
@@ -84,46 +64,90 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, id }) => {
     };
   }, []);
 
-  const onCancel = () => {
-    if (type === 'add') {
-      reset();
-    } else {
-      reset();
-      navigate('/events', { replace: true });
+  // Start the interval
+  const startInterval = () => {
+    console.log(
+      'intervalRef in start interval in the beginning',
+      intervalRef.current
+    );
+
+    if (intervalRef.current !== null) return;
+    intervalRef.current = window.setInterval(() => {
+      onSaveDraft();
+    }, TIMER);
+
+    console.log(
+      'intervalRef in start interval in the end',
+      intervalRef.current
+    );
+  };
+
+  // Stop the interval
+  const stopInterval = () => {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      console.log('stop interval');
     }
   };
 
-  const onSubmit = (data: IEventValues) => {
-    const event = { ...data, status: EventStatus.PUBLISHED };
-    if (eventId.current) {
-      editEvent(event, eventId.current);
-      console.log('navigation to event list');
+  const navigationAfterSaving = () => {
+    if (type === 'edit') {
+      navigate('/events', { replace: true });
     } else {
-      addEvent(event);
+      stopInterval();
+      wasResetRef.current = true;
+    }
+  };
+
+  const onCancel = () => {
+    stopInterval();
+    reset();
+    navigationAfterSaving();
+  };
+
+  const onSubmit = async (data: IEventValues) => {
+    if (dateError) {
+      return;
+    }
+    const event = { ...data, status: EventStatus.PUBLISHED };
+    if (eventSlug.current) {
+      console.log('change event');
+      await editEvent(event, eventSlug.current);
+    } else {
+      await addEvent(event);
     }
     reset();
+    setIsPublishSuccess(true);
   };
 
-  const onSaveDraft = () => {
+  const onSaveDraft = async () => {
     const values = getValues();
     console.log(values);
-    console.log('eventId onSaveDraft', eventId.current);
-    if (eventId.current) {
+    console.log('eventId onSaveDraft', eventSlug.current);
+    if (eventSlug.current) {
       console.log('change event');
+      editDraft(values, eventSlug.current);
     } else {
       console.log('add event');
-      eventId.current = 'some id';
+      eventSlug.current = 'other-1234456';
+      addDraft(values).then((res) => (eventSlug.current = res.data.slug));
     }
   };
 
-  const onClickSaveDraft = () => {
-    stopInterval();
-    // if (isFieldWasChanged.length === 0) {
-    //   console.log('any field was not changed');
-    //   return;
-    // }
-    // console.log('fields were changed');
-    // onSaveDraft();
+  const onClickSaveDraft = async () => {
+    await onSaveDraft();
+    setIsDraftSaveSuccess(true);
+  };
+
+  const onCloseSuccessPublish = () => {
+    setIsPublishSuccess(false);
+    navigationAfterSaving();
+  };
+
+  const onCloseSuccessDraftSave = () => {
+    setIsDraftSaveSuccess(false);
+    navigationAfterSaving();
   };
 
   const requiredFieldsError = useMemo(() => {
@@ -140,18 +164,30 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, id }) => {
   }, [begin, end]);
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      errorMessage={requiredFieldsError}
-      control={control}
-      errors={formState.errors}
-      dateError={dateError}
-      activeEndDate={!!begin}
-      activeDraftBtn={isFieldWasChanged.length > 0}
-      onSaveDraft={onClickSaveDraft}
-      onCancel={onCancel}
-      status={status}
-    />
+    <>
+      <Form
+        onSubmit={handleSubmit(onSubmit)}
+        errorMessage={requiredFieldsError}
+        control={control}
+        errors={formState.errors}
+        dateError={dateError}
+        activeEndDate={!!begin}
+        activeDraftBtn={isFieldWasChanged.length > 0}
+        onSaveDraft={onClickSaveDraft}
+        onCancel={onCancel}
+        status={status}
+      />
+      <InfoModal
+        open={isPublishSuccess}
+        onClose={onCloseSuccessPublish}
+        text={'Подія була успішно опублікована.'}
+      />
+      <InfoModal
+        open={isDraftSaveSuccess}
+        onClose={onCloseSuccessDraftSave}
+        text={'Чернетку збережено в розділі \n “Редагувати події”.'}
+      />
+    </>
   );
 };
 

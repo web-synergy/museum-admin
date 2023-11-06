@@ -40,7 +40,7 @@ const EditEvent = () => {
           }}
         >
           {event && (
-            <EventForm defaultValues={event} type="edit" id={event.id} />
+            <EventForm defaultValues={event} type="edit" slug={event.slug} />
           )}
         </Container>
       )}

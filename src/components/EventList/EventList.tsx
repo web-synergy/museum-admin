@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Stack } from '@mui/material';
-
 import PageTemplate from '../Common/PageTemplate';
-
 import { ListContainer, ShowMoreBtn } from './parts/styles';
 import { IEvent } from '@/types/events';
 import { getEvents, deleteEvent } from '@/api';
@@ -38,10 +36,10 @@ const EventList = () => {
     setLoading(false);
   };
 
-  const onDeleteEvent = async (id: string) => {
+  const onDeleteEvent = async (slug: string) => {
     try {
-      await deleteEvent(id);
-      const newEvents = events.filter((event) => event.id !== id);
+      await deleteEvent(slug);
+      const newEvents = events.filter((event) => event.slug !== slug);
       setEvents(newEvents);
     } catch (error) {
       console.log(error);

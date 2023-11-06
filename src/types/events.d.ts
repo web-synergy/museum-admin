@@ -17,7 +17,7 @@ export interface IEventValues {
 }
 
 export interface IEvent extends IEventValues {
-  id: string;
+  slug: string;
   created: string;
 }
 
