@@ -10,7 +10,7 @@ import {
 } from 'react'
 
 import { AuthData } from '../Login'
-import { ButtonBox, Description, ErrorBox, FormBox, RecoveryPassTitle } from '../styles'
+import { ButtonBox, CustomAlert, FormBox, RecoveryPassTitle } from '../styles'
 import ModalWind from './ModalWind'
 import PassIcon from './PassIcon'
 
@@ -104,11 +104,9 @@ const LoginForm: FC<LoginFormProps> = ({
       </form>
 
       {loginError && (
-        <ErrorBox>
-          <Description maxWidth={'282px'}>
-            Невірно введені дані. Для входу в обліковий запис повторіть спробу.
-          </Description>
-        </ErrorBox>
+        <CustomAlert variant="outlined" severity="error" icon={false}>
+          Невірно введені дані. Для входу в обліковий запис повторіть спробу.
+        </CustomAlert>
       )}
 
       <ModalWind open={openModal} closeModal={closeModal} />

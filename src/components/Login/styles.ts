@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertProps,
   Box,
   BoxProps,
   Dialog,
@@ -93,9 +95,9 @@ export const RecoveryPassTitle = styled(Typography)<TypographyProps>(({ theme })
 }))
 
 export const ButtonBox = styled(Box)<BoxProps>(({ theme }) => ({
-  paddingTop: '32px',
+  marginTop: '32px',
   [theme.breakpoints.down('md')]: {
-    paddingTop: '24px',
+    marginTop: '24px',
   },
 }))
 
@@ -166,4 +168,11 @@ export const DialogText = styled(Typography)<TypographyProps>(({ theme }) => ({
   },
   margin: 'auto auto',
   textAlign: 'center',
+}))
+
+export const CustomAlert = styled(Alert)<AlertProps>(() => ({
+  padding: '8px',
+  marginTop: '16px',
+  textAlign: 'center',
+  '.MuiAlert-message': { maxWidth: '282px', margin: '0px auto' },
 }))
