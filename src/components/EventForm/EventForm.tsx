@@ -3,12 +3,14 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateTime } from 'luxon';
+import { Typography, Box, Button } from '@mui/material';
 import { IEventValues } from '@/types/events';
 import { validationSchemaEventForm } from './validation';
 import { EventStatus, FormEventFields } from '@/assets/constants/formEnums';
 import { editEvent, addEvent, addDraft, editDraft } from '@/api';
 import Form from './parts/Form';
 import InfoModal from './parts/InfoModal';
+import ModalBase from '../Common/ModalBase';
 
 interface EventFormProps {
   defaultValues: IEventValues;
@@ -145,7 +147,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     navigationAfterSaving();
   };
 
-  const onCloseSuccessDraftSave = () => {
+  const onCloseSuccessDraftSave = (navigate = falsr) => {
     setIsDraftSaveSuccess(false);
     navigationAfterSaving();
   };
@@ -191,11 +193,16 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
         onClose={onCloseSuccessPublish}
         text={'Подія була успішно опублікована.'}
       />
-      <InfoModal
+      {/* <InfoModal
         open={isDraftSaveSuccess}
         onClose={onCloseSuccessDraftSave}
         text={'Чернетку збережено в розділі \n “Редагувати події”.'}
-      />
+      /> */}
+      <ModalBase open={isDraftSaveSuccess} onClose={onCloseSuccessDraftSave}>
+        <Box mx={3} mb={3}>
+          <Typography></Typography>
+        </Box>
+      </ModalBase>
     </>
   );
 };

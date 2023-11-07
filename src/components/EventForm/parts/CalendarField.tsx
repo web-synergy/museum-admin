@@ -39,7 +39,6 @@ const CalendarField: FC<CalendarFieldProps> = ({
               width: '100%',
               fontVariantNumeric: 'lining-nums proportional-nums',
             }}
-            format="dd/MM/yyyy"
             {...field}
             value={field.value ? DateTime.fromISO(field.value) : null}
             onChange={(date) => {

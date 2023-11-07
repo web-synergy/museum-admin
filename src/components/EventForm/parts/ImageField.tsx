@@ -222,7 +222,7 @@ const ImageField: FC<ImageFieldProps> = ({
       <InfoModal
         open={openErrorModal}
         onClose={() => setOpenErrorModal(false)}
-        text="Формат файлу не підтримується. Будь ласка, завантажте файл у форматі .jpg, .png, .jpeg або .jiff"
+        text="Формат файлу не підтримується. Будь ласка, завантажте файл у форматі .jpg, .png, .jpeg або .jiff. Максимальний розмір файлів для завантаження —  5 МБ."
       />
     </>
   );
