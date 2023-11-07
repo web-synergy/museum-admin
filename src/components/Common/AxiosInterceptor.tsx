@@ -6,7 +6,7 @@ import useAuth from '@/hooks/useAuth';
 const AxiosInterceptor = () => {
   const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
-  const { removeCredentials } = useAuth();
+  const { removeCredentials, updateAuthState } = useAuth();
 
   useEffect(() => {
     if (redirect) {
@@ -14,6 +14,12 @@ const AxiosInterceptor = () => {
       setRedirect(false);
     }
   }, [redirect, navigate]);
+
+  instance.interceptors.request.use((config) => {
+    const token = updateAuthState();
+    config.headers['Authorization'] = `Bearer ${token}`;
+    return config;
+  });
 
   instance.interceptors.response.use(
     (res) => res,
