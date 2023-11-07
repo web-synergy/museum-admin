@@ -1,8 +1,10 @@
 import { IEventValues, IContactInfo, IEvent } from '@/types/events';
 import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
+
 export const instance = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
 });
 
 interface LoginResponse {
@@ -23,7 +25,7 @@ export const logout = () => {
 };
 
 export const getContactInfo = () => {
-  return instance.get('/museum_data');
+  return instance.get('/museum-data');
 };
 
 export const updateContactInfo = (data: IContactInfo) => {
