@@ -7,8 +7,4 @@ export default function proxySettings(request: Request) {
   if (url.pathname.startsWith('/api')) {
     return rewrite(new URL(`${serverUrl}`, request.url));
   }
-
-  if (url.pathname.startsWith('/')) {
-    return rewrite('/index.html');
-  }
 }
