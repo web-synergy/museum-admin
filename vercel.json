@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/:path*", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "$VITE_SERVER_URL"
+    },
+    { "source": "/:path*", "destination": "/index.html" }
+  ]
 }
