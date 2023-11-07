@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
         '#root': resolve(__dirname),
       },
     },
+    rewrite: {},
   };
 
   return config;
