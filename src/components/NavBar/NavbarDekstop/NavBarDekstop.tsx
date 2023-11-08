@@ -1,10 +1,9 @@
 import { FC, useState } from 'react';
-import { Box, styled, useMediaQuery, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
 
 import { CloseButton, ExitButton, ExitWrapper, Wrapper } from './style';
 import Navigation from '../parts/Navigation';
-
 import { Link } from 'react-router-dom';
 import { makeConstantsVie } from './helper';
 
@@ -16,32 +15,69 @@ const NavBarDekstop: FC = () => {
 
   const [isShort, setIsShort] = useState(isLaptop);
 
-  const { rotate, title, navItems, insertLogo, width } = makeConstantsVie(isShort, isLaptop);
-  const Offset = styled('div')({
-    height: '100vh',
-    width,
-  });
+  const { rotate, title, navItems, insertLogo, width, widthCollapse } =
+    makeConstantsVie(isShort, isLaptop);
+
   return (
     <Box>
-      <Wrapper sx={{ position: 'fixed', zIndex: 1 }}>
-        <Box component="img" sx={{ maxWidth: '240px', alignSelf: 'end' }} src={insertLogo} alt="logo" mb={2} />
-        <Navigation navigation={navItems} />
-        <CloseButton
+      <Box
+        onClick={() => setIsShort(true)}
+        sx={{
+          position: 'absolute',
+          width: '100vw',
+          transition: 'width 0.4s ease-in-out',
+        }}>
+        <Wrapper
+          onClick={e => e.stopPropagation()}
           sx={{
-            transform: rotate,
-          }}
-          svgSpriteId={'close-nav'}
-          title=""
-          variant="link"
-          iconPlace="startIcon"
-          component={Link}
-          onClick={() => setIsShort((prev) => !prev)}
-        />
-        <ExitWrapper>
-          <ExitButton svgSpriteId="log-out" title={title} variant="text" iconPlace="startIcon" onClick={() => signOut()} />
-        </ExitWrapper>
-      </Wrapper>
-      <Offset />
+            position: !isLaptop ? 'fixed' : 'relative',
+            zIndex: 2,
+            width: widthCollapse,
+            transition: 'width 0.4s ease-in-out',
+          }}>
+          <Box
+            component='img'
+            sx={{ maxWidth: '540px', alignSelf: 'end' }}
+            src={insertLogo}
+            alt='logo'
+            mb={2}
+          />
+          <Navigation
+            handleClose={() => setIsShort(true)}
+            navigation={navItems}
+          />
+          <CloseButton
+            sx={{
+              '.MuiSvgIcon-root': {
+                transform: rotate,
+                transition: 'transform 0.4s',
+              },
+            }}
+            svgSpriteId={'close-nav'}
+            title=''
+            variant='link'
+            iconPlace='startIcon'
+            component={Link}
+            onClick={() => setIsShort(prev => !prev)}
+          />
+          <ExitWrapper>
+            <ExitButton
+              svgSpriteId='log-out'
+              title={title}
+              variant='text'
+              iconPlace='startIcon'
+              onClick={() => signOut()}
+            />
+          </ExitWrapper>
+        </Wrapper>
+      </Box>
+      <Box
+        sx={{
+          height: '100vh',
+          width,
+          transition: 'width 0.4s ease-in-out',
+        }}
+      />
     </Box>
   );
 };
