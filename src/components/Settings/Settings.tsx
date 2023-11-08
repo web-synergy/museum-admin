@@ -10,7 +10,7 @@ import { ContentBox, CustomDivider, MainContainer, SettingsHeaderContainer } fro
 
 const Settings: FC = () => {
   const [value, setValue] = useState(0)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const openModal = () => setOpen(true)
   const closeModal = () => setOpen(false)

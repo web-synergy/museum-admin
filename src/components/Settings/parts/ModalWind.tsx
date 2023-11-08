@@ -1,13 +1,16 @@
+import { confirmEmail } from '@/api'
 import SvgSpriteIcon from '@/components/Common/SvgSprite'
-import { Box, Button, IconButton, Stack, TextField, Typography } from '@mui/material'
-import { ChangeEvent, ChangeEventHandler, FC, FormEvent, useRef, useState } from 'react'
+import useAuth from '@/hooks/useAuth'
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
+import { FC, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getUserCode, handleKeyDown } from '../helpers'
 import {
   CustomDialog,
   DialogErrorText,
   DialogHintText,
   DialogStack,
   DialogTextField,
-  ModalText,
 } from '../styles'
 
 interface ModalWindProps {
@@ -16,23 +19,35 @@ interface ModalWindProps {
 }
 
 const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
-  const [error, setError] = useState(true)
-  const [inputsValues, setInputsValues] = useState(Array(6).fill(''))
-  const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(''))
+  const { signOut } = useAuth()
+  const inputs = Array(6).fill('')
+  const [error, setError] = useState(false)
+  const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null))
+  const navigate = useNavigate()
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index: number
-  ) => {
-    const newValues = [...inputsValues]
-    const currVal = /[0-9]/gi.test(e.target.value) ? e.target.value : ''
-
-    newValues[index] = currVal
-    setInputsValues(newValues)
-
-    if (index < inputRefs.current.length - 1 && currVal.length === 1) {
+  const changeFocus = (currInputVal: string, index: number) => {
+    if (index < inputRefs.current.length - 1 && currInputVal) {
       inputRefs.current[index + 1]?.focus()
     }
+  }
+
+  const checkUserCode = () => {
+    const checkCode = async (code: string) => {
+      try {
+        const resp = await confirmEmail(code)
+        if (resp.status === 204) {
+          signOut()
+          navigate('/login', { replace: true })
+        } else {
+          throw new Error()
+        }
+      } catch (error) {
+        setError(true)
+        console.log(error)
+      }
+    }
+    const userCode = getUserCode(inputRefs.current)
+    checkCode(userCode)
   }
 
   return (
@@ -61,23 +76,23 @@ const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
           <Stack
             sx={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
           >
-            {inputsValues.map((inputVal, index) => (
+            {inputs.map((_, index) => (
               <DialogTextField
                 type="text"
                 variant="outlined"
                 key={index}
-                value={inputVal}
-                onChange={e => handleInputChange(e, index)}
+                onChange={e => changeFocus(e.target.value, index)}
                 inputRef={ref => (inputRefs.current[index] = ref)}
+                onKeyDown={handleKeyDown}
                 inputProps={{ maxLength: 1 }}
-                required
-                error={true}
+                error={error}
+                autoComplete="off"
               />
             ))}
           </Stack>
           {error && <DialogErrorText>Не вірний код!</DialogErrorText>}
         </Box>
-        <Button type="button" variant="adminPrimaryBtn">
+        <Button type="button" variant="adminPrimaryBtn" onClick={checkUserCode}>
           Змінити логін
         </Button>
         <DialogHintText variant="body1">

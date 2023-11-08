@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material'
 import { ChangeEvent, FC, FormEventHandler, useState } from 'react'
 
+import { verificationNewEmail } from '@/api'
 import { ErrorText, InputsBox } from '../styles'
 import { validationSchema } from '../validationSchema/email'
 import InputWithLabel from './InputWithLabel'
@@ -22,7 +23,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim().toLowerCase()
     setData({ ...data, [key]: newVal })
-    if (key === 'repeatLogin') {
+    if (key === 'repeatLogin' && newLogin) {
       setError(!isLoginsSame(newVal, data.newLogin))
       setErrorMsg('Логіни не співпадають. Спробуйте ще раз.')
       if (newVal.length === data.newLogin.length)
@@ -38,18 +39,26 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault()
+    setIsDisabled(true)
     const isValid = await validationSchema.isValid(data)
     if (!isValid) {
       setErrorMsg('Логін може бути тільки електронною адресою!')
-      setIsDisabled(true)
       return setError(!isValid)
     } else {
-      openModal()
-      setError(false)
-      setIsDisabled(true)
-      setData({ ...data, newLogin: '', repeatLogin: '' })
+      const sendCodeToUserEmail = async (userEmail: string) => {
+        try {
+          const res = await verificationNewEmail(userEmail)
+          if (!res) throw new Error()
+          openModal()
+          setData({ ...data, newLogin: '', repeatLogin: '' })
+        } catch (error) {
+          console.log(error)
+          setErrorMsg('Something went wrong')
+          setError(true)
+        }
+      }
+      sendCodeToUserEmail(newLogin)
     }
-    console.log(data)
   }
   return (
     <Box component={'form'} onSubmit={onSubmit} position={'relative'}>
