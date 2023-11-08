@@ -1,7 +1,7 @@
 import { IContactInfo, IEvent, IEventValues } from '@/types/events'
 import axios from 'axios'
 
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
+const BASE_URL = import.meta.env.VITE_SERVER_URL
 
 export const instance = axios.create({
   baseURL: BASE_URL,
@@ -13,15 +13,8 @@ interface LoginResponse {
 }
 
 export const login = (username: string, password: string) => {
-  console.log(import.meta.env.MODE)
   return instance.post<LoginResponse>('/admin/login', {}, { auth: { username, password } })
 }
-  return instance.post<LoginResponse>(
-    '/admin/login',
-    {},
-    { auth: { username, password } }
-  );
-};
 
 export const logout = () => {
   return instance.post('/admin/logout')
@@ -30,14 +23,10 @@ export const logout = () => {
 export const getContactInfo = () => {
   return instance.get('/museum_data')
 }
-  return instance.get('/museum-data');
-};
 
 export const updateContactInfo = (data: IContactInfo) => {
   return instance.put('/admin/museum_data', data)
 }
-  return instance.put('/admin/museum-data', data);
-};
 
 interface AddImageResponse {
   imageId: string
@@ -59,10 +48,8 @@ export const getImage = (imageId: string) => {
 }
 
 export const addEvent = (data: IEventValues) => {
-  return instance.post('/admin/events', data)
+  return instance.post<IEvent>('/admin/events', data)
 }
-  return instance.post<IEvent>('/admin/events', data);
-};
 
 interface GetEventsResponse {
   totalPages: number
@@ -72,12 +59,8 @@ interface GetEventsResponse {
 }
 
 export const getEvents = (page = 0, size = 5) => {
-  return instance.get<GetEventsResponse>(`/events?size=${size}&page=${page}`)
+  return instance.get<GetEventsResponse>(`/admin/events?size=${size}&page=${page}`)
 }
-  return instance.get<GetEventsResponse>(
-    `/admin/events?size=${size}&page=${page}`
-  );
-};
 
 export const getEventById = async (id: string) => {
   try {
@@ -89,10 +72,8 @@ export const getEventById = async (id: string) => {
 }
 
 export const editEvent = async (data: IEventValues, id: string) => {
-  return instance.put(`/admin/events/${id}`, data)
+  return instance.put<IEvent>(`/admin/events/${id}`, data)
 }
-  return instance.put<IEvent>(`/admin/events/${id}`, data);
-};
 
 export const deleteEvent = async (id: string) => {
   return instance.delete(`/admin/events/${id}`)
@@ -105,9 +86,9 @@ export const confirmEmail = (code: string) =>
   instance.put(`/admin/update/confirm-email?code=${code}`)
 
 export const addDraft = async (data: IEventValues) => {
-  return instance.post<IEvent>('/admin/events/draft', data);
-};
+  return instance.post<IEvent>('/admin/events/draft', data)
+}
 
 export const editDraft = async (data: IEventValues, slug: string) => {
-  return instance.put<IEvent>(`/admin/events/draft/${slug}`, data);
-};
+  return instance.put<IEvent>(`/admin/events/draft/${slug}`, data)
+}
