@@ -21,11 +21,11 @@ export const logout = () => {
 }
 
 export const getContactInfo = () => {
-  return instance.get('/museum_data')
+  return instance.get('/museum-data')
 }
 
 export const updateContactInfo = (data: IContactInfo) => {
-  return instance.put('/admin/museum_data', data)
+  return instance.put('/admin/museum-data', data)
 }
 
 interface AddImageResponse {
@@ -79,12 +79,6 @@ export const deleteEvent = async (id: string) => {
   return instance.delete(`/admin/events/${id}`)
 }
 
-export const verificationNewEmail = (data: string) =>
-  instance.post('/admin/update/email', { email: data })
-
-export const confirmEmail = (code: string) =>
-  instance.put(`/admin/update/confirm-email?code=${code}`)
-
 export const addDraft = async (data: IEventValues) => {
   return instance.post<IEvent>('/admin/events/draft', data)
 }
@@ -92,3 +86,9 @@ export const addDraft = async (data: IEventValues) => {
 export const editDraft = async (data: IEventValues, slug: string) => {
   return instance.put<IEvent>(`/admin/events/draft/${slug}`, data)
 }
+
+export const verificationNewEmail = (data: string) =>
+  instance.post('/admin/update/email', { email: data })
+
+export const confirmEmail = (code: string) =>
+  instance.put(`/admin/update/confirm-email?code=${code}`)
