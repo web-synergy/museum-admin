@@ -28,7 +28,7 @@ export const ExitButton = styled(ButtonWithIcon)(({ theme }) => ({
   border: `1px solid ${theme.palette.common.white}`,
   color: theme.palette.common.white,
   width: '100%',
-
+  height: '48px',
   maxWidth: '238px',
   padding: '16px',
   '&:hover': {

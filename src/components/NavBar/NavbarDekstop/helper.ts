@@ -6,8 +6,8 @@ export const makeConstantsVie = (isShort: boolean, isLaptop: boolean) => {
   let title = 'Вийти';
   let navItems = [...navigation];
   let insertLogo = logo;
-  let width = isLaptop ? '151px' : '336px';
-  let widthCollapse = '336px';
+  let width = isLaptop ? '151px' : '342px';
+  let widthCollapse = '342px';
   if (isShort) {
     navItems = navigation.map(item => ({ ...item, title: '' }));
     insertLogo = logoShort;
