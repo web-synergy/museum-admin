@@ -4,7 +4,6 @@ import useAuth from '@/hooks/useAuth';
 
 import { CloseButton, ExitButton, ExitWrapper, Wrapper } from './style';
 import Navigation from '../parts/Navigation';
-import { Link } from 'react-router-dom';
 import { makeConstantsVie } from './helper';
 
 const NavBarDekstop: FC = () => {
@@ -39,13 +38,18 @@ const NavBarDekstop: FC = () => {
           }}>
           <Box
             component='img'
-            sx={{ maxWidth: '540px', alignSelf: 'end' }}
+            sx={{
+              maxWidth: '540px',
+              alignSelf: 'end',
+            }}
             src={insertLogo}
             alt='logo'
             mb={2}
           />
           <Navigation
-            handleClose={() => setIsShort(true)}
+            handleClose={() => {
+              isLaptop && setIsShort(true);
+            }}
             navigation={navItems}
           />
           <CloseButton
@@ -59,7 +63,6 @@ const NavBarDekstop: FC = () => {
             title=''
             variant='link'
             iconPlace='startIcon'
-            component={Link}
             onClick={() => setIsShort(prev => !prev)}
           />
           <ExitWrapper>
