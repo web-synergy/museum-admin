@@ -1,8 +1,9 @@
 import useActiveLink from '@/hooks/useActiveLink';
-import { ListItem } from '@mui/material';
-import { FC } from 'react';
+import { ListItem, useMediaQuery } from '@mui/material';
+import { FC, useEffect, useState } from 'react';
 import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
 import { Link } from 'react-router-dom';
+import { theme } from '@/theme';
 
 interface NavMenuItemProp {
   href: string;
@@ -13,12 +14,32 @@ interface NavMenuItemProp {
 
 const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
   const isActiveLink = useActiveLink(href);
+  const isMob = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [slowTitle, setSlowTitle] = useState('');
+  useEffect(() => {
+    let timerId: ReturnType<typeof setTimeout>;
+
+    const time = () => {
+      timerId = setTimeout(() => {
+        setSlowTitle(title);
+      }, 400);
+    };
+
+    if (title && !isMob) {
+      time();
+    } else {
+      setSlowTitle(title);
+    }
+
+    return () => clearTimeout(timerId);
+  }, [title, isMob]);
   return (
-    <ListItem disablePadding onClick={click}>
+    <ListItem sx={{ mb: 1 }} disablePadding onClick={click}>
       <ButtonWithIcon
         sx={{
           '.MuiButton-startIcon': {
-            m: 0,
+            m: '1px',
           },
           backgroundColor: theme =>
             isActiveLink
@@ -29,7 +50,7 @@ const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
               ? theme.palette.common.black
               : theme.palette.common.white,
         }}
-        title={title}
+        title={slowTitle}
         svgSpriteId={icon}
         variant='link'
         iconPlace='startIcon'
