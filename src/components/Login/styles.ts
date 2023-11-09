@@ -3,6 +3,8 @@ import {
   AlertProps,
   Box,
   BoxProps,
+  Container,
+  ContainerProps,
   Dialog,
   DialogProps,
   Typography,
@@ -175,4 +177,10 @@ export const CustomAlert = styled(Alert)<AlertProps>(() => ({
   marginTop: '16px',
   textAlign: 'center',
   '.MuiAlert-message': { maxWidth: '282px', margin: '0px auto' },
+}))
+
+export const MainContainer = styled(Container)<ContainerProps>(() => ({
+  '&.MuiContainer-root': {
+    margin: '0px auto',
+  },
 }))

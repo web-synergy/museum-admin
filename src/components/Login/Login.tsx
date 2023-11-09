@@ -1,10 +1,10 @@
 import useAuth from '@/hooks/useAuth'
-import { Container, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { FC, FormEventHandler, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Section from '../Common/Section'
 import LoginForm from './parts/LoginForm'
-import { ContentBox } from './styles'
+import { ContentBox, MainContainer } from './styles'
 
 export interface AuthData {
   login: string
@@ -34,14 +34,14 @@ const Login: FC = () => {
 
   return (
     <Section variant="light">
-      <Container sx={{ '&.MuiContainer-root': { margin: '0px auto' } }}>
+      <MainContainer>
         <ContentBox>
           <Typography variant="h3" textAlign={'center'}>
             Вхід
           </Typography>
           <LoginForm {...{ authData, setAuthData, onSubmit, loginError, setLoginError }} />
         </ContentBox>
-      </Container>
+      </MainContainer>
     </Section>
   )
 }
