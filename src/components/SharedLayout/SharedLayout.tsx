@@ -13,7 +13,7 @@ const SharedLayout = () => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   if (!isAuth) {
-    // return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to='/login' state={{ from: location }} replace />;
   }
   const direction = isDesktop ? 'row' : 'column';
   return (
