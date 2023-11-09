@@ -8,7 +8,7 @@ import { BurgerIcon, CloseIcon, Logout, MobileHeader, Wrapper } from './style';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { TransitionProps } from '@mui/material/transitions';
-import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
@@ -37,13 +37,7 @@ const NavBarMobile: FC = () => {
         fullScreen
         open={open}
         onClose={handleClose}>
-        <ButtonWithIcon
-          sx={{
-            color: 'white',
-            p: 0,
-            mb: '24px',
-            justifyContent: 'flex-end',
-          }}
+        <CloseIcon
           svgSpriteId='close'
           title=''
           variant='text'
@@ -55,17 +49,7 @@ const NavBarMobile: FC = () => {
             display: 'block',
             textAlign: 'center',
           }}>
-          <ButtonWithIcon
-            sx={{
-              borderRadius: '8px',
-              border: theme => `1px solid ${theme.palette.common.white}`,
-              color: theme => theme.palette.common.white,
-              minWidth: '238px',
-              p: '16px',
-              '&:hover': {
-                border: theme => `1px solid ${theme.palette.primary.dark}`,
-              },
-            }}
+          <Logout
             svgSpriteId='log-out'
             title='Вийти'
             variant='text'
@@ -78,8 +62,7 @@ const NavBarMobile: FC = () => {
 
       <MobileHeader position='fixed'>
         <Toolbar>
-          <ButtonWithIcon
-            sx={{ color: 'white', p: 0 }}
+          <BurgerIcon
             svgSpriteId='burger-menu'
             title=''
             variant='text'
