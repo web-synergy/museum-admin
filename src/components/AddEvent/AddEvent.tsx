@@ -1,26 +1,20 @@
-import { FC, useState } from 'react';
-import { Container, Box, Typography } from '@mui/material';
+import { FC } from 'react';
+import { Container } from '@mui/material';
 import PageTemplate from '../Common/PageTemplate';
 import EventForm from '../EventForm/EventForm';
-import ModalBase from '../Common/ModalBase';
-import { IEventValues } from '@/types/events';
-import { addEvent } from '@/api';
+import { EventStatus } from '@/assets/constants/formEnums';
+import { IEventValues } from '@/types/events.d';
 
 const AddEvent: FC = () => {
-  const [confirmModal, setConfirmModal] = useState(false);
   const defaultValues: IEventValues = {
-    type: '',
+    type: null,
     title: '',
     summary: '',
     description: '',
-    banner: '',
+    banner: null,
+    status: EventStatus.DRAFT,
     begin: null,
     end: null,
-  };
-
-  const onAddEventSubmit = async (data: IEventValues) => {
-    await addEvent(data);
-    setConfirmModal(true);
   };
 
   return (
@@ -31,18 +25,8 @@ const AddEvent: FC = () => {
           pb: { xs: '60px', md: 10, lg: 15 },
         }}
       >
-        <EventForm
-          onPublish={onAddEventSubmit}
-          defaultValues={defaultValues}
-          type="add"
-        />
+        <EventForm slug={null} defaultValues={defaultValues} type="add" />
       </Container>
-
-      <ModalBase open={confirmModal} onClose={() => setConfirmModal(false)}>
-        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
-          <Typography>Подія була успішно опублікована.</Typography>
-        </Box>
-      </ModalBase>
     </PageTemplate>
   );
 };

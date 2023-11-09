@@ -4,15 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import SvgSpriteIcon from '@/components/Common/SvgSprite';
 import MobileMenu from './MobileMenu';
 import ConfirmDelete from './ConfirmDelete';
+import InfoModal from '@/components/EventForm/parts/InfoModal';
 
 interface TableItemActivityProps {
-  id: string;
+  slug: string;
   title: string;
-  onDeleteEventState: (id: string) => void;
+  onDeleteEventState: (slug: string) => void;
 }
 
 const TableItemActivity: FC<TableItemActivityProps> = ({
-  id,
+  slug,
   title,
   onDeleteEventState,
 }) => {
@@ -20,6 +21,7 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
   const isNotMobile = useMediaQuery(theme.breakpoints.up('md'));
   const navigate = useNavigate();
   const [confirmModal, setConfirmModal] = useState(false);
+  const [successInfo, setSuccessInfo] = useState(false);
 
   const onOpenConfirmModal = () => {
     setConfirmModal(true);
@@ -30,12 +32,19 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
   };
 
   const onDeleteItem = async () => {
-    console.log(`delete item with id: ${id}`);
-    await onDeleteEventState(id);
+    onCloseConfirmModal();
+
+    try {
+      await onDeleteEventState(slug);
+      console.log(`delete item with id: ${slug}`);
+      setSuccessInfo(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onEditItem = () => {
-    navigate(`/events/${id}`);
+    navigate(`/events/${slug}`);
   };
 
   return (
@@ -68,6 +77,11 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
         onCloseModal={onCloseConfirmModal}
         onDeleteItem={onDeleteItem}
         title={title}
+      />
+      <InfoModal
+        open={successInfo}
+        onClose={() => setSuccessInfo(false)}
+        text="Подія була успішно видалена."
       />
     </>
   );

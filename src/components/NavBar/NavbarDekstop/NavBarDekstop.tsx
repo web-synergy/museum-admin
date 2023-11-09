@@ -17,13 +17,13 @@ const NavBarDekstop: FC = () => {
 
   const { rotate, title, navItems, insertLogo, width, widthCollapse } =
     makeConstantsVie(isShort, isLaptop);
-
   return (
     <Box>
       <Box
         onClick={() => setIsShort(true)}
         sx={{
-          position: 'absolute',
+          position: 'fixed',
+          zIndex: 1,
           width: '100vw',
           transition: 'width 0.4s ease-in-out',
         }}>
@@ -32,6 +32,8 @@ const NavBarDekstop: FC = () => {
           sx={{
             position: !isLaptop ? 'fixed' : 'relative',
             zIndex: 2,
+            p: isShort ? '32px 11px 40px 80px' : '32px 8px 40px 80px',
+
             width: widthCollapse,
             transition: 'width 0.4s ease-in-out',
           }}>

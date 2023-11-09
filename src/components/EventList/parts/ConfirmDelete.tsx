@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Stack, Box, Typography, Button } from '@mui/material';
 import ModalBase from '@/components/Common/ModalBase';
 
@@ -15,18 +15,6 @@ const ConfirmDelete: FC<ConfirmDeleteProps> = ({
   onDeleteItem,
   title,
 }) => {
-  const [infoModal, setInfoModal] = useState(false);
-
-  const onOpenInfoModal = () => setInfoModal(true);
-
-  const onCloseInfoModal = () => setInfoModal(false);
-
-  const onConfirmDeleting = () => {
-    onDeleteItem();
-    onCloseModal();
-    onOpenInfoModal();
-  };
-
   return (
     <>
       <ModalBase open={open} onClose={onCloseModal}>
@@ -40,7 +28,7 @@ const ConfirmDelete: FC<ConfirmDeleteProps> = ({
           paddingRight={3}
           paddingLeft={3}
         >
-          <Button sx={{ flexGrow: 1 }} onClick={onConfirmDeleting}>
+          <Button sx={{ flexGrow: 1 }} onClick={onDeleteItem}>
             Видалити
           </Button>
           <Button
@@ -51,12 +39,6 @@ const ConfirmDelete: FC<ConfirmDeleteProps> = ({
             Скасувати
           </Button>
         </Stack>
-      </ModalBase>
-
-      <ModalBase open={infoModal} onClose={onCloseInfoModal}>
-        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
-          <Typography>Подія була успішно видалена.</Typography>
-        </Box>
       </ModalBase>
     </>
   );

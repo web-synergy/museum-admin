@@ -3,7 +3,7 @@ import { MenuItem, Box, Select, InputLabel } from '@mui/material';
 import { Controller, Control } from 'react-hook-form';
 import SvgSpriteIcon from '../../Common/SvgSprite';
 import { IEventValues } from '@/types/events';
-import { typeEventArray } from '@/assets/constants/eventType';
+import { TypeEvent } from '@/assets/constants/formEnums';
 
 interface SelectFormProps {
   label: string;
@@ -12,6 +12,8 @@ interface SelectFormProps {
   name: string;
   error: boolean;
 }
+
+const typeEventArray = Object.entries(TypeEvent);
 
 const TypeSelect: FC<SelectFormProps> = ({
   control,
@@ -34,11 +36,12 @@ const TypeSelect: FC<SelectFormProps> = ({
             displayEmpty
             fullWidth
             error={error}
+            value={field.value ? field.value : ''}
             renderValue={() => {
               const valueForRender = typeEventArray.find(
                 (item) => item[0] === field.value
               );
-              return field.value === '' ? (
+              return !field.value ? (
                 <Box
                   component="span"
                   sx={{ color: (theme) => theme.palette.text.secondary }}

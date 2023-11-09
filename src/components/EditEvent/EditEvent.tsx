@@ -1,27 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PageTemplate from '../Common/PageTemplate';
-import { Container, Box, Typography } from '@mui/material';
-import { IEvent, IEventValues } from '@/types/events';
-import { getEventById, editEvent } from '@/api';
+import { Container } from '@mui/material';
+import { IEvent } from '@/types/events';
+import { getEventById } from '@/api';
 import EventForm from '../EventForm/EventForm';
-import ModalBase from '../Common/ModalBase';
-// import Loader from '../Common/Loader';
+import Loader from '../Common/Loader';
 
 const EditEvent = () => {
   const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState<IEvent | null>(null);
-  const [openModal, setOpenModal] = useState(false);
 
   const { slug } = useParams();
-  const navigate = useNavigate();
-
-  const onOpenModal = () => setOpenModal(true);
-
-  const onCloseModal = () => {
-    setOpenModal(false);
-    navigate('/events');
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -38,18 +28,10 @@ const EditEvent = () => {
     getEvent();
   }, [slug]);
 
-  const unPublishEvent = async (data: IEventValues) => {
-    if (event) {
-      await editEvent(data, event.id);
-      onOpenModal();
-    }
-  };
-
   return (
     <PageTemplate title="Редагувати подію">
       {loading ? (
-        // <Loader visible={loading} />
-        <div>Loading...</div>
+        <Loader visible={loading} />
       ) : (
         <Container
           sx={{
@@ -58,20 +40,10 @@ const EditEvent = () => {
           }}
         >
           {event && (
-            <EventForm
-              defaultValues={event}
-              onPublish={unPublishEvent}
-              type="edit"
-            />
+            <EventForm defaultValues={event} type="edit" slug={event.slug} />
           )}
         </Container>
       )}
-
-      <ModalBase open={openModal} onClose={onCloseModal}>
-        <Box sx={{ padding: '0 24px 56px 24px', textAlign: 'center' }}>
-          <Typography>Зміни збережено.</Typography>
-        </Box>
-      </ModalBase>
     </PageTemplate>
   );
 };

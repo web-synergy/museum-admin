@@ -1,15 +1,14 @@
 import Section from '@/components/Common/Section'
-import { Container } from '@mui/material'
 import { FC } from 'react'
-import { FooterBox, FooterText } from '../styles'
+import { FooterBox, FooterText, MainContainer } from '../styles'
 
 const LoginFooter: FC = () => {
   return (
     <Section variant="dark">
       <FooterBox>
-        <Container>
+        <MainContainer>
           <FooterText>Розробка Baza Trainee Ukraine 2023 © Всі права захищені</FooterText>
-        </Container>
+        </MainContainer>
       </FooterBox>
     </Section>
   )

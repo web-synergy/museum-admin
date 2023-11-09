@@ -11,28 +11,30 @@ interface NavMenuItemProp {
   click?: () => void;
 }
 
-const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click, }) => {
+const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
   const isActiveLink = useActiveLink(href);
   return (
     <ListItem disablePadding onClick={click}>
       <ButtonWithIcon
         sx={{
-          backgroundColor: (theme) =>
+          '.MuiButton-startIcon': {
+            m: 0,
+          },
+          backgroundColor: theme =>
             isActiveLink
               ? theme.palette.primary.main
               : theme.palette.text.primary,
-          color: (theme) =>
+          color: theme =>
             isActiveLink
               ? theme.palette.common.black
               : theme.palette.common.white,
         }}
         title={title}
         svgSpriteId={icon}
-        variant="link"
-        iconPlace="startIcon"
+        variant='link'
+        iconPlace='startIcon'
         component={Link}
-        to={href}
-      ></ButtonWithIcon>
+        to={href}></ButtonWithIcon>
     </ListItem>
   );
 };

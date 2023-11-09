@@ -1,14 +1,14 @@
-import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
 import useAuth from '@/hooks/useAuth';
 import { Box, Slide, Toolbar, styled } from '@mui/material';
 import { FC, useState } from 'react';
 import Navigation from '../parts/Navigation';
 import { navigation } from '../parts/data';
-import { MobileHeader, Wrapper } from './style';
+import { BurgerIcon, CloseIcon, Logout, MobileHeader, Wrapper } from './style';
 
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { TransitionProps } from '@mui/material/transitions';
+import ButtonWithIcon from '@/components/Common/ButtonWithIcon';
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
@@ -52,10 +52,8 @@ const NavBarMobile: FC = () => {
         <Navigation handleClose={handleClose} navigation={navigation} />
         <Box
           sx={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: 'block',
+            textAlign: 'center',
           }}>
           <ButtonWithIcon
             sx={{
