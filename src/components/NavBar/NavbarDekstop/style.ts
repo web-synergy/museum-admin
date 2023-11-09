@@ -4,7 +4,6 @@ import { Box, styled } from '@mui/material';
 export const Wrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.common.black,
   color: theme.palette.common.white,
-  padding: '32px 11px 40px 80px',
   minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
