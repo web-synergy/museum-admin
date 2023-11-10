@@ -10,12 +10,12 @@ interface NavMenuItemProp {
   title: string;
   icon: string;
   click?: () => void;
+  isShort?: boolean;
 }
 
 const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
   const isActiveLink = useActiveLink(href);
   const isMob = useMediaQuery(theme.breakpoints.down('md'));
-
   const [slowTitle, setSlowTitle] = useState('');
   useEffect(() => {
     let timerId: ReturnType<typeof setTimeout>;
@@ -25,7 +25,6 @@ const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
         setSlowTitle(title);
       }, 400);
     };
-
     if (title && !isMob) {
       time();
     } else {
@@ -38,9 +37,6 @@ const NavMenuItem: FC<NavMenuItemProp> = ({ href, title, icon, click }) => {
     <ListItem sx={{ mb: 1 }} disablePadding onClick={click}>
       <ButtonWithIcon
         sx={{
-          '.MuiButton-startIcon': {
-            m: '1px',
-          },
           backgroundColor: theme =>
             isActiveLink
               ? theme.palette.primary.main

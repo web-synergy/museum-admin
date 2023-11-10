@@ -12,7 +12,6 @@ export const Wrapper = styled(Box)(({ theme }) => ({
 export const CloseButton = styled(ButtonWithIcon)({
   background: 'white',
   color: 'black',
-  marginTop: '8px',
   width: '60px',
 });
 
