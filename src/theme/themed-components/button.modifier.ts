@@ -191,7 +191,7 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
           marginLeft: 4,
         },
         padding: '16px',
-        gap: ' 14px',
+        gap: '8px',
         display: 'flex',
         minWidth: '60px',
         width: '100%',
