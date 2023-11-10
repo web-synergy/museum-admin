@@ -23,7 +23,7 @@ const NavBarDekstop: FC = () => {
         sx={{
           position: 'fixed',
           zIndex: 1,
-          width: '100vw',
+          width: !isShort ? '100vw' : widthCollapse,
           transition: 'width 0.4s ease-in-out',
         }}>
         <Wrapper
@@ -32,19 +32,17 @@ const NavBarDekstop: FC = () => {
             position: !isLaptop ? 'fixed' : 'relative',
             zIndex: 2,
             p: isShort ? '32px 11px 40px 80px' : '32px 8px 40px 80px',
-
             width: widthCollapse,
             transition: 'width 0.4s ease-in-out',
           }}>
           <Box
             component='img'
             sx={{
-              maxWidth: '540px',
               alignSelf: 'end',
             }}
             src={insertLogo}
             alt='logo'
-            mb={2}
+            mb={3}
           />
           <Navigation
             handleClose={() => {
