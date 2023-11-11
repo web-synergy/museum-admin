@@ -1,4 +1,5 @@
 import { IContactInfo, IEvent, IEventValues } from '@/types/events'
+
 import axios from 'axios'
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL
@@ -92,3 +93,12 @@ export const verificationNewEmail = (data: string) =>
 
 export const confirmEmail = (code: string) =>
   instance.put(`/admin/update/confirm-email?code=${code}`)
+
+export const recoveryPass = async (email: string) => {
+  try {
+    const { status } = await instance.put(`/admin/update/recovery-password?email=${email}`)
+    return status
+  } catch {
+    return null
+  }
+}

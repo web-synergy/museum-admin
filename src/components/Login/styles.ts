@@ -7,10 +7,14 @@ import {
   ContainerProps,
   Dialog,
   DialogProps,
+  Stack,
+  StackProps,
   Typography,
   TypographyProps,
   styled,
 } from '@mui/material'
+import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import { LinkProps } from 'react-router-dom'
 
 // =========  Header  =========
 
@@ -68,6 +72,15 @@ export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }))
 
+export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
+  [theme.breakpoints.up('xs')]: {
+    rowGap: '24px',
+  },
+  [theme.breakpoints.up('md')]: {
+    rowGap: '32px',
+  },
+}))
+
 // =========  Form  =========
 
 export const FormBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -77,7 +90,9 @@ export const FormBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }))
 
-export const RecoveryPassTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
+export const RecoveryPassTitle = styled(Typography)<
+  TypographyProps<ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>>
+>(({ theme }) => ({
   '&.MuiTypography-root': {
     fontSize: '1.125rem',
     color: 'inherit',
