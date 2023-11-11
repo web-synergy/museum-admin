@@ -9,16 +9,7 @@ const SuccessMessage: FC = () => {
   return (
     <Section variant="light">
       <MainContainer>
-        <ContentBox
-          sx={{
-            width: {
-              lg: '300px',
-              md: '300px',
-              sm: '289px',
-              xs: '289px',
-            },
-          }}
-        >
+        <ContentBox>
           <Typography variant="h3" textAlign={'center'}>
             Дякуємо!
           </Typography>
