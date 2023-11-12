@@ -8,10 +8,10 @@ import {
   SetStateAction,
   useState,
 } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 import { AuthData } from '../Login'
 import { ButtonBox, CustomAlert, FormBox, RecoveryPassTitle } from '../styles'
-import ModalWind from './ModalWind'
 import PassIcon from './PassIcon'
 
 interface LoginFormProps {
@@ -30,14 +30,6 @@ const LoginForm: FC<LoginFormProps> = ({
   setLoginError,
 }) => {
   const [showPass, setShowPass] = useState(false)
-  const [openModal, setOpenModal] = useState(false)
-
-  const modalOpen = () => {
-    setOpenModal(true)
-  }
-  const closeModal = () => {
-    setOpenModal(false)
-  }
 
   const managePassInput: MouseEventHandler = e => {
     e.preventDefault()
@@ -91,7 +83,7 @@ const LoginForm: FC<LoginFormProps> = ({
             />
           </FormControl>
 
-          <RecoveryPassTitle component={'span'} onClick={modalOpen}>
+          <RecoveryPassTitle component={RouterLink} to={'reset'}>
             Забули пароль?
           </RecoveryPassTitle>
         </Stack>
@@ -108,8 +100,6 @@ const LoginForm: FC<LoginFormProps> = ({
           Невірно введені дані. Для входу в обліковий запис повторіть спробу.
         </CustomAlert>
       )}
-
-      <ModalWind open={openModal} closeModal={closeModal} />
     </FormBox>
   )
 }
