@@ -23,7 +23,6 @@ const ResetPassword: FC = () => {
   }
 
   const goToLoginPage: MouseEventHandler = e => {
-    console.log('Hola')
     e.preventDefault()
     navigate('/login')
   }

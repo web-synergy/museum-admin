@@ -37,7 +37,7 @@ const Settings: FC = () => {
       <MainContainer>
         <ContentBox>
           <TabPanel index={0} value={value}>
-            {/* <ChangePassword openModal={openModal} /> */}
+            <ChangePassword />
           </TabPanel>
           <TabPanel index={1} value={value}>
             <ChangeLogin />

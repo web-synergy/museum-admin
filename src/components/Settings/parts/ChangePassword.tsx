@@ -3,11 +3,7 @@ import { ChangeEvent, FC, FormEventHandler, useState } from 'react'
 import { ErrorText, InputsBox } from '../styles'
 import InputWithLabel from './InputWithLabel'
 
-interface ChangePasswordProps {
-  openModal: () => void
-}
-
-const ChangePassword: FC<ChangePasswordProps> = ({ openModal }) => {
+const ChangePassword: FC = () => {
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState(false)
   const [data, setData] = useState({
@@ -19,7 +15,6 @@ const ChangePassword: FC<ChangePasswordProps> = ({ openModal }) => {
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim()
     setData({ ...data, [key]: newVal })
-
     if (key === 'repeatPass') {
       setError(!isPasswordsSame(newVal, data.newPass))
       if (newVal.length === data.newPass.length)
@@ -36,7 +31,6 @@ const ChangePassword: FC<ChangePasswordProps> = ({ openModal }) => {
   const onSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
     console.log(data)
-    openModal()
   }
 
   return (
