@@ -121,7 +121,7 @@ const Form: FC<FormProps> = ({
         <Grid item xs={12}>
           <ImageField
             control={control}
-            label="Додати зображення події*"
+            label="Додати зображення події"
             required={true}
             name={FormEventFields.BANNER}
             placeholder="Введіть Ваш текст"

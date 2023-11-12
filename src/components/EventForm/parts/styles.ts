@@ -6,28 +6,16 @@ export const VisuallyHiddenInput = styled('input')({
   height: 1,
   overflow: 'hidden',
   position: 'absolute',
-  bottom: 0,
-  left: 0,
   whiteSpace: 'nowrap',
   width: 1,
 });
 
-interface DragDropWrapperProps {
-  isError: boolean;
-}
-
-export const DragDropWrapper = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'isError',
-})<DragDropWrapperProps>(({ theme, isError }) => ({
+export const DragDropWrapper = styled(Box)({
   display: 'block',
   width: '100%',
   height: 'auto',
   maxHeight: 900,
-  border: '1px solid',
-  borderRadius: '4px',
-  overflow: 'hidden',
-  borderColor: isError ? theme.palette.error.main : 'transparent',
-}));
+});
 
 interface AspectRatioProp {
   ratio: number;

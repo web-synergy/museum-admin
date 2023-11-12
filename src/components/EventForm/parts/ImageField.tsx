@@ -114,12 +114,17 @@ const ImageField: FC<ImageFieldProps> = ({
             <InputLabel shrink={false} htmlFor={field.name} required={required}>
               {label}
             </InputLabel>
-            <DragDropWrapper
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
+            <Box
+              sx={{
+                borderRadius: '4px',
+                overflow: 'hidden',
+                border: '1px solid',
+                borderColor: (theme) =>
+                  error ? theme.palette.error.main : 'transparent',
+              }}
               draggable="true"
-              isError={error}
+              onDrop={(e) => e.preventDefault()}
+              onDragOver={onDragOver}
             >
               {banner ? (
                 <Box position="relative">
@@ -158,54 +163,63 @@ const ImageField: FC<ImageFieldProps> = ({
                   {loading ? (
                     <Loader visible={loading} />
                   ) : (
-                    <Stack
-                      alignItems="center"
-                      gap={1}
-                      sx={{ width: { xs: 206, md: 'auto' } }}
-                    >
-                      <Box
-                        component="img"
-                        src={picture}
-                        alt="picture"
-                        sx={{ width: 80, height: 80 }}
-                      />
+                    <>
+                      <DragDropWrapper
+                        onDrop={onDrop}
+                        onDragOver={onDragOver}
+                        onDragLeave={onDragLeave}
+                        draggable="true"
+                      >
+                        <Stack
+                          alignItems="center"
+                          gap={1}
+                          sx={{ width: { xs: 206, md: 'auto' } }}
+                        >
+                          <Box
+                            component="img"
+                            src={picture}
+                            alt="picture"
+                            sx={{ width: 80, height: 80 }}
+                          />
 
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          color: (theme) => theme.palette.gray.dark,
-                        }}
-                      >
-                        Завантажити файл
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: (theme) => theme.palette.gray.dark,
-                          textAlign: 'center',
-                        }}
-                      >
-                        Допустимий формат файлів — .jpg, .png, .jpeg, .jiff
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: (theme) => theme.palette.gray.dark,
-                          textAlign: 'center',
-                          maxWidth: { xs: 160, md: '100%' },
-                        }}
-                      >
-                        Максимальний розмір файлів — 5 МБ
-                      </Typography>
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              color: (theme) => theme.palette.gray.dark,
+                            }}
+                          >
+                            Завантажити файл
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: (theme) => theme.palette.gray.dark,
+                              textAlign: 'center',
+                            }}
+                          >
+                            Допустимий формат файлів — .jpg, .png, .jpeg, .jiff
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: (theme) => theme.palette.gray.dark,
+                              textAlign: 'center',
+                              maxWidth: { xs: 160, md: '100%' },
+                            }}
+                          >
+                            Максимальний розмір файлів — 5 МБ
+                          </Typography>
 
-                      <VisuallyHiddenInput
-                        type="file"
-                        ref={imageRef}
-                        onChange={onUploadImage}
-                      />
-                    </Stack>
+                          <VisuallyHiddenInput
+                            type="file"
+                            ref={imageRef}
+                            onChange={onUploadImage}
+                          />
+                        </Stack>
+                      </DragDropWrapper>
+                    </>
                   )}
                 </UploadImageBox>
               )}
-            </DragDropWrapper>
+            </Box>
           </>
         )}
       />
@@ -217,12 +231,13 @@ const ImageField: FC<ImageFieldProps> = ({
           onChangeImage={onChangeImage}
           onUploadFile={onUploadImage}
           loading={loading}
+          onDrop={onDrop}
         />
       )}
       <InfoModal
         open={openErrorModal}
         onClose={() => setOpenErrorModal(false)}
-        text="Формат файлу не підтримується. Будь ласка, завантажте файл у форматі .jpg, .png, .jpeg або .jiff"
+        text="Формат файлу не підтримується. Будь ласка, завантажте файл у форматі .jpg, .png, .jpeg або .jiff. Максимальний розмір файлів для завантаження —  5 МБ."
       />
     </>
   );
