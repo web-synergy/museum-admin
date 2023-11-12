@@ -22,10 +22,10 @@ export const SettingsHeaderContainer = styled(Box)<BoxProps>(({ theme }) => ({
     padding: '24px 16px',
   },
   [theme.breakpoints.up('md')]: {
-    padding: '56px 16px 24px ',
+    padding: '56px 0px 16px 24px ',
   },
   [theme.breakpoints.up('lg')]: {
-    padding: '68px 16px 24px ',
+    padding: '68px 0px 16px 24px ',
   },
 }))
 
@@ -36,7 +36,7 @@ export const MainContainer = styled(Box)<BoxProps>(({ theme }) => ({
   },
   [theme.breakpoints.up('md')]: {
     paddingTop: '32px',
-    paddingLeft: '24  px',
+    paddingLeft: '24px',
   },
 }))
 

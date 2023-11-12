@@ -11,11 +11,10 @@ const ChangePassword: FC<ChangePasswordProps> = ({ openModal }) => {
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState(false)
   const [data, setData] = useState({
-    oldPass: '',
     newPass: '',
     repeatPass: '',
   })
-  const { oldPass, newPass, repeatPass } = data
+  const { newPass, repeatPass } = data
 
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim()
@@ -43,14 +42,6 @@ const ChangePassword: FC<ChangePasswordProps> = ({ openModal }) => {
   return (
     <Box component={'form'} onSubmit={onSubmit}>
       <InputsBox>
-        <InputWithLabel
-          label="Старий пароль"
-          type="password"
-          placeholder="Введіть Ваш пароль"
-          value={oldPass}
-          onChange={handleChange('oldPass')}
-          onClick={() => setError(false)}
-        />
         <InputWithLabel
           label="Новий пароль"
           type="password"
