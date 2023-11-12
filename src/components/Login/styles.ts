@@ -3,12 +3,18 @@ import {
   AlertProps,
   Box,
   BoxProps,
+  Container,
+  ContainerProps,
   Dialog,
   DialogProps,
+  Stack,
+  StackProps,
   Typography,
   TypographyProps,
   styled,
 } from '@mui/material'
+import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import { LinkProps } from 'react-router-dom'
 
 // =========  Header  =========
 
@@ -48,21 +54,24 @@ export const FooterText = styled(Typography)<TypographyProps>(({ theme }) => ({
 export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
   margin: '0 auto',
   [theme.breakpoints.up('xs')]: {
-    padding: '60px 0',
+    marginTop: '60px',
+    width: '289px',
   },
   [theme.breakpoints.up('md')]: {
-    padding: '80px 0',
+    marginTop: '80px',
+    width: '300px',
   },
   [theme.breakpoints.up('lg')]: {
-    padding: '120px 0',
+    marginTop: '120px',
   },
+}))
 
-  width: '358px',
-  [theme.breakpoints.only('md')]: {
-    width: '332px',
+export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
+  [theme.breakpoints.up('xs')]: {
+    rowGap: '24px',
   },
-  [theme.breakpoints.down('md')]: {
-    width: '288px',
+  [theme.breakpoints.up('md')]: {
+    rowGap: '32px',
   },
 }))
 
@@ -75,7 +84,9 @@ export const FormBox = styled(Box)<BoxProps>(({ theme }) => ({
   },
 }))
 
-export const RecoveryPassTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
+export const RecoveryPassTitle = styled(Typography)<
+  TypographyProps<ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>>
+>(({ theme }) => ({
   '&.MuiTypography-root': {
     fontSize: '1.125rem',
     color: 'inherit',
@@ -175,4 +186,10 @@ export const CustomAlert = styled(Alert)<AlertProps>(() => ({
   marginTop: '16px',
   textAlign: 'center',
   '.MuiAlert-message': { maxWidth: '282px', margin: '0px auto' },
+}))
+
+export const MainContainer = styled(Container)<ContainerProps>(() => ({
+  '&.MuiContainer-root': {
+    margin: '0px auto',
+  },
 }))

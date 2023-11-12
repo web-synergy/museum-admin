@@ -1,4 +1,5 @@
-import { IEventValues, IContactInfo, IEvent } from '@/types/events';
+import { IContactInfo, IEvent, IEventValues } from '@/types/events';
+
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;

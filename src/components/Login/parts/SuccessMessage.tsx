@@ -1,24 +1,15 @@
 import Section from '@/components/Common/Section'
-import { Button, Container, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ButtonBox, ContentBox, Description } from '../styles'
+import { ButtonBox, ContentBox, Description, MainContainer } from '../styles'
 
 const SuccessMessage: FC = () => {
   const navigate = useNavigate()
   return (
     <Section variant="light">
-      <Container>
-        <ContentBox
-          sx={{
-            width: {
-              lg: '300px',
-              md: '300px',
-              sm: '289px',
-              xs: '289px',
-            },
-          }}
-        >
+      <MainContainer>
+        <ContentBox>
           <Typography variant="h3" textAlign={'center'}>
             Дякуємо!
           </Typography>
@@ -31,7 +22,7 @@ const SuccessMessage: FC = () => {
             </Button>
           </ButtonBox>
         </ContentBox>
-      </Container>
+      </MainContainer>
     </Section>
   )
 }

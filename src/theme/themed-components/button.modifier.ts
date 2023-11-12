@@ -105,6 +105,7 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       props: { variant: 'text' },
       style: ({ theme }) => ({
         color: theme.palette.primary.main,
+        minWidth: '0px',
         '&:hover': {
           color: theme.palette.primary.dark,
           backgroundColor: 'transparent',
@@ -185,13 +186,16 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
         lineHeight: 0,
         justifyContent: 'flex-start',
         alignItems: 'center',
+        fontSize: '18px',
         '& .MuiButton-startIcon': {
           marginLeft: 4,
         },
         padding: '16px',
-        gap: ' 16px',
+        gap: '8px',
         display: 'flex',
+        minWidth: '60px',
         width: '100%',
+        height: '60px',
         transition: theme.transitions.create('color'),
         '&:hover': { color: theme.palette.primary.dark },
         borderRadius: 0,
