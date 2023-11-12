@@ -18,7 +18,7 @@ interface EventFormProps {
   slug: string | null;
 }
 
-const TIMER = 1000 * 60 * 5;
+const TIMER = 1000 * 60 * 0.5;
 
 const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const { control, handleSubmit, reset, getValues, formState, watch } = useForm<
@@ -35,6 +35,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const wasResetRef = useRef(false);
   const [isPublishSuccess, setIsPublishSuccess] = useState(false);
   const [isDraftSaveSuccess, setIsDraftSaveSuccess] = useState(false);
+  const [isChangeSaved, setIsChangeSaved] = useState(false);
 
   const begin = watch('begin');
   const end = watch('end');
@@ -93,8 +94,8 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     }
   };
 
-  const navigationAfterSaving = () => {
-    if (type === 'edit') {
+  const navigationAfterSaving = (navigation = false) => {
+    if (type === 'edit' || navigation) {
       navigate('/events', { replace: true });
     } else {
       stopInterval();
@@ -115,12 +116,12 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     }
     const event = { ...data, status: EventStatus.PUBLISHED };
     if (eventSlug.current) {
-      console.log('change event');
       await editEvent(event, eventSlug.current);
+      setIsChangeSaved(true);
     } else {
       await addEvent(event);
+      setIsPublishSuccess(true);
     }
-    setIsPublishSuccess(true);
   };
 
   const onSaveDraft = async () => {
@@ -129,7 +130,10 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     console.log('eventId onSaveDraft', eventSlug.current);
     if (eventSlug.current) {
       console.log('change event');
-      editDraft(values, eventSlug.current);
+      editDraft(values, eventSlug.current).then((res) => {
+        if (res.data.slug !== eventSlug.current)
+          eventSlug.current = res.data.slug;
+      });
     } else {
       console.log('add event');
       eventSlug.current = 'other-1234456';
@@ -139,7 +143,11 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
 
   const onClickSaveDraft = async () => {
     await onSaveDraft();
-    setIsDraftSaveSuccess(true);
+    if (type === 'add') {
+      setIsDraftSaveSuccess(true);
+    } else {
+      setIsChangeSaved(true);
+    }
   };
 
   const onCloseSuccessPublish = () => {
@@ -147,8 +155,13 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     navigationAfterSaving();
   };
 
-  const onCloseSuccessDraftSave = (navigate = falsr) => {
+  const onCloseSuccessDraftSave = (navigate = false) => {
     setIsDraftSaveSuccess(false);
+    navigationAfterSaving(navigate);
+  };
+
+  const onCloseChangeSaved = () => {
+    setIsChangeSaved(false);
     navigationAfterSaving();
   };
 
@@ -193,15 +206,30 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
         onClose={onCloseSuccessPublish}
         text={'Подія була успішно опублікована.'}
       />
-      {/* <InfoModal
+
+      <InfoModal
+        open={isChangeSaved}
+        onClose={onCloseChangeSaved}
+        text={'Зміни збережено.'}
+      />
+
+      <ModalBase
         open={isDraftSaveSuccess}
-        onClose={onCloseSuccessDraftSave}
-        text={'Чернетку збережено в розділі \n “Редагувати події”.'}
-      /> */}
-      <ModalBase open={isDraftSaveSuccess} onClose={onCloseSuccessDraftSave}>
-        <Box mx={3} mb={3}>
-          <Typography></Typography>
+        onClose={() => onCloseSuccessDraftSave(false)}
+      >
+        <Box mb={3}>
+          <Typography whiteSpace="break-spaces" textAlign="center">
+            {'Чернетку збережено в розділі \n “Редагувати події”'}
+          </Typography>
         </Box>
+
+        <Button onClick={() => onCloseSuccessDraftSave(false)}>OK</Button>
+        <Button
+          variant="secondary"
+          onClick={() => onCloseSuccessDraftSave(true)}
+        >
+          Перейти до списку подій
+        </Button>
       </ModalBase>
     </>
   );

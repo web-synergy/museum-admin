@@ -11,14 +11,13 @@ interface InfoModalProps {
 const InfoModal: FC<InfoModalProps> = ({ text, open, onClose }) => {
   return (
     <ModalBase open={open} onClose={onClose}>
-      <Typography mx={3} mb={3} textAlign="center" whiteSpace="break-spaces">
+      <Typography mb={3} textAlign="center" whiteSpace="break-spaces">
         {text}
       </Typography>
       <Button
         sx={{
-          mb: 4,
-          mx: { xs: 3, md: 'auto' },
-          width: { md: 180, lg: 220 },
+          width: { xs: '100%', md: 180, lg: 220 },
+          margin: '0 auto',
         }}
         onClick={onClose}
       >

@@ -24,7 +24,9 @@ const ModalBase: FC<PropsWithChildren<ModalBaseProps>> = ({
             <SvgSpriteIcon iconId="close" />
           </IconButton>
         </Stack>
-        {children}
+        <Stack px={3} pb={4} gap={2}>
+          {children}
+        </Stack>
       </Stack>
     </Dialog>
   );

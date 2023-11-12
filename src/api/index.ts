@@ -90,5 +90,5 @@ export const addDraft = async (data: IEventValues) => {
 };
 
 export const editDraft = async (data: IEventValues, slug: string) => {
-  return instance.put<IEvent>(`/admin/events/draft/${slug}`, data);
+  return instance.put<IEvent>(`/admin/events/draft/${slug}`, { ...data, slug });
 };
