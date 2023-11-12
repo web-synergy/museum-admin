@@ -102,3 +102,12 @@ export const recoveryPass = async (email: string) => {
     return null
   }
 }
+
+export const updatePass = async (pass: string) => {
+  try {
+    const { status } = await instance.put(`/admin/update/password?password=${pass}`)
+    return status
+  } catch (error) {
+    return null
+  }
+}

@@ -1,5 +1,9 @@
+import { updatePass } from '@/api'
+import InfoModal from '@/components/EventForm/parts/InfoModal'
+import useAuth from '@/hooks/useAuth'
 import { Box, Button } from '@mui/material'
 import { ChangeEvent, FC, FormEventHandler, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ErrorText, InputsBox } from '../styles'
 import InputWithLabel from './InputWithLabel'
 
@@ -11,6 +15,16 @@ const ChangePassword: FC = () => {
     repeatPass: '',
   })
   const { newPass, repeatPass } = data
+
+  const { signOut } = useAuth()
+  const navigate = useNavigate()
+
+  const [open, setOpen] = useState(false)
+  const onClose = () => {
+    setOpen(false)
+    signOut()
+    navigate('/login', { replace: true })
+  }
 
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim()
@@ -30,7 +44,11 @@ const ChangePassword: FC = () => {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
-    console.log(data)
+    const sendNewPass = async (pass: string) => {
+      const resp = await updatePass(pass)
+      if (resp === 204) setOpen(true)
+    }
+    sendNewPass(newPass)
   }
 
   return (
@@ -59,6 +77,7 @@ const ChangePassword: FC = () => {
         </Button>
         {error && <ErrorText>Паролі не співпадають. Спробуйте ще раз.</ErrorText>}
       </InputsBox>
+      <InfoModal {...{ text: 'Зміни збережено.', open, onClose }} />
     </Box>
   )
 }
