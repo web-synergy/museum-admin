@@ -20,9 +20,9 @@ const EditEvent = () => {
         const event = await getEventById(slug);
         if (event) {
           setEvent(event);
-          setLoading(false);
         }
       }
+      setLoading(false);
     };
 
     getEvent();

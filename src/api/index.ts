@@ -52,10 +52,6 @@ export const getImage = (imageId: string) => {
   });
 };
 
-export const addEvent = (data: IEventValues) => {
-  return instance.post<IEvent>('/admin/events', data);
-};
-
 interface GetEventsResponse {
   totalPages: number;
   totalElements: number;
@@ -69,21 +65,25 @@ export const getEvents = (page = 0, size = 5) => {
   );
 };
 
-export const getEventById = async (id: string) => {
+export const getEventById = async (slug: string) => {
   try {
-    const { data } = await instance.get<IEvent>(`/events/${id}`);
+    const { data } = await instance.get<IEvent>(`/events/${slug}`);
     return data;
   } catch (e) {
     return null;
   }
 };
 
-export const editEvent = async (data: IEventValues, id: string) => {
-  return instance.put<IEvent>(`/admin/events/${id}`, data);
+export const addEvent = (data: IEventValues) => {
+  return instance.post<IEvent>('/admin/events', data);
 };
 
-export const deleteEvent = async (id: string) => {
-  return instance.delete(`/admin/events/${id}`);
+export const editEvent = async (data: IEventValues, slug: string) => {
+  return instance.put<IEvent>(`/admin/events/${slug}`, { ...data, slug });
+};
+
+export const deleteEvent = async (slug: string) => {
+  return instance.delete(`/admin/events/${slug}`);
 };
 
 export const addDraft = async (data: IEventValues) => {
@@ -92,4 +92,21 @@ export const addDraft = async (data: IEventValues) => {
 
 export const editDraft = async (data: IEventValues, slug: string) => {
   return instance.put<IEvent>(`/admin/events/draft/${slug}`, { ...data, slug });
+};
+
+export const verificationNewEmail = (data: string) =>
+  instance.post('/admin/update/email', { email: data });
+
+export const confirmEmail = (code: string) =>
+  instance.put(`/admin/update/confirm-email?code=${code}`);
+
+export const recoveryPass = async (email: string) => {
+  try {
+    const { status } = await instance.put(
+      `/admin/update/recovery-password?email=${email}`
+    );
+    return status;
+  } catch {
+    return null;
+  }
 };

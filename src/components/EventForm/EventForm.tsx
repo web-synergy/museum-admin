@@ -42,6 +42,15 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const status = watch('status');
   const isFieldWasChanged = Object.keys(formState.dirtyFields);
 
+  //check if validation error is occured
+  useEffect(() => {
+    const { isSubmitting, isSubmitSuccessful } = formState;
+
+    if (isSubmitting && !isSubmitSuccessful) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+  }, [formState]);
+
   //start interval
   useEffect(() => {
     if (wasResetRef.current) {
@@ -53,7 +62,6 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       status === EventStatus.DRAFT &&
       !intervalRef.current
     ) {
-      console.log('start interval');
       startInterval();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,20 +77,10 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
 
   // Start the interval
   const startInterval = () => {
-    console.log(
-      'intervalRef in start interval in the beginning',
-      intervalRef.current
-    );
-
     if (intervalRef.current !== null) return;
     intervalRef.current = window.setInterval(() => {
       onSaveDraft();
     }, TIMER);
-
-    console.log(
-      'intervalRef in start interval in the end',
-      intervalRef.current
-    );
   };
 
   // Stop the interval
@@ -90,7 +88,6 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
       intervalRef.current = null;
-      console.log('stop interval');
     }
   };
 
@@ -115,27 +112,28 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       return;
     }
     const event = { ...data, status: EventStatus.PUBLISHED };
+
     if (eventSlug.current) {
       await editEvent(event, eventSlug.current);
-      setIsChangeSaved(true);
     } else {
       await addEvent(event);
+    }
+
+    if (data.status === EventStatus.DRAFT) {
       setIsPublishSuccess(true);
+    } else {
+      setIsChangeSaved(true);
     }
   };
 
   const onSaveDraft = async () => {
     const values = getValues();
-    console.log(values);
-    console.log('eventId onSaveDraft', eventSlug.current);
     if (eventSlug.current) {
-      console.log('change event');
       editDraft(values, eventSlug.current).then((res) => {
         if (res.data.slug !== eventSlug.current)
           eventSlug.current = res.data.slug;
       });
     } else {
-      console.log('add event');
       eventSlug.current = 'other-1234456';
       addDraft(values).then((res) => (eventSlug.current = res.data.slug));
     }

@@ -1,5 +1,5 @@
-import { FC, useState, useRef, ChangeEvent } from 'react';
-import { Stack, Typography, IconButton, Button } from '@mui/material';
+import { FC, useState, useRef, ChangeEvent, DragEvent } from 'react';
+import { Stack, Typography, IconButton, Button, Box } from '@mui/material';
 import Cropper, { Area, Point } from 'react-easy-crop';
 import SvgSpriteIcon from '../../Common/SvgSprite';
 import {
@@ -21,6 +21,7 @@ interface EditImageProps {
   onChangeImage: (url: Blob) => void;
   onUploadFile: (e: ChangeEvent<HTMLInputElement>) => void;
   loading: boolean;
+  onDrop: (e: DragEvent<HTMLDivElement>) => void;
 }
 
 const EditImage: FC<EditImageProps> = ({
@@ -30,6 +31,7 @@ const EditImage: FC<EditImageProps> = ({
   onChangeImage,
   onUploadFile,
   loading,
+  onDrop,
 }) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [aspectRatio, setAspectRatio] = useState<number>(
@@ -76,6 +78,11 @@ const EditImage: FC<EditImageProps> = ({
     setAspectRatio(aspectRatioMenu[1].value);
   };
 
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
   return (
     <ImageDialog open={open} onClose={onClose}>
       <Stack gap={3}>
@@ -95,23 +102,31 @@ const EditImage: FC<EditImageProps> = ({
             <SvgSpriteIcon iconId="close" />
           </IconButton>
         </Stack>
-        <CropWrapper ref={containerRef} ratio={aspectRatio}>
-          {loading ? (
-            <Loader visible={loading} />
-          ) : (
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              aspect={aspectRatio}
-              rotation={rotation}
-              onCropChange={setCrop}
-              onCropComplete={onCropComplete}
-              zoom={zoom}
-              showGrid={false}
-              objectFit="cover"
-            />
-          )}
-        </CropWrapper>
+        <Box
+          draggable="true"
+          onDragLeave={(e) => e.preventDefault()}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+        >
+          <CropWrapper ref={containerRef} ratio={aspectRatio}>
+            {loading ? (
+              <Loader visible={loading} />
+            ) : (
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                aspect={aspectRatio}
+                rotation={rotation}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                zoom={zoom}
+                showGrid={false}
+                objectFit="cover"
+              />
+            )}
+          </CropWrapper>
+        </Box>
+
         <Stack direction={{ xs: 'column', md: 'row' }} gap={2}>
           <RatioSelect onChangeValue={onChangeAspectRatio} />
 
