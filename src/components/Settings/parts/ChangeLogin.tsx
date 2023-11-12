@@ -5,27 +5,33 @@ import { verificationNewEmail } from '@/api'
 import { ErrorText, InputsBox } from '../styles'
 import { validationSchema } from '../validationSchema/email'
 import InputWithLabel from './InputWithLabel'
+import LoginModalWind from './LoginModalWind'
 
-interface ChangeLoginProps {
-  openModal: () => void
-}
-
-const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
+const ChangeLogin: FC = () => {
+  const [open, setOpen] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
-  const [error, setError] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
+  const [error, setError] = useState({
+    isError: false,
+    errorMsg: '',
+  })
   const [data, setData] = useState({
     newLogin: '',
     repeatLogin: '',
   })
   const { newLogin, repeatLogin } = data
 
+  const openModal = () => setOpen(true)
+  const closeModal = () => setOpen(false)
+
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim().toLowerCase()
     setData({ ...data, [key]: newVal })
     if (key === 'repeatLogin' && newLogin) {
-      setError(!isLoginsSame(newVal, data.newLogin))
-      setErrorMsg('Логіни не співпадають. Спробуйте ще раз.')
+      setError({
+        ...error,
+        isError: !isLoginsSame(newVal, data.newLogin),
+        errorMsg: 'Логіни не співпадають. Спробуйте ще раз.',
+      })
       if (newVal.length === data.newLogin.length)
         setIsDisabled(!isLoginsSame(newVal, data.newLogin))
       else setIsDisabled(true)
@@ -33,8 +39,8 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
   }
 
   const isLoginsSame = (repeatLogin: string, newLogin: string) => {
-    const part = newLogin.slice(0, repeatLogin.length)
-    return part === repeatLogin
+    const partNewLogin = newLogin.slice(0, repeatLogin.length)
+    return partNewLogin === repeatLogin
   }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
@@ -42,8 +48,8 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
     setIsDisabled(true)
     const isValid = await validationSchema.isValid(data)
     if (!isValid) {
-      setErrorMsg('Логін може бути тільки електронною адресою!')
-      return setError(!isValid)
+      const msg = 'Логін може бути тільки електронною адресою!'
+      return setError({ ...error, errorMsg: msg, isError: !isValid })
     } else {
       const sendCodeToUserEmail = async (userEmail: string) => {
         try {
@@ -51,43 +57,44 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ openModal }) => {
           if (!res) throw new Error()
           openModal()
           setData({ ...data, newLogin: '', repeatLogin: '' })
-        } catch (error) {
-          console.log(error)
-          setErrorMsg('Something went wrong')
-          setError(true)
+        } catch (e) {
+          setError({ ...error, isError: true, errorMsg: 'Something went wrong' })
         }
       }
       sendCodeToUserEmail(newLogin)
     }
   }
   return (
-    <Box component={'form'} onSubmit={onSubmit} position={'relative'}>
-      <InputsBox>
-        <InputWithLabel
-          label="Новий логін"
-          type="text"
-          placeholder="Введіть Ваш логін"
-          value={newLogin}
-          onChange={handleChange('newLogin')}
-          error={error}
-          onClick={() => setError(false)}
-        />
-        <InputWithLabel
-          label="Повторіть новий логін"
-          type="text"
-          placeholder="Введіть Ваш логін"
-          value={repeatLogin}
-          onChange={handleChange('repeatLogin')}
-          error={error}
-          onClick={() => setError(false)}
-        />
-        <Button type="submit" variant="adminPrimaryBtn" disabled={isDisabled}>
-          Зберегти зміни
-        </Button>
+    <>
+      <Box component={'form'} onSubmit={onSubmit} position={'relative'}>
+        <InputsBox>
+          <InputWithLabel
+            label="Новий логін"
+            type="text"
+            placeholder="olenapetrova@gmail.com"
+            value={newLogin}
+            onChange={handleChange('newLogin')}
+            error={error.isError}
+            onClick={() => setError({ ...error, isError: false })}
+          />
+          <InputWithLabel
+            label="Повторіть новий логін"
+            type="text"
+            placeholder="olenapetrova@gmail.com"
+            value={repeatLogin}
+            onChange={handleChange('repeatLogin')}
+            error={error.isError}
+            onClick={() => setError({ ...error, isError: false })}
+          />
+          <Button type="submit" variant="adminPrimaryBtn" disabled={isDisabled}>
+            Зберегти зміни
+          </Button>
+          {error.isError && <ErrorText>{error.errorMsg}</ErrorText>}
+        </InputsBox>
+      </Box>
 
-        {error && <ErrorText>{errorMsg}</ErrorText>}
-      </InputsBox>
-    </Box>
+      <LoginModalWind {...{ closeModal, open }} />
+    </>
   )
 }
 

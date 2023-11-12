@@ -31,11 +31,11 @@ export const SettingsHeaderContainer = styled(Box)<BoxProps>(({ theme }) => ({
 
 export const MainContainer = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
-    paddingTop: '24px',
+    paddingTop: '32px',
     paddingLeft: '16px',
   },
   [theme.breakpoints.up('md')]: {
-    paddingTop: '32px',
+    paddingTop: '40px',
     paddingLeft: '24px',
   },
 }))
@@ -56,13 +56,9 @@ export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
 
 export const InputsBox = styled(Stack)<StackProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
-    paddingTop: '32px',
-
     rowGap: '24px',
   },
   [theme.breakpoints.up('md')]: {
-    paddingTop: '40px',
-
     rowGap: '32px',
   },
   [theme.breakpoints.up('lg')]: {},
