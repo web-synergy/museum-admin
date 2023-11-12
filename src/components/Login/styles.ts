@@ -54,21 +54,15 @@ export const FooterText = styled(Typography)<TypographyProps>(({ theme }) => ({
 export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
   margin: '0 auto',
   [theme.breakpoints.up('xs')]: {
-    padding: '60px 0',
+    marginTop: '60px',
+    width: '289px',
   },
   [theme.breakpoints.up('md')]: {
-    padding: '80px 0',
+    marginTop: '80px',
+    width: '300px',
   },
   [theme.breakpoints.up('lg')]: {
-    padding: '120px 0',
-  },
-
-  width: '358px',
-  [theme.breakpoints.only('md')]: {
-    width: '332px',
-  },
-  [theme.breakpoints.down('md')]: {
-    width: '288px',
+    marginTop: '120px',
   },
 }))
 
