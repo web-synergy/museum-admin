@@ -18,7 +18,7 @@ interface ModalWindProps {
   open: boolean
 }
 
-const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
+const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
   const { signOut } = useAuth()
   const inputs = Array(6).fill('')
   const [error, setError] = useState(false)
@@ -103,4 +103,4 @@ const ModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
   )
 }
 
-export default ModalWind
+export default LoginModalWind

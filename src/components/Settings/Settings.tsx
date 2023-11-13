@@ -3,17 +3,12 @@ import { FC, SyntheticEvent, useState } from 'react'
 
 import ChangeLogin from './parts/ChangeLogin'
 import ChangePassword from './parts/ChangePassword'
-import ModalWind from './parts/ModalWind'
 import TabPanel from './parts/TabPanel'
 
 import { ContentBox, CustomDivider, MainContainer, SettingsHeaderContainer } from './styles'
 
 const Settings: FC = () => {
   const [value, setValue] = useState(0)
-  const [open, setOpen] = useState(false)
-
-  const openModal = () => setOpen(true)
-  const closeModal = () => setOpen(false)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     event.stopPropagation()
@@ -42,13 +37,11 @@ const Settings: FC = () => {
       <MainContainer>
         <ContentBox>
           <TabPanel index={0} value={value}>
-            <ChangePassword openModal={openModal} />
+            <ChangePassword />
           </TabPanel>
           <TabPanel index={1} value={value}>
-            <ChangeLogin openModal={openModal} />
+            <ChangeLogin />
           </TabPanel>
-
-          <ModalWind {...{ closeModal, open }} />
         </ContentBox>
       </MainContainer>
     </Stack>
