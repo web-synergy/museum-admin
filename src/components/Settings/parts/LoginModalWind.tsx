@@ -1,9 +1,7 @@
 import { confirmEmail } from '@/api'
 import SvgSpriteIcon from '@/components/Common/SvgSprite'
-import useAuth from '@/hooks/useAuth'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
-import { FC, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Dispatch, FC, useRef, useState } from 'react'
 import { getUserCode, handleKeyDown } from '../helpers'
 import {
   CustomDialog,
@@ -16,14 +14,13 @@ import {
 interface ModalWindProps {
   closeModal: () => void
   open: boolean
+  setOpen: Dispatch<React.SetStateAction<boolean>>
 }
 
-const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
-  const { signOut } = useAuth()
+const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen }) => {
   const inputs = Array(6).fill('')
   const [error, setError] = useState(false)
   const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null))
-  const navigate = useNavigate()
 
   const changeFocus = (currInputVal: string, index: number) => {
     if (index < inputRefs.current.length - 1 && currInputVal) {
@@ -33,18 +30,9 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open }) => {
 
   const checkUserCode = () => {
     const checkCode = async (code: string) => {
-      try {
-        const resp = await confirmEmail(code)
-        if (resp.status === 204) {
-          signOut()
-          navigate('/login', { replace: true })
-        } else {
-          throw new Error()
-        }
-      } catch (error) {
-        setError(true)
-        console.log(error)
-      }
+      const resp = await confirmEmail(code)
+      if (resp === 204) return setOpen(true)
+      else setError(true)
     }
     const userCode = getUserCode(inputRefs.current)
     checkCode(userCode)

@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material'
-import { ChangeEvent, FC, FormEventHandler, useState } from 'react'
+import { ChangeEvent, Dispatch, FC, FormEventHandler, useState } from 'react'
 
 import { verificationNewEmail } from '@/api'
 import { ErrorText, InputsBox } from '../styles'
@@ -7,8 +7,12 @@ import { validationSchema } from '../validationSchema/email'
 import InputWithLabel from './InputWithLabel'
 import LoginModalWind from './LoginModalWind'
 
-const ChangeLogin: FC = () => {
-  const [open, setOpen] = useState(false)
+interface ChangeLoginProps {
+  setOpen: Dispatch<React.SetStateAction<boolean>>
+}
+
+const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
+  const [openCodeWindow, setOpenCodeWindow] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState({
     isError: false,
@@ -20,8 +24,11 @@ const ChangeLogin: FC = () => {
   })
   const { newLogin, repeatLogin } = data
 
-  const openModal = () => setOpen(true)
-  const closeModal = () => setOpen(false)
+  const openModal = () => setOpenCodeWindow(true)
+  const closeModal = () => {
+    setOpenCodeWindow(false)
+    setOpen(true)
+  }
 
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim().toLowerCase()
@@ -93,7 +100,7 @@ const ChangeLogin: FC = () => {
         </InputsBox>
       </Box>
 
-      <LoginModalWind {...{ closeModal, open }} />
+      <LoginModalWind {...{ closeModal, open: openCodeWindow, setOpen }} />
     </>
   )
 }
