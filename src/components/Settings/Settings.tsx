@@ -54,7 +54,7 @@ const Settings: FC = () => {
             <ChangePassword {...{ setOpen }} />
           </TabPanel>
           <TabPanel index={1} value={value}>
-            <ChangeLogin />
+            <ChangeLogin {...{ setOpen }} />
           </TabPanel>
         </ContentBox>
       </MainContainer>

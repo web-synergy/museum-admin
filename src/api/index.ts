@@ -91,8 +91,14 @@ export const editDraft = async (data: IEventValues, slug: string) => {
 export const verificationNewEmail = (email: string) =>
   instance.post('/admin/update/email', { email })
 
-export const confirmEmail = (code: string) =>
-  instance.put(`/admin/update/confirm-email?code=${code}`)
+export const confirmEmail = async (code: string) => {
+  try {
+    const { status } = await instance.put(`/admin/update/confirm-email?code=${code}`)
+    return status
+  } catch (e) {
+    return null
+  }
+}
 
 export const recoveryPass = async (email: string) => {
   try {
