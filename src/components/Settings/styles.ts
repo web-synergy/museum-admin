@@ -31,23 +31,23 @@ export const SettingsHeaderContainer = styled(Box)<BoxProps>(({ theme }) => ({
 
 export const MainContainer = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
-    paddingTop: '32px',
+    paddingTop: '24px',
     paddingLeft: '16px',
   },
   [theme.breakpoints.up('md')]: {
-    paddingTop: '40px',
+    paddingTop: '32px',
     paddingLeft: '24px',
   },
 }))
 
 export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
-  position: 'relative',
-  // margin: '0px auto',
   [theme.breakpoints.up('xs')]: {
     width: '288px',
+    margin: '32px 0 0 16px',
   },
   [theme.breakpoints.up('md')]: {
     width: '440px',
+    margin: '40px 0 0 24px',
   },
   [theme.breakpoints.up('lg')]: {
     width: '460px',

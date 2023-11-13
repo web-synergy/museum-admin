@@ -48,16 +48,14 @@ const Settings: FC = () => {
 
       <CustomDivider />
 
-      <MainContainer>
-        <ContentBox>
-          <TabPanel index={0} value={value}>
-            <ChangePassword {...{ setOpen }} />
-          </TabPanel>
-          <TabPanel index={1} value={value}>
-            <ChangeLogin {...{ setOpen }} />
-          </TabPanel>
-        </ContentBox>
-      </MainContainer>
+      <ContentBox>
+        <TabPanel index={0} value={value}>
+          <ChangePassword {...{ setOpen }} />
+        </TabPanel>
+        <TabPanel index={1} value={value}>
+          <ChangeLogin {...{ setOpen }} />
+        </TabPanel>
+      </ContentBox>
 
       <InfoModal {...{ text: 'Зміни збережено.', open, onClose }} />
     </Stack>
