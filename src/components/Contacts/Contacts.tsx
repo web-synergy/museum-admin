@@ -1,27 +1,27 @@
-import { FC, useState, useEffect } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import PageTemplate from "../Common/PageTemplate";
-import ContactField from "./ContactField";
-import { Box, Button, Container } from "@mui/material";
+import { FC, useState, useEffect } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import PageTemplate from '../Common/PageTemplate';
+import ContactField from './ContactField';
+import { Box, Button, Container } from '@mui/material';
 
-import { getContactInfo, updateContactInfo } from "@/api";
-import { theme } from "@/theme";
-import Loader from "../Common/Loader";
+import { getContactInfo, updateContactInfo } from '@/api';
+import { theme } from '@/theme';
+import Loader from '../Common/Loader';
 
 type FieldName =
-  | "phoneNumber"
-  | "email"
-  | "subwayRoute"
-  | "funicularRoute"
-  | "busRoute";
+  | 'phoneNumber'
+  | 'email'
+  | 'subwayRoute'
+  | 'funicularRoute'
+  | 'busRoute';
 
 const Contacts: FC = () => {
   const [contactInfo, setContactInfo] = useState({
-    phoneNumber: "",
-    email: "",
-    subwayRoute: "",
-    funicularRoute: "",
-    busRoute: "",
+    phoneNumber: '',
+    email: '',
+    subwayRoute: '',
+    funicularRoute: '',
+    busRoute: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ const Contacts: FC = () => {
   const [isFormChanged, setIsFormChanged] = useState(false);
 
   const { control, handleSubmit, setValue, getValues } = useForm<FieldValues>({
-    mode: "all",
+    mode: 'all',
     defaultValues: {
       phoneNumber: contactInfo.phoneNumber,
       email: contactInfo.email,
@@ -57,15 +57,15 @@ const Contacts: FC = () => {
 
         setContactInfo(response.data);
 
-        setValue("phoneNumber", response.data.phoneNumber || "");
-        setValue("email", response.data.email || "");
-        setValue("subwayRoute", response.data.subwayRoute || "");
-        setValue("funicularRoute", response.data.funicularRoute || "");
-        setValue("busRoute", response.data.busRoute || "");
+        setValue('phoneNumber', response.data.phoneNumber || '');
+        setValue('email', response.data.email || '');
+        setValue('subwayRoute', response.data.subwayRoute || '');
+        setValue('funicularRoute', response.data.funicularRoute || '');
+        setValue('busRoute', response.data.busRoute || '');
 
         setLoading(false);
       } catch (error) {
-        console.error("Помилка при отриманні даних з серверу:", error);
+        console.error('Помилка при отриманні даних з серверу:', error);
       }
     };
 
@@ -94,13 +94,13 @@ const Contacts: FC = () => {
     try {
       // Надіслати усі дані об'єкта contactInfo на сервер
       await updateContactInfo(contactInfo);
-      console.log("Дані відправлені на сервер:", contactInfo);
+      console.log('Дані відправлені на сервер:', contactInfo);
 
       // Скинути флажки змін у полях
       setIsFormChanged(false);
     } catch (error) {
       // Обробка помилок
-      console.error("Помилка при відправленні даних на сервер:", error);
+      console.error('Помилка при відправленні даних на сервер:', error);
     }
   };
 
@@ -110,24 +110,24 @@ const Contacts: FC = () => {
       {!loading && (
         <Container
           sx={{
-            pt: { xs: 4, md: 4, lg: 5 },
-            pb: { xs: "60px", md: 10, lg: 15 },
+            pt: { xs: 4, md: 5 },
+            pb: { xs: '60px', md: 10, lg: 15 },
           }}
         >
           <form onSubmit={handleSubmit(() => {})}>
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: { xs: "24px", md: "32px" },
-                width: { xs: "100%", md: "552px" },
+                display: 'flex',
+                flexDirection: 'column',
+                gap: { xs: '24px', md: '32px' },
+                width: { xs: '100%', md: '552px' },
               }}
             >
               <ContactField
                 label="Номер телефону"
                 fieldName="phoneNumber"
                 control={control}
-                onChange={(value) => handleInputChange("phoneNumber", value)}
+                onChange={(value) => handleInputChange('phoneNumber', value)}
                 onSave={() => handleSave()}
                 isChanged={fieldChanges.phoneNumber}
                 iconId="phone"
@@ -136,7 +136,7 @@ const Contacts: FC = () => {
                 label="Електронна адреса"
                 fieldName="email"
                 control={control}
-                onChange={(value) => handleInputChange("email", value)}
+                onChange={(value) => handleInputChange('email', value)}
                 onSave={() => handleSave()}
                 isChanged={fieldChanges.email}
                 iconId="email"
@@ -147,7 +147,7 @@ const Contacts: FC = () => {
                 isMulti={true}
                 rows={4}
                 control={control}
-                onChange={(value) => handleInputChange("subwayRoute", value)}
+                onChange={(value) => handleInputChange('subwayRoute', value)}
                 onSave={() => handleSave()}
                 isChanged={fieldChanges.subwayRoute}
               />
@@ -157,7 +157,7 @@ const Contacts: FC = () => {
                 isMulti={true}
                 rows={4}
                 control={control}
-                onChange={(value) => handleInputChange("funicularRoute", value)}
+                onChange={(value) => handleInputChange('funicularRoute', value)}
                 onSave={() => handleSave()}
                 isChanged={fieldChanges.funicularRoute}
               />
@@ -167,17 +167,17 @@ const Contacts: FC = () => {
                 isMulti={true}
                 rows={4}
                 control={control}
-                onChange={(value) => handleInputChange("busRoute", value)}
+                onChange={(value) => handleInputChange('busRoute', value)}
                 onSave={() => handleSave()}
                 isChanged={fieldChanges.busRoute}
-              />{" "}
+              />{' '}
               <Button
                 type="submit"
                 variant="secondary"
                 sx={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: theme.palette.primary.main,
-                  "&:hover": {
+                  '&:hover': {
                     backgroundColor: theme.palette.primary.dark,
                   },
                 }}

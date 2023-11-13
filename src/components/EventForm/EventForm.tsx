@@ -18,7 +18,7 @@ interface EventFormProps {
   slug: string | null;
 }
 
-const TIMER = 1000 * 60 * 0.5;
+const TIMER = 1000 * 60 * 5;
 
 const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const { control, handleSubmit, reset, getValues, formState, watch } = useForm<
@@ -41,15 +41,23 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const end = watch('end');
   const status = watch('status');
   const isFieldWasChanged = Object.keys(formState.dirtyFields);
+  const dateError = useMemo(() => {
+    if (begin && end) {
+      return DateTime.fromISO(begin) >= DateTime.fromISO(end);
+    }
+    return false;
+  }, [begin, end]);
 
   //check if validation error is occured
   useEffect(() => {
     const { isSubmitting, isSubmitSuccessful } = formState;
 
-    if (isSubmitting && !isSubmitSuccessful) {
+    console.log('isSubmitting', isSubmitting);
+    console.log('isSubmitSuccessful', isSubmitSuccessful);
+    if ((isSubmitting && !isSubmitSuccessful) || (isSubmitting && dateError)) {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
-  }, [formState]);
+  }, [dateError, formState]);
 
   //start interval
   useEffect(() => {
@@ -168,13 +176,6 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       .map((item) => item.message)
       .join(', ');
   }, [formState]);
-
-  const dateError = useMemo(() => {
-    if (begin && end) {
-      return DateTime.fromISO(begin) >= DateTime.fromISO(end);
-    }
-    return false;
-  }, [begin, end]);
 
   const btnTitle = useMemo(() => {
     return type === 'add'

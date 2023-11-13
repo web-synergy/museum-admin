@@ -9,4 +9,7 @@ export const theme = createTheme({
   typography,
   breakpoints,
   components,
+  mixins: {
+    toolbar: { minHeight: 56 },
+  },
 });
