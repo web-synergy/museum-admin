@@ -13,8 +13,8 @@ const PageTemplate: FC<PropsWithChildren<PageTemplateProps>> = ({
     <Stack width="100%">
       <Container
         sx={{
-          pt: { xs: 3, md: 7, lg: '68px' },
-          pb: { xs: 3, md: 3, lg: 2 },
+          pt: { xs: 3, md: '68px' },
+          pb: { xs: 3, md: 2 },
         }}
       >
         <Typography variant="h3" component="h1">
