@@ -33,7 +33,12 @@ const EventTextArea: FC<InputFormProps> = ({
           </TextAreaContainer>
 
           {maxLength && (
-            <Typography textAlign="end" variant="body2" mt={1}>
+            <Typography
+              textAlign="end"
+              variant="helperText"
+              component={'p'}
+              mt={1}
+            >
               {field.value?.length ?? 0}/{maxLength}
             </Typography>
           )}

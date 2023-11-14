@@ -48,6 +48,7 @@ export const MuiOutlinedInput: Components<Theme>['MuiOutlinedInput'] = {
     root: ({ theme, error }) => ({
       color: theme.palette.common.black,
       padding: '12px 16px',
+      minHeight: 48,
       [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
         borderColor: error
           ? 'var(--TextFiled-brandErrorBorderColor)'

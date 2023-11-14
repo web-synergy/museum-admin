@@ -16,6 +16,11 @@ export const MuiSelect: Components<Theme>['MuiSelect'] = {
       MenuListProps: {
         disablePadding: true,
         sx: {
+          '& .MuiMenuItem-root': {
+            fontSize: { xs: 14, md: 16 },
+            lineHeight: { xs: 1.429, md: 1.555 },
+          },
+
           '& .MuiMenuItem-root:hover': {
             backgroundColor: 'inherit',
             color: (theme) => theme.palette.primary.dark,
@@ -39,14 +44,20 @@ export const MuiSelect: Components<Theme>['MuiSelect'] = {
     },
     root: ({ theme }) => ({
       padding: 0,
+
       '& .MuiSelect-select[aria-expanded=true] ~ .MuiOutlinedInput-notchedOutline':
         {
           borderColor: theme.palette.primary.main,
         },
     }),
-    outlined: {
+    outlined: ({ theme }) => ({
       padding: '12px 16px',
-    },
+      fontSize: 14,
+
+      [`${theme.breakpoints.up('md')}`]: {
+        fontSize: 16,
+      },
+    }),
 
     icon: ({ theme }) => ({
       color: theme.palette.common.black,

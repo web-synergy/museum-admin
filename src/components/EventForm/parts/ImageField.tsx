@@ -125,6 +125,7 @@ const ImageField: FC<ImageFieldProps> = ({
               draggable="true"
               onDrop={(e) => e.preventDefault()}
               onDragOver={onDragOver}
+              id={field.name}
             >
               {banner ? (
                 <Box position="relative">
@@ -172,6 +173,7 @@ const ImageField: FC<ImageFieldProps> = ({
                       >
                         <Stack
                           alignItems="center"
+                          margin="0 auto"
                           gap={1}
                           sx={{ width: { xs: 206, md: 'auto' } }}
                         >
