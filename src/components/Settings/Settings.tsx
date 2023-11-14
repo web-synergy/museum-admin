@@ -1,4 +1,4 @@
-import { Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Divider, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { FC, SyntheticEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,10 +10,12 @@ import InfoModal from '../EventForm/parts/InfoModal'
 import { ContentBox, CustomDivider, MainContainer, SettingsHeaderContainer } from './styles'
 
 import useAuth from '@/hooks/useAuth'
+import Loader from '../Common/Loader'
 
 const Settings: FC = () => {
   const [value, setValue] = useState(0)
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const { signOut } = useAuth()
   const navigate = useNavigate()
@@ -49,11 +51,15 @@ const Settings: FC = () => {
       <CustomDivider />
 
       <ContentBox>
+        <Box sx={{ position: 'absolute', top: '-15%', left: '50%' }}>
+          <Loader visible={loading} />
+        </Box>
+
         <TabPanel index={0} value={value}>
-          <ChangePassword {...{ setOpen }} />
+          <ChangePassword {...{ setOpen, setLoading }} />
         </TabPanel>
         <TabPanel index={1} value={value}>
-          <ChangeLogin {...{ setOpen }} />
+          <ChangeLogin {...{ setOpen, setLoading }} />
         </TabPanel>
       </ContentBox>
 

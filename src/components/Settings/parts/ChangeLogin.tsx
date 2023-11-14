@@ -9,9 +9,10 @@ import LoginModalWind from './LoginModalWind'
 
 interface ChangeLoginProps {
   setOpen: Dispatch<React.SetStateAction<boolean>>
+  setLoading: Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
+const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
   const [openCodeWindow, setOpenCodeWindow] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState({
@@ -53,6 +54,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault()
     setIsDisabled(true)
+    setLoading(true)
     const isValid = await validationSchema.isValid(data)
     if (!isValid) {
       const msg = 'Логін може бути тільки електронною адресою!'
@@ -61,6 +63,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
       const sendCodeToUserEmail = async (userEmail: string) => {
         try {
           const res = await verificationNewEmail(userEmail)
+          setLoading(false)
           if (!res) throw new Error()
           openModal()
           setData({ ...data, newLogin: '', repeatLogin: '' })
