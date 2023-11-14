@@ -2,7 +2,7 @@ import { Stack, useMediaQuery, useTheme } from '@mui/material';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import NavBarMobile from '../NavBar/NavbarMobile/NavBarMobile';
-import NavBarDekstop from '../NavBar/NavbarDekstop/NavBarDekstop';
+import NavBarDesktop from '../NavBar/NavbarDesctop/NavBarDesktop';
 import AxiosInterceptor from '../Common/AxiosInterceptor';
 
 const SharedLayout = () => {
@@ -18,7 +18,7 @@ const SharedLayout = () => {
   const direction = isDesktop ? 'row' : 'column';
   return (
     <Stack direction={direction}>
-      {isDesktop ? <NavBarDekstop /> : <NavBarMobile />}
+      {isDesktop ? <NavBarDesktop /> : <NavBarMobile />}
       <Outlet />
       <AxiosInterceptor />
     </Stack>
