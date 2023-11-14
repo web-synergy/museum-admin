@@ -41,13 +41,15 @@ export const FooterBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 export const FooterText = styled(Typography)<TypographyProps>(({ theme }) => ({
-  textAlign: 'center',
-  color: theme.palette.gray.dark,
-  [theme.breakpoints.up('xs')]: {
-    fontSize: '1rem',
+  '&.MuiTypography-root': {
+    textAlign: 'center',
+    color: theme.palette.gray.dark,
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    fontWeight: 500,
+    lineHeight: 'normal',
   },
-  fontWeight: 500,
-  lineHeight: 'normal',
 }))
 
 // =========  Content  =========
