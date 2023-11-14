@@ -71,20 +71,21 @@ export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 // styles for success message page
-// export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
-//   margin: '0 auto',
-//   [theme.breakpoints.up('xs')]: {
-//     marginTop: '60px',
-//     width: '289px',
-//   },
-//   [theme.breakpoints.up('md')]: {
-//     marginTop: '80px',
-//     width: '300px',
-//   },
-//   [theme.breakpoints.up('lg')]: {
-//     marginTop: '120px',
-//   },
-// }))
+
+export const SuccessMessageBox = styled(Box)<BoxProps>(({ theme }) => ({
+  margin: '0 auto',
+  [theme.breakpoints.up('xs')]: {
+    marginTop: '60px',
+    width: '289px',
+  },
+  [theme.breakpoints.up('md')]: {
+    marginTop: '80px',
+    width: '300px',
+  },
+  [theme.breakpoints.up('lg')]: {
+    marginTop: '120px',
+  },
+}))
 
 export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
@@ -197,7 +198,7 @@ export const DialogText = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     maxWidth: '268px',
   },
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     maxWidth: '284px',
   },
   margin: 'auto auto',
