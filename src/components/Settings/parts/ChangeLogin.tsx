@@ -27,7 +27,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
   const openModal = () => setOpenCodeWindow(true)
   const closeModal = () => {
     setOpenCodeWindow(false)
-    setOpen(true)
+    error.isError && setError({ ...error, isError: false })
   }
 
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +64,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
           if (!res) throw new Error()
           openModal()
           setData({ ...data, newLogin: '', repeatLogin: '' })
+          setError({ ...error, isError: false, errorMsg: '' })
         } catch (e) {
           setError({ ...error, isError: true, errorMsg: 'Something went wrong' })
         }
@@ -100,7 +101,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen }) => {
         </InputsBox>
       </Box>
 
-      <LoginModalWind {...{ closeModal, open: openCodeWindow, setOpen }} />
+      <LoginModalWind {...{ closeModal, open: openCodeWindow, setOpen, error, setError }} />
     </>
   )
 }

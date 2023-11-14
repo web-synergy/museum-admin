@@ -157,14 +157,17 @@ export const DialogTextField = styled(TextField)<TextFieldProps>(({ theme, error
 }))
 
 export const DialogErrorText = styled(Typography)<TypographyProps>(({ theme }) => ({
-  lineHeight: 1.42,
-  textAlign: 'left',
-  color: theme.palette.error.main,
-  [theme.breakpoints.up('xs')]: {
-    fontSize: '0.875rem',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '1rem',
+  '&.MuiTypography-root': {
+    marginTop: '4px',
+    lineHeight: 1.5,
+    color: theme.palette.error.main,
+    textAlign: 'left',
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '0.875rem',
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1rem',
+    },
   },
 }))
 
