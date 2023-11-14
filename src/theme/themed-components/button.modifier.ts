@@ -1,13 +1,13 @@
-import { Components, Theme } from '@mui/material/styles';
+import { Components, Theme } from '@mui/material/styles'
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
-    primary: true;
-    secondary: true;
-    adminPrimaryBtn: true;
-    adminSecondaryBtn: true;
-    tertiary: true;
-    link: true;
+    primary: true
+    secondary: true
+    adminPrimaryBtn: true
+    adminSecondaryBtn: true
+    tertiary: true
+    link: true
   }
 }
 export const MuiButton: Components<Theme>['MuiButton'] = {
@@ -116,9 +116,11 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       props: { variant: 'adminPrimaryBtn' },
       style: ({ theme }) => ({
         fontFamily: 'Raleway',
-        fontSize: '1.125rem',
-        [theme.breakpoints.down('lg')]: {
-          fontSize: '1rem',
+        [theme.breakpoints.up('xs')]: {
+          fontSize: '16px',
+        },
+        [theme.breakpoints.up('md')]: {
+          fontSize: '18px',
         },
         fontWeight: 500,
         lineHeight: 'normal',
@@ -239,4 +241,4 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       }),
     },
   ],
-};
+}
