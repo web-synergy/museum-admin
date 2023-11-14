@@ -125,7 +125,6 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   };
 
   const onSubmit = async (data: IEventValues) => {
-    console.log('submit');
     if (dateError) {
       return;
     }
