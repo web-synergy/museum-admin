@@ -25,13 +25,21 @@ const EventField: FC<InputFormProps> = ({
             {...field}
             id={field.name}
             InputLabelProps={{ shrink: true }}
-            inputProps={{ maxLength: maxLength || 'auto' }}
+            inputProps={{
+              maxLength: maxLength || 'auto',
+            }}
             fullWidth
             error={!!error}
             placeholder={placeholder}
+            sx={{ '.MuiInputBase-input': { fontSize: { xs: 14, md: 16 } } }}
           />
           {maxLength && (
-            <Typography textAlign="end" variant="body2" mt={1}>
+            <Typography
+              textAlign="end"
+              component="p"
+              variant="helperText"
+              mt={1}
+            >
               {field.value?.length ?? 0}/{maxLength}
             </Typography>
           )}

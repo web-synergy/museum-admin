@@ -1,5 +1,5 @@
 import { FC, FormEventHandler } from 'react';
-import { Box, Grid, Typography, Button, Stack, Alert } from '@mui/material';
+import { Box, Typography, Button, Stack, Alert, Grid } from '@mui/material';
 import { Control, FieldErrors } from 'react-hook-form';
 import TypeSelect from './TypeSelect';
 import EventField from './EventField';
@@ -38,66 +38,77 @@ const Form: FC<FormProps> = ({
   btnTitle,
 }) => {
   return (
-    <Box component="form" onSubmit={onSubmit} sx={{ minWidth: 320 }}>
-      <Grid container columnSpacing="30px" rowSpacing={4}>
-        {errorMessage && (
-          <Grid item xs={12}>
-            <Alert variant="outlined" severity="error" icon={false}>
-              Заповніть поля: {errorMessage}
-            </Alert>
-          </Grid>
-        )}
-        <Grid item xs={12} lg={6}>
-          <EventField
-            control={control}
-            label="Назва події"
-            required={true}
-            name={FormEventFields.TITLE}
-            placeholder="Введіть назву події"
-            maxLength={100}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <TypeSelect
-            label="Тип події"
-            control={control}
-            required={true}
-            name={FormEventFields.TYPE}
-            error={!!errors.type}
-          />
-        </Grid>
-        <Grid item container columnSpacing="30px" rowSpacing={1}>
+    <Box component="form" onSubmit={onSubmit}>
+      {errorMessage && (
+        <Alert
+          variant="outlined"
+          severity="error"
+          icon={false}
+          sx={{ marginBottom: { xs: 4, lg: 5 }, padding: '7px 8px' }}
+        >
+          Заповніть поля: {errorMessage}
+        </Alert>
+      )}
+      <Stack gap={{ xs: 2, md: 4 }}>
+        <Grid
+          container
+          columnSpacing={{ lg: '30px' }}
+          rowSpacing={{ xs: 2, md: 4, lg: 0 }}
+        >
           <Grid item xs={12} lg={6}>
-            <CalendarField
+            <EventField
               control={control}
-              label="Дата початку події"
-              required={false}
-              name={FormEventFields.BEGIN}
-              placeholder="дд/мм/рррр"
-              error={dateError}
+              label="Назва події"
+              required={true}
+              name={FormEventFields.TITLE}
+              placeholder="Введіть назву події"
+              maxLength={100}
             />
           </Grid>
-          <Grid item xs={12} lg={6}>
-            <CalendarField
+          <Grid item xs={12} lg={6} marginBottom={{ xs: '28px', md: 4 }}>
+            <TypeSelect
+              label="Тип події"
               control={control}
-              label="Дата закічення події"
-              required={false}
-              name={FormEventFields.END}
-              placeholder="дд/мм/рррр"
-              error={dateError}
-              disabled={!activeEndDate}
+              required={true}
+              name={FormEventFields.TYPE}
+              error={!!errors.type}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Typography
-              variant="body2"
-              color={dateError ? 'error.main' : 'transparent'}
-            >
-              Дата початку повинна бути раніше за дату закінчення
-            </Typography>
-          </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Box>
+          <Grid container columnSpacing={{ lg: '30px' }}>
+            <Grid item xs={12} lg={6} mb={{ xs: '44px', md: 8, lg: 0 }}>
+              <CalendarField
+                control={control}
+                label="Дата початку події"
+                required={false}
+                name={FormEventFields.BEGIN}
+                placeholder="дд/мм/рррр"
+                error={dateError}
+              />
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <CalendarField
+                control={control}
+                label="Дата закічення події"
+                required={false}
+                name={FormEventFields.END}
+                placeholder="дд/мм/рррр"
+                error={dateError}
+                disabled={!activeEndDate}
+              />
+            </Grid>
+          </Grid>
+          <Typography
+            variant="helperText"
+            component={'p'}
+            color={dateError ? 'error.main' : 'transparent'}
+            mt={1}
+          >
+            Дата початку повинна бути раніше за дату закінчення
+          </Typography>
+        </Box>
+        <Box>
           <EventTextArea
             control={control}
             label="Короткий опис події"
@@ -106,8 +117,9 @@ const Form: FC<FormProps> = ({
             placeholder="Введіть Ваш текст"
             maxLength={150}
           />
-        </Grid>
-        <Grid item xs={12}>
+        </Box>
+
+        <Box>
           <EventTextArea
             control={control}
             label="Розгорнутий опис події"
@@ -116,9 +128,9 @@ const Form: FC<FormProps> = ({
             placeholder="Введіть Ваш текст"
             maxLength={2000}
           />
-        </Grid>
+        </Box>
 
-        <Grid item xs={12}>
+        <Box>
           <ImageField
             control={control}
             label="Додати зображення події"
@@ -127,8 +139,8 @@ const Form: FC<FormProps> = ({
             placeholder="Введіть Ваш текст"
             error={!!errors.banner}
           />
-        </Grid>
-        <Grid item xs={12}>
+        </Box>
+        <Box>
           <Stack
             direction={{ xs: 'column-reverse', lg: 'row' }}
             justifyContent="space-between"
@@ -164,8 +176,8 @@ const Form: FC<FormProps> = ({
               </Box>
             )}
           </Stack>
-        </Grid>
-      </Grid>
+        </Box>
+      </Stack>
     </Box>
   );
 };

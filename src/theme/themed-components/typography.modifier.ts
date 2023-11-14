@@ -3,6 +3,7 @@ import { Components, Theme } from '@mui/material/styles';
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     navigationRale: true;
+    helperText: true;
   }
 }
 export const MuiTypography: Components<Theme>['MuiTypography'] = {
@@ -66,6 +67,21 @@ export const MuiTypography: Components<Theme>['MuiTypography'] = {
 
         [theme.breakpoints.up('lg')]: {
           fontSize: 18,
+        },
+      }),
+    },
+    {
+      props: { variant: 'helperText' },
+      style: ({ theme }) => ({
+        fontFamily: 'Raleway',
+        fontVariantNumeric: 'lining-nums proportional-nums',
+        fontSize: '14px',
+        lineHeight: 1.429,
+        fontWeight: 400,
+
+        [theme.breakpoints.up('md')]: {
+          fontSize: '16px',
+          lineHeight: 1.5,
         },
       }),
     },

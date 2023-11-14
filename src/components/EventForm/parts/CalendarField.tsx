@@ -30,7 +30,7 @@ const CalendarField: FC<CalendarFieldProps> = ({
         <>
           <InputLabel shrink={false} disabled={disabled}>
             {label}
-            <Typography variant="body2" component="span" ml={1}>
+            <Typography variant="helperText" component="span" ml={1}>
               (не обовʼязково)
             </Typography>
           </InputLabel>
@@ -51,6 +51,7 @@ const CalendarField: FC<CalendarFieldProps> = ({
             slotProps={{
               textField: {
                 error: error,
+                InputProps: { sx: { fontSize: { xs: 14, md: 16 } } },
               },
               openPickerButton: {
                 disableFocusRipple: true,
@@ -61,13 +62,14 @@ const CalendarField: FC<CalendarFieldProps> = ({
                 sx: {
                   marginRight: '3px',
                   padding: 0,
+
                   '&:hover': {
                     backgroundColor: 'transparent',
                   },
                 },
               },
 
-              day: { sx: { fontSize: 16 } },
+              day: { sx: { fontSize: { xs: 14, md: 16 } } },
             }}
           />
         </>

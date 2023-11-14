@@ -28,7 +28,9 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     defaultValues: defaultValues,
     mode: 'onSubmit',
     resolver: yupResolver(validationSchemaEventForm),
+    shouldFocusError: false,
   });
+
   const navigate = useNavigate();
   const eventSlug = useRef<string | null>(slug);
   const intervalRef = useRef<number | null>(null);
@@ -48,16 +50,11 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     return false;
   }, [begin, end]);
 
-  //check if validation error is occured
-  useEffect(() => {
-    const { isSubmitting, isSubmitSuccessful } = formState;
-
-    console.log('isSubmitting', isSubmitting);
-    console.log('isSubmitSuccessful', isSubmitSuccessful);
-    if ((isSubmitting && !isSubmitSuccessful) || (isSubmitting && dateError)) {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }
-  }, [dateError, formState]);
+  const requiredFieldsError = useMemo(() => {
+    return Object.values(formState.errors)
+      .map((item) => item.message)
+      .join(', ');
+  }, [formState]);
 
   //start interval
   useEffect(() => {
@@ -82,6 +79,18 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       }
     };
   }, []);
+
+  //check if validation error is occured
+  useEffect(() => {
+    const { isSubmitting } = formState;
+
+    const validationFieldError = isSubmitting && requiredFieldsError.length > 0;
+    const validationDateError = isSubmitting && dateError;
+
+    if (validationDateError || validationFieldError) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+  }, [dateError, formState, requiredFieldsError.length]);
 
   // Start the interval
   const startInterval = () => {
@@ -116,6 +125,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   };
 
   const onSubmit = async (data: IEventValues) => {
+    console.log('submit');
     if (dateError) {
       return;
     }
@@ -171,15 +181,9 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     navigationAfterSaving();
   };
 
-  const requiredFieldsError = useMemo(() => {
-    return Object.values(formState.errors)
-      .map((item) => item.message)
-      .join(', ');
-  }, [formState]);
-
   const btnTitle = useMemo(() => {
     return type === 'add'
-      ? { publish: 'Опублікувати', draft: 'Зберегти як чернетка' }
+      ? { publish: 'Опублікувати', draft: 'Зберегти як чернетку' }
       : status === EventStatus.DRAFT
       ? { publish: 'Зберегти та опублікувати', draft: 'Зберегти зміни' }
       : { publish: 'Зберегти зміни', draft: '' };
