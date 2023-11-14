@@ -58,16 +58,33 @@ export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
   margin: '0 auto',
   [theme.breakpoints.up('xs')]: {
     marginTop: '60px',
-    width: '289px',
+    width: '288px',
   },
   [theme.breakpoints.up('md')]: {
     marginTop: '80px',
-    width: '300px',
+    width: '332px',
   },
   [theme.breakpoints.up('lg')]: {
     marginTop: '120px',
+    width: '358px',
   },
 }))
+
+// styles for success message page
+// export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
+//   margin: '0 auto',
+//   [theme.breakpoints.up('xs')]: {
+//     marginTop: '60px',
+//     width: '289px',
+//   },
+//   [theme.breakpoints.up('md')]: {
+//     marginTop: '80px',
+//     width: '300px',
+//   },
+//   [theme.breakpoints.up('lg')]: {
+//     marginTop: '120px',
+//   },
+// }))
 
 export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
