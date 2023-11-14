@@ -8,17 +8,19 @@ type NavigationProps = {
 
 const Navigation: FC<NavigationProps> = ({ navigation, handleClose }) => {
   return (
-    <List component={'nav'}>
-      {navigation.map(({ title, href, icon }) => (
-        <NavMenuItem
-          key={href}
-          href={href}
-          title={title}
-          icon={icon}
-          click={handleClose}
-        />
-      ))}
-    </List>
+    <nav>
+      <List>
+        {navigation.map(({ title, href, icon }) => (
+          <NavMenuItem
+            key={href}
+            href={href}
+            title={title}
+            icon={icon}
+            click={handleClose}
+          />
+        ))}
+      </List>
+    </nav>
   );
 };
 export default Navigation;
