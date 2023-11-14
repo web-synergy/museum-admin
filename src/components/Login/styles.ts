@@ -90,7 +90,7 @@ export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
     rowGap: '24px',
   },
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     rowGap: '32px',
   },
 }))
@@ -109,10 +109,10 @@ export const RecoveryPassTitle = styled(Typography)<
 >(({ theme }) => ({
   '&.MuiTypography-root': {
     [theme.breakpoints.up('xs')]: {
-      fontSize: '16px',
+      fontSize: '1rem',
     },
     [theme.breakpoints.up('md')]: {
-      fontSize: '18px',
+      fontSize: '1.125rem',
     },
     color: 'inherit',
     fontWeight: 500,
@@ -120,12 +120,13 @@ export const RecoveryPassTitle = styled(Typography)<
     textDecoration: 'underline',
     cursor: 'pointer',
     width: 'fit-content',
-
     '&:hover': {
       color: theme.palette.primary.dark,
     },
   },
 }))
+
+// recovery password page
 
 export const ButtonBox = styled(Box)<BoxProps>(({ theme }) => ({
   marginTop: '32px',
