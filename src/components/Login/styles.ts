@@ -25,6 +25,7 @@ export const HeaderBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 export const HeaderLogoBox = styled(Box)<BoxProps>(({ theme }) => ({
+  lineHeight: 0,
   padding: '32px 0 16px 0',
   [theme.breakpoints.down('lg')]: {
     padding: '24px 0 8px 0',
