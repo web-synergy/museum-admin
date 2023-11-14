@@ -117,10 +117,10 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       style: ({ theme }) => ({
         fontFamily: 'Raleway',
         [theme.breakpoints.up('xs')]: {
-          fontSize: '16px',
+          fontSize: '1rem',
         },
         [theme.breakpoints.up('md')]: {
-          fontSize: '18px',
+          fontSize: '1.125rem',
         },
         fontWeight: 500,
         lineHeight: 'normal',

@@ -108,11 +108,13 @@ export const RecoveryPassTitle = styled(Typography)<
   TypographyProps<ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>>
 >(({ theme }) => ({
   '&.MuiTypography-root': {
-    fontSize: '1.125rem',
-    color: 'inherit',
-    [theme.breakpoints.down('md')]: {
-      fontSize: '0.875rem',
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '16px',
     },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '18px',
+    },
+    color: 'inherit',
     fontWeight: 500,
     lineHeight: 'normal',
     textDecoration: 'underline',
