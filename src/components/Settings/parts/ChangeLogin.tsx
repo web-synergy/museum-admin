@@ -85,7 +85,6 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
             value={newLogin}
             onChange={handleChange('newLogin')}
             error={error.isError}
-            onClick={() => setError({ ...error, isError: false })}
           />
           <InputWithLabel
             label="Повторіть новий логін"
@@ -94,7 +93,6 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
             value={repeatLogin}
             onChange={handleChange('repeatLogin')}
             error={error.isError}
-            onClick={() => setError({ ...error, isError: false })}
           />
           <Button type="submit" variant="adminPrimaryBtn" disabled={isDisabled}>
             Зберегти зміни
