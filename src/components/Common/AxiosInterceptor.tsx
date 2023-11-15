@@ -16,8 +16,11 @@ const AxiosInterceptor = () => {
   }, [redirect, navigate]);
 
   instance.interceptors.request.use((config) => {
+    console.log('axios interceptor request');
     const token = updateAuthState();
-    config.headers['Authorization'] = `Bearer ${token}`;
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     return config;
   });
 
