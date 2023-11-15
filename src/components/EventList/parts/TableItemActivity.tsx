@@ -36,7 +36,6 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
 
     try {
       await onDeleteEventState(slug);
-      console.log(`delete item with id: ${slug}`);
       setSuccessInfo(true);
     } catch (error) {
       console.log(error);

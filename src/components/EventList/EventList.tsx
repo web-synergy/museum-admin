@@ -11,6 +11,7 @@ import { useFetch } from '@/hooks/useFetch';
 const EventList = () => {
   const [events, setEvents] = useState<IEvent[]>([] as IEvent[]);
   const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const getEventList = useCallback(() => getEvents(page), [page]);
   const { data, isLoading } = useFetch(getEventList);
   const initialRef = useRef<true | null>(null);
@@ -25,6 +26,7 @@ const EventList = () => {
       if (page > 0) {
         setEvents((prev) => [...prev, ...data.content]);
       }
+      setTotalPages(data.totalPages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -34,6 +36,7 @@ const EventList = () => {
       const response = await getEvents(i);
       if (i === 0) {
         setEvents(response.data.content);
+        setTotalPages(response.data.totalPages);
       } else {
         setEvents((prev) => [...prev, ...response.data.content]);
       }
@@ -41,8 +44,8 @@ const EventList = () => {
   };
 
   const isShowMoreDisplay = useMemo(
-    () => data && data.totalPages > page + 1,
-    [data, page]
+    () => totalPages > page + 1,
+    [totalPages, page]
   );
 
   const onDeleteEvent = async (slug: string) => {
