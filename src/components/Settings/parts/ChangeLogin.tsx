@@ -53,7 +53,6 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault()
     setIsDisabled(true)
-    setLoading(true)
     const isValid = await validationSchema.isValid(data)
     if (!isValid) {
       const msg = 'Логін може бути тільки електронною адресою!'
@@ -61,6 +60,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
     } else {
       const sendCodeToUserEmail = async (userEmail: string) => {
         try {
+          setLoading(true)
           const res = await verificationNewEmail(userEmail)
           setLoading(false)
           if (!res) throw new Error()
