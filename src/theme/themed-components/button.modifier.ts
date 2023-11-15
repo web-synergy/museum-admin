@@ -1,13 +1,13 @@
-import { Components, Theme } from '@mui/material/styles'
+import { Components, Theme } from '@mui/material/styles';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
-    primary: true
-    secondary: true
-    adminPrimaryBtn: true
-    adminSecondaryBtn: true
-    tertiary: true
-    link: true
+    primary: true;
+    secondary: true;
+    adminPrimaryBtn: true;
+    adminSecondaryBtn: true;
+    tertiary: true;
+    link: true;
   }
 }
 export const MuiButton: Components<Theme>['MuiButton'] = {
@@ -106,7 +106,7 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       style: ({ theme }) => ({
         color: theme.palette.primary.main,
         minWidth: '0px',
-        transition: theme.transitions.create(['background-color', 'color']),
+        // transition: theme.transitions.create(['background-color', 'color']),
         '&:hover': {
           color: theme.palette.primary.dark,
           backgroundColor: 'transparent',
@@ -200,7 +200,7 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
         minWidth: '60px',
         width: '100%',
         height: '60px',
-        transition: theme.transitions.create(['background-color', 'color']),
+        // transition: theme.transitions.create(['background-color', 'color']),
         '&:hover': { color: theme.palette.primary.dark },
         borderRadius: 0,
 
@@ -243,4 +243,4 @@ export const MuiButton: Components<Theme>['MuiButton'] = {
       }),
     },
   ],
-}
+};
