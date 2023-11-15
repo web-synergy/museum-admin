@@ -78,7 +78,7 @@ const NavBarDesktop: FC = () => {
               aria-label={title}
               sx={{
                 '& .MuiButton-startIcon': {
-                  transition,
+                  transition: `margin ${transition}`,
                   marginLeft: isShort ? '70px' : '0px',
                 },
               }}
