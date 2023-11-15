@@ -16,7 +16,6 @@ const AxiosInterceptor = () => {
   }, [redirect, navigate]);
 
   instance.interceptors.request.use((config) => {
-    console.log('axios interceptor request');
     const token = updateAuthState();
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;

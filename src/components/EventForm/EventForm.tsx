@@ -38,6 +38,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const [isPublishSuccess, setIsPublishSuccess] = useState(false);
   const [isDraftSaveSuccess, setIsDraftSaveSuccess] = useState(false);
   const [isChangeSaved, setIsChangeSaved] = useState(false);
+  const [needToScroll, setNeedToScroll] = useState(false);
 
   const begin = watch('begin');
   const end = watch('end');
@@ -82,15 +83,26 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
 
   //check if validation error is occured
   useEffect(() => {
-    const { isSubmitting } = formState;
+    const { isSubmitting, isSubmitSuccessful } = formState;
+    if (isSubmitting) {
+      setNeedToScroll(true);
+    }
 
-    const validationFieldError = isSubmitting && requiredFieldsError.length > 0;
+    const validationFieldError =
+      !isSubmitSuccessful && requiredFieldsError.length > 0;
     const validationDateError = isSubmitting && dateError;
 
-    if (validationDateError || validationFieldError) {
+    if (validationDateError) {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
-  }, [dateError, formState, requiredFieldsError.length]);
+
+    if (validationFieldError && needToScroll) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      setNeedToScroll(false);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState]);
 
   // Start the interval
   const startInterval = () => {
@@ -100,6 +112,10 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
     }, TIMER);
   };
 
+  const onResetForm = () => {
+    reset();
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
   // Stop the interval
   const stopInterval = () => {
     if (intervalRef.current) {
@@ -113,7 +129,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
       navigate('/events', { replace: true });
     } else {
       stopInterval();
-      reset();
+      onResetForm();
       wasResetRef.current = true;
       eventSlug.current = null;
     }
