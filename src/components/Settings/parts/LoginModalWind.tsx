@@ -1,7 +1,7 @@
 import { confirmEmail } from '@/api'
 import SvgSpriteIcon from '@/components/Common/SvgSprite'
 import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
-import { Dispatch, FC, useRef, useState } from 'react'
+import { Dispatch, FC, useRef } from 'react'
 import { getUserCode, handleKeyDown } from '../helpers'
 import {
   CustomDialog,
@@ -11,15 +11,22 @@ import {
   DialogTextField,
 } from '../styles'
 
+interface CurrError {
+  isError: boolean
+  errorMsg: string
+}
+
 interface ModalWindProps {
   closeModal: () => void
   open: boolean
   setOpen: Dispatch<React.SetStateAction<boolean>>
+  error: CurrError
+  setError: (value: React.SetStateAction<CurrError>) => void
 }
 
-const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen }) => {
+const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen, error, setError }) => {
   const inputs = Array(6).fill('')
-  const [error, setError] = useState(false)
+
   const inputRefs = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null))
 
   const changeFocus = (currInputVal: string, index: number) => {
@@ -32,7 +39,7 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen }) => {
     const checkCode = async (code: string) => {
       const resp = await confirmEmail(code)
       if (resp === 204) return setOpen(true)
-      else setError(true)
+      else setError({ ...error, isError: true })
     }
     const userCode = getUserCode(inputRefs.current)
     checkCode(userCode)
@@ -60,7 +67,7 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen }) => {
           </Typography>
         </Box>
 
-        <Box>
+        <Box sx={{ height: '76px' }}>
           <Stack
             sx={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
           >
@@ -73,12 +80,12 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen }) => {
                 inputRef={ref => (inputRefs.current[index] = ref)}
                 onKeyDown={handleKeyDown}
                 inputProps={{ maxLength: 1 }}
-                error={error}
+                error={error.isError}
                 autoComplete="off"
               />
             ))}
           </Stack>
-          {error && <DialogErrorText>Не вірний код!</DialogErrorText>}
+          {error.isError && <DialogErrorText>Не вірний код!</DialogErrorText>}
         </Box>
         <Button type="button" variant="adminPrimaryBtn" onClick={checkUserCode}>
           Змінити логін

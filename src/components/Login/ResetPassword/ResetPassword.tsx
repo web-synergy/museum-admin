@@ -19,7 +19,7 @@ const ResetPassword: FC = () => {
 
   const headlines = {
     title: 'Забули пароль?',
-    subtitle: 'Будь ласка, вкажіть Вашу електронну адресу для відновлення паролю',
+    subtitle: 'Будь ласка, вкажіть Вашу електронну адресу для відновлення паролю ',
   }
 
   const goToLoginPage: MouseEventHandler = e => {

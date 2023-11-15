@@ -6,9 +6,10 @@ import InputWithLabel from './InputWithLabel'
 
 interface ChangePasswordProps {
   setOpen: Dispatch<React.SetStateAction<boolean>>
+  setLoading: Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChangePassword: FC<ChangePasswordProps> = ({ setOpen }) => {
+const ChangePassword: FC<ChangePasswordProps> = ({ setOpen, setLoading }) => {
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState(false)
   const [data, setData] = useState({
@@ -35,8 +36,11 @@ const ChangePassword: FC<ChangePasswordProps> = ({ setOpen }) => {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
+    setLoading(true)
     const sendNewPass = async (pass: string) => {
       const resp = await updatePass(pass)
+      setLoading(false)
+
       if (resp === 204) setOpen(true)
     }
     sendNewPass(newPass)

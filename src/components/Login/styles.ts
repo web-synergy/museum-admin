@@ -25,6 +25,7 @@ export const HeaderBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 export const HeaderLogoBox = styled(Box)<BoxProps>(({ theme }) => ({
+  lineHeight: 0,
   padding: '32px 0 16px 0',
   [theme.breakpoints.down('lg')]: {
     padding: '24px 0 8px 0',
@@ -40,18 +41,38 @@ export const FooterBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 export const FooterText = styled(Typography)<TypographyProps>(({ theme }) => ({
-  textAlign: 'center',
-  color: theme.palette.gray.dark,
-  [theme.breakpoints.up('xs')]: {
-    fontSize: '1rem',
+  '&.MuiTypography-root': {
+    textAlign: 'center',
+    color: theme.palette.gray.dark,
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    fontWeight: 500,
+    lineHeight: 'normal',
   },
-  fontWeight: 500,
-  lineHeight: 'normal',
 }))
 
 // =========  Content  =========
 
 export const ContentBox = styled(Box)<BoxProps>(({ theme }) => ({
+  margin: '0 auto',
+  [theme.breakpoints.up('xs')]: {
+    marginTop: '60px',
+    width: '288px',
+  },
+  [theme.breakpoints.up('md')]: {
+    marginTop: '80px',
+    width: '332px',
+  },
+  [theme.breakpoints.up('lg')]: {
+    marginTop: '120px',
+    width: '358px',
+  },
+}))
+
+// styles for success message page
+
+export const SuccessMessageBox = styled(Box)<BoxProps>(({ theme }) => ({
   margin: '0 auto',
   [theme.breakpoints.up('xs')]: {
     marginTop: '60px',
@@ -70,7 +91,7 @@ export const ContentStack = styled(Stack)<StackProps>(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
     rowGap: '24px',
   },
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     rowGap: '32px',
   },
 }))
@@ -88,22 +109,25 @@ export const RecoveryPassTitle = styled(Typography)<
   TypographyProps<ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>>
 >(({ theme }) => ({
   '&.MuiTypography-root': {
-    fontSize: '1.125rem',
-    color: 'inherit',
-    [theme.breakpoints.down('md')]: {
-      fontSize: '0.875rem',
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1rem',
     },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.125rem',
+    },
+    color: 'inherit',
     fontWeight: 500,
     lineHeight: 'normal',
     textDecoration: 'underline',
     cursor: 'pointer',
     width: 'fit-content',
-
     '&:hover': {
       color: theme.palette.primary.dark,
     },
   },
 }))
+
+// recovery password page
 
 export const ButtonBox = styled(Box)<BoxProps>(({ theme }) => ({
   marginTop: '32px',
@@ -174,7 +198,7 @@ export const DialogText = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     maxWidth: '268px',
   },
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     maxWidth: '284px',
   },
   margin: 'auto auto',
