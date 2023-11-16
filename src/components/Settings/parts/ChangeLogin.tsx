@@ -18,6 +18,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
   const [isDisabled, setIsDisabled] = useState(true)
   const [error, setError] = useState({
     isError: false,
+    isModalError: false,
     errorMsg: '',
   })
   const [data, setData] = useState({
@@ -29,7 +30,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
   const openModal = () => setOpenCodeWindow(true)
   const closeModal = () => {
     setOpenCodeWindow(false)
-    error.isError && setError({ ...error, isError: false })
+    error.isModalError && setError({ ...error, isModalError: false })
   }
 
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
