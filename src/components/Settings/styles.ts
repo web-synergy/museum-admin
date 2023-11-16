@@ -186,3 +186,11 @@ export const DialogHintText = styled(Typography)<TypographyProps>(({ theme }) =>
     },
   },
 }))
+
+export const LoaderBox = styled(Box)(() => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100vh',
+  zIndex: 10,
+  backgroundColor: '#0006',
+}))

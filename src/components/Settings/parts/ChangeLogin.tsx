@@ -1,7 +1,8 @@
 import { Box, Button } from '@mui/material'
-import { ChangeEvent, Dispatch, FC, FormEventHandler, useState } from 'react'
+import { ChangeEvent, Dispatch, FC, FormEventHandler, useEffect, useState } from 'react'
 
 import { verificationNewEmail } from '@/api'
+import { isValuesSame } from '../helpers'
 import { ErrorText, InputsBox } from '../styles'
 import { validationSchema } from '../validationSchema/email'
 import InputWithLabel from './InputWithLabel'
@@ -34,27 +35,24 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim().toLowerCase()
     setData({ ...data, [key]: newVal })
-    if (key === 'repeatLogin' && newLogin) {
-      setError({
-        ...error,
-        isError: !isLoginsSame(newVal, data.newLogin),
-        errorMsg: 'Логіни не співпадають. Спробуйте ще раз.',
-      })
-      if (newVal.length === data.newLogin.length)
-        setIsDisabled(!isLoginsSame(newVal, data.newLogin))
-      else setIsDisabled(true)
-    }
+    setError({ ...error, isError: false })
   }
 
-  const isLoginsSame = (repeatLogin: string, newLogin: string) => {
-    const partNewLogin = newLogin.slice(0, repeatLogin.length)
-    return partNewLogin === repeatLogin
-  }
+  useEffect(() => {
+    if (newLogin && repeatLogin) {
+      setError({
+        ...error,
+        isError: !isValuesSame(newLogin, repeatLogin),
+        errorMsg: 'Логіни не співпадають. Спробуйте ще раз.',
+      })
+    }
+    if (newLogin.length === repeatLogin.length) setIsDisabled(!isValuesSame(newLogin, repeatLogin))
+    else setIsDisabled(true)
+  }, [newLogin, repeatLogin])
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault()
     setIsDisabled(true)
-    setLoading(true)
     const isValid = await validationSchema.isValid(data)
     if (!isValid) {
       const msg = 'Логін може бути тільки електронною адресою!'
@@ -62,6 +60,7 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
     } else {
       const sendCodeToUserEmail = async (userEmail: string) => {
         try {
+          setLoading(true)
           const res = await verificationNewEmail(userEmail)
           setLoading(false)
           if (!res) throw new Error()
@@ -86,7 +85,6 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
             value={newLogin}
             onChange={handleChange('newLogin')}
             error={error.isError}
-            onClick={() => setError({ ...error, isError: false })}
           />
           <InputWithLabel
             label="Повторіть новий логін"
@@ -95,7 +93,6 @@ const ChangeLogin: FC<ChangeLoginProps> = ({ setOpen, setLoading }) => {
             value={repeatLogin}
             onChange={handleChange('repeatLogin')}
             error={error.isError}
-            onClick={() => setError({ ...error, isError: false })}
           />
           <Button type="submit" variant="adminPrimaryBtn" disabled={isDisabled}>
             Зберегти зміни
