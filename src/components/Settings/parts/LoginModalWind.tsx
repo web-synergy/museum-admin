@@ -13,6 +13,7 @@ import {
 
 interface CurrError {
   isError: boolean
+  isModalError: boolean
   errorMsg: string
 }
 
@@ -39,7 +40,7 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen, error, 
     const checkCode = async (code: string) => {
       const resp = await confirmEmail(code)
       if (resp === 204) return setOpen(true)
-      else setError({ ...error, isError: true })
+      else setError({ ...error, isModalError: true })
     }
     const userCode = getUserCode(inputRefs.current)
     checkCode(userCode)
@@ -80,12 +81,12 @@ const LoginModalWind: FC<ModalWindProps> = ({ closeModal, open, setOpen, error, 
                 inputRef={ref => (inputRefs.current[index] = ref)}
                 onKeyDown={handleKeyDown}
                 inputProps={{ maxLength: 1 }}
-                error={error.isError}
+                error={error.isModalError}
                 autoComplete="off"
               />
             ))}
           </Stack>
-          {error.isError && <DialogErrorText>Не вірний код!</DialogErrorText>}
+          {error.isModalError && <DialogErrorText>Не вірний код!</DialogErrorText>}
         </Box>
         <Button type="button" variant="adminPrimaryBtn" onClick={checkUserCode}>
           Змінити логін
