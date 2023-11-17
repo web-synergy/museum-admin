@@ -1,19 +1,17 @@
 import { FC, useState } from 'react';
 import { Box, useMediaQuery, useTheme } from '@mui/material';
-import useAuth from '@/hooks/useAuth';
-
 import { CloseButton, ExitButton, ExitWrapper, Wrapper } from './style';
 import Navigation from '../parts/Navigation';
 import { makeConstantsVie } from './helper';
+import ConfirmExitModal from '../parts/ConfirmExitModal';
 
 const NavBarDesktop: FC = () => {
-  const { signOut } = useAuth();
-
   const theme = useTheme();
 
   const isLaptop = useMediaQuery(theme.breakpoints.down('lg'));
 
   const [isShort, setIsShort] = useState(isLaptop);
+  const [openModal, setOpenModal] = useState(false);
 
   const { rotate, title, navItems, insertLogo, width, widthCollapse } =
     makeConstantsVie(isShort, isLaptop);
@@ -29,23 +27,25 @@ const NavBarDesktop: FC = () => {
           zIndex: 1,
           width: !isShort ? '100vw' : widthCollapse,
           transition: `width ${transition}`,
-        }}>
+        }}
+      >
         <Wrapper
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
           sx={{
             position: !isLaptop ? 'fixed' : 'relative',
             zIndex: 2,
             p: isShort ? '32px 11px 40px 80px' : '32px 8px 40px 80px',
             width: widthCollapse,
             transition: `width ${transition}`,
-          }}>
+          }}
+        >
           <Box
-            component='img'
+            component="img"
             sx={{
               alignSelf: 'end',
             }}
             src={insertLogo}
-            alt='logo'
+            alt="logo"
             mb={3}
           />
           <Navigation
@@ -63,18 +63,18 @@ const NavBarDesktop: FC = () => {
               },
             }}
             svgSpriteId={'close-nav'}
-            title=''
-            variant='link'
-            iconPlace='startIcon'
-            onClick={() => setIsShort(prev => !prev)}
+            title=""
+            variant="link"
+            iconPlace="startIcon"
+            onClick={() => setIsShort((prev) => !prev)}
           />
           <ExitWrapper>
             <ExitButton
-              svgSpriteId='log-out'
+              svgSpriteId="log-out"
               title={title}
-              variant='text'
-              iconPlace='startIcon'
-              onClick={() => signOut()}
+              variant="text"
+              iconPlace="startIcon"
+              onClick={() => setOpenModal(true)}
               aria-label={title}
               sx={{
                 '& .MuiButton-startIcon': {
@@ -92,6 +92,10 @@ const NavBarDesktop: FC = () => {
           width,
           transition: `width ${transition}`,
         }}
+      />
+      <ConfirmExitModal
+        open={openModal}
+        closeModal={() => setOpenModal(false)}
       />
     </Box>
   );

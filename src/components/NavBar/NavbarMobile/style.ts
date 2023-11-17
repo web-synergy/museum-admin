@@ -41,8 +41,10 @@ export const Logout = styled(ButtonWithIcon)(({ theme }) => ({
   border: `1px solid ${theme.palette.common.white}`,
   color: theme.palette.common.white,
   minWidth: '238px',
-  padding: '16px',
+  padding: '9px 16px',
   marginTop: '185px',
+  fontSize: 18,
+  lineHeight: 1.555,
   '&:hover': {
     border: `1px solid ${theme.palette.primary.dark}`,
   },
