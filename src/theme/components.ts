@@ -17,6 +17,7 @@ import {
 import { MuiTypography } from './themed-components/typography.modifier';
 import { MuiTableCell, MuiTableRow } from './themed-components/table.modifier';
 import { MuiToolbar } from './themed-components/toolbar.modifier';
+import { MuiTooltip } from './themed-components/tooltip.modifier';
 
 export const components: Components<Theme> = {
   MuiTypography,
@@ -35,4 +36,5 @@ export const components: Components<Theme> = {
   MuiTableCell,
   MuiTableRow,
   MuiToolbar,
+  MuiTooltip,
 };

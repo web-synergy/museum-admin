@@ -1,6 +1,5 @@
 import { Box, Button } from '@mui/material'
 import { ChangeEvent, Dispatch, FC, FormEventHandler, useState } from 'react'
-
 import { verificationNewEmail } from '@/api'
 import { ErrorText, InputsBox } from '../styles'
 import { validationSchema } from '../validationSchema/email'
