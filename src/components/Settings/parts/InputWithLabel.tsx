@@ -1,14 +1,23 @@
-import PassIcon from '@/components/Login/parts/PassIcon'
-import { Box, InputAdornment, TextField, Typography, useTheme } from '@mui/material'
-import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react'
+import PassIcon from '@/components/Login/parts/PassIcon';
+import {
+  Box,
+  InputAdornment,
+  TextField,
+  Typography,
+  useTheme,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
+import SvgSpriteIcon from '@/components/Common/SvgSprite';
+import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 
 interface InputWithLabelProps {
-  label: string
-  type?: string
-  placeholder?: string
-  value: string
-  error?: boolean
-  onChange: ChangeEventHandler<HTMLInputElement> | undefined
+  label: string;
+  type?: string;
+  placeholder?: string;
+  value: string;
+  error?: boolean;
+  onChange: ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
 const InputWithLabel: FC<InputWithLabelProps> = ({
@@ -19,11 +28,11 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
   error,
   onChange,
 }) => {
-  const [showPass, setShowPass] = useState(false)
+  const [showPass, setShowPass] = useState(false);
+  const [infoTooltip, setInfoTooltip] = useState(false);
+  const isPassType = type === 'password';
 
-  const isPassType = type === 'password'
-
-  const { palette } = useTheme()
+  const { palette } = useTheme();
   const styles = {
     '.MuiInputBase-root': { height: '52px' },
     '& .MuiOutlinedInput-root': {
@@ -31,12 +40,12 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
         borderColor: error ? palette.error.main : '',
       },
     },
-  }
+  };
 
-  const managePassInput: MouseEventHandler = e => {
-    e.preventDefault()
-    setShowPass(!showPass)
-  }
+  const managePassInput: MouseEventHandler = (e) => {
+    e.preventDefault();
+    setShowPass(!showPass);
+  };
 
   return (
     <Box>
@@ -76,13 +85,35 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
             value={value}
             onChange={onChange}
             error={error}
-            onPaste={e => e.preventDefault()}
-            onCopy={e => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCopy={(e) => e.preventDefault()}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip
+                    title="Лише у форматі зразок@зразок.зразок"
+                    placement="top-end"
+                    id="info-tooltip"
+                    open={infoTooltip}
+                    onOpen={() => setInfoTooltip(true)}
+                    onClose={() => setInfoTooltip(false)}
+                  >
+                    <IconButton
+                      aria-label="info tooltip"
+                      aria-describedby={`info-tooltip`}
+                      sx={{ p: 0 }}
+                    >
+                      <SvgSpriteIcon iconId="info" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
         </>
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default InputWithLabel
+export default InputWithLabel;
