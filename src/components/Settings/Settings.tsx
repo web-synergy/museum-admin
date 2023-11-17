@@ -7,7 +7,13 @@ import ChangePassword from './parts/ChangePassword'
 import TabPanel from './parts/TabPanel'
 
 import InfoModal from '../EventForm/parts/InfoModal'
-import { ContentBox, CustomDivider, MainContainer, SettingsHeaderContainer } from './styles'
+import {
+  ContentBox,
+  CustomDivider,
+  LoaderBox,
+  MainContainer,
+  SettingsHeaderContainer,
+} from './styles'
 
 import useAuth from '@/hooks/useAuth'
 import Loader from '../Common/Loader'
@@ -32,7 +38,14 @@ const Settings: FC = () => {
   }
 
   return (
-    <Stack sx={{ width: '100%' }}>
+    <Stack sx={{ width: '100%' }} position={'relative'}>
+      {loading && (
+        <LoaderBox>
+          <Box sx={{ position: 'absolute', left: '45%' }}>
+            <Loader visible={loading} />
+          </Box>
+        </LoaderBox>
+      )}
       <SettingsHeaderContainer>
         <Typography variant="h3" component="h1">
           Налаштування
@@ -51,10 +64,6 @@ const Settings: FC = () => {
       <CustomDivider />
 
       <ContentBox>
-        <Box sx={{ position: 'absolute', top: '-15%', left: '50%' }}>
-          <Loader visible={loading} />
-        </Box>
-
         <TabPanel index={0} value={value}>
           <ChangePassword {...{ setOpen, setLoading }} />
         </TabPanel>

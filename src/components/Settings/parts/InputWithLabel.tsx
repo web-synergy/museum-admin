@@ -9,7 +9,6 @@ interface InputWithLabelProps {
   value: string
   error?: boolean
   onChange: ChangeEventHandler<HTMLInputElement> | undefined
-  onClick: MouseEventHandler<HTMLDivElement> | undefined
 }
 
 const InputWithLabel: FC<InputWithLabelProps> = ({
@@ -18,7 +17,6 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
   type,
   value,
   error,
-  onClick,
   onChange,
 }) => {
   const [showPass, setShowPass] = useState(false)
@@ -63,7 +61,6 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
             value={value}
             onChange={onChange}
             error={error}
-            onClick={onClick}
           />
         </>
       ) : (

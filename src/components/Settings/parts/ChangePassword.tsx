@@ -1,6 +1,7 @@
 import { updatePass } from '@/api'
 import { Box, Button } from '@mui/material'
-import { ChangeEvent, Dispatch, FC, FormEventHandler, useState } from 'react'
+import { ChangeEvent, Dispatch, FC, FormEventHandler, useEffect, useState } from 'react'
+import { isValuesSame } from '../helpers'
 import { ErrorText, InputsBox } from '../styles'
 import InputWithLabel from './InputWithLabel'
 
@@ -21,18 +22,18 @@ const ChangePassword: FC<ChangePasswordProps> = ({ setOpen, setLoading }) => {
   const handleChange = (key: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const newVal = event.target.value.trim()
     setData({ ...data, [key]: newVal })
-    if (key === 'repeatPass') {
-      setError(!isPasswordsSame(newVal, data.newPass))
-      if (newVal.length === data.newPass.length)
-        setIsDisabled(!isPasswordsSame(newVal, data.newPass))
-      else setIsDisabled(true)
-    }
+    setError(false)
   }
 
-  const isPasswordsSame = (repeatPas: string, newPass: string) => {
-    const part = newPass.slice(0, repeatPas.length)
-    return part === repeatPas
-  }
+  useEffect(() => {
+    if (newPass && repeatPass) {
+      setError(!isValuesSame(newPass, repeatPass))
+    }
+
+    if (newPass.length === repeatPass.length) {
+      setIsDisabled(!isValuesSame(newPass, repeatPass))
+    } else setIsDisabled(true)
+  }, [newPass, repeatPass])
 
   const onSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
@@ -56,7 +57,6 @@ const ChangePassword: FC<ChangePasswordProps> = ({ setOpen, setLoading }) => {
           value={newPass}
           onChange={handleChange('newPass')}
           error={error}
-          onClick={() => setError(false)}
         />
         <InputWithLabel
           label="Повторіть новий пароль"
@@ -65,7 +65,6 @@ const ChangePassword: FC<ChangePasswordProps> = ({ setOpen, setLoading }) => {
           value={repeatPass}
           onChange={handleChange('repeatPass')}
           error={error}
-          onClick={() => setError(false)}
         />
         <Button type="submit" variant="adminPrimaryBtn" disabled={isDisabled}>
           Зберегти зміни
