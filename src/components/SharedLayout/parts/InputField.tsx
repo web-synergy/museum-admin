@@ -72,6 +72,10 @@ const InputField: FC<InputFieldProps> = ({
                     open={infoTooltip}
                     onOpen={() => setInfoTooltip(true)}
                     onClose={() => setInfoTooltip(false)}
+                    sx={{
+                      p: 0,
+                      color: (theme) => theme.palette.common.black,
+                    }}
                   >
                     <IconButton
                       aria-label="info tooltip"

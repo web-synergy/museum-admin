@@ -7,6 +7,7 @@ import {
   useTheme,
   Tooltip,
   IconButton,
+  useMediaQuery,
 } from '@mui/material';
 import SvgSpriteIcon from '@/components/Common/SvgSprite';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
@@ -32,7 +33,9 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
   const [infoTooltip, setInfoTooltip] = useState(false);
   const isPassType = type === 'password';
 
-  const { palette } = useTheme();
+  const { palette, breakpoints } = useTheme();
+  const isDesktop = useMediaQuery(breakpoints.up('lg'));
+
   const styles = {
     '.MuiInputBase-root': { height: '52px' },
     '& .MuiOutlinedInput-root': {
@@ -45,6 +48,13 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
   const managePassInput: MouseEventHandler = (e) => {
     e.preventDefault();
     setShowPass(!showPass);
+  };
+
+  const onClickInfoBtn = () => {
+    if (isDesktop) {
+      return;
+    }
+    setInfoTooltip(true);
   };
 
   return (
@@ -101,7 +111,11 @@ const InputWithLabel: FC<InputWithLabelProps> = ({
                     <IconButton
                       aria-label="info tooltip"
                       aria-describedby={`info-tooltip`}
-                      sx={{ p: 0 }}
+                      sx={{
+                        p: 0,
+                        color: (theme) => theme.palette.common.black,
+                      }}
+                      onClick={onClickInfoBtn}
                     >
                       <SvgSpriteIcon iconId="info" />
                     </IconButton>
