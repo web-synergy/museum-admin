@@ -11,6 +11,7 @@ export const instance = axios.create({
 interface LoginResponse {
   roles: string[];
   token: string;
+  is_valid_email: boolean;
 }
 
 export const login = (username: string, password: string) => {
@@ -125,6 +126,17 @@ export const updatePass = async (pass: string) => {
       `/admin/update/password?password=${pass}`
     );
     return status;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const changeLogin = async (login: string) => {
+  try {
+    await instance.put('/admin/update/email', {
+      email: login,
+    });
+    return true;
   } catch (error) {
     return null;
   }
