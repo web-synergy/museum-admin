@@ -119,6 +119,7 @@ const ChangeLoginModal: FC<ChangeLoginModalProps> = ({ open, onClose }) => {
             name={ChangeLoginFields.CONFIRM}
             label="Повторіть новий логін"
             error={compareError}
+            
           />
           <Button disabled={disableBtn} type="submit">
             Увійти

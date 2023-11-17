@@ -56,7 +56,12 @@ const InputField: FC<InputFieldProps> = ({
             error={!!error || compareError}
             placeholder="olenapetrova@gmail.com"
             autoComplete="off"
-            sx={{ '.MuiInputBase-input': { fontSize: { xs: 14, md: 16 } } }}
+            sx={{
+              '.MuiInputBase-input': {
+                fontSize: { xs: 14, md: 16 },
+              },
+              '.MuiOutlinedInput-root': { height: '52px' },
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
