@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Stack, Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import ModalBase from '@/components/Common/ModalBase';
 
 interface ConfirmDeleteProps {
@@ -21,24 +21,26 @@ const ConfirmDelete: FC<ConfirmDeleteProps> = ({
         <Box sx={{ padding: '0 24px 24px', textAlign: 'center' }}>
           <Typography>Ви дійсно хочете видалити {title}?</Typography>
         </Box>
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          spacing={2}
-          mb={4}
-          paddingRight={3}
-          paddingLeft={3}
+
+        <Button
+          sx={{
+            width: { xs: '100%', md: 280 },
+            margin: '0 auto',
+          }}
+          onClick={onDeleteItem}
         >
-          <Button sx={{ flexGrow: 1 }} onClick={onDeleteItem}>
-            Видалити
-          </Button>
-          <Button
-            sx={{ flexGrow: 1 }}
-            variant="secondary"
-            onClick={onCloseModal}
-          >
-            Скасувати
-          </Button>
-        </Stack>
+          Видалити
+        </Button>
+        <Button
+          sx={{
+            width: { xs: '100%', md: 280 },
+            margin: '0 auto',
+          }}
+          variant="secondary"
+          onClick={onCloseModal}
+        >
+          Скасувати
+        </Button>
       </ModalBase>
     </>
   );
