@@ -26,6 +26,7 @@ const MemberItem = ({ member }: ListItemProps) => {
         sx={{
           color: "inherit",
           textAlign: { xs: "center", md: "center" },
+          transition: "color 0.3s ease-out",
           "&:hover": {
             color: theme.palette.action.hover,
           },
