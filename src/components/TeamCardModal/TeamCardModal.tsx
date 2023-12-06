@@ -49,7 +49,7 @@ const TeamCardModal = ({ handleClose, open }: IModalTeamCard) => {
             position: "absolute",
             top: "16px",
             right: "16px",
-            transition: "color 0.3s ease-in-out",
+            transition: "color 0.3s ease-out",
           }}
         >
           <SvgSpriteIcon fontSize="large" iconId="close" />

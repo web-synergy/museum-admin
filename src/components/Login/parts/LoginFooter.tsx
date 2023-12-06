@@ -9,6 +9,7 @@ const TextLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
   borderBottom: "solid 1px",
   cursor: "pointer",
+  transition: "color 0.3s ease-out",
   ":hover": {
     color: theme.palette.primary.main,
   },
