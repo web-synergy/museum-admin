@@ -5,17 +5,19 @@ import SvgSpriteIcon from '@/components/Common/SvgSprite';
 import MobileMenu from './MobileMenu';
 import ConfirmDelete from './ConfirmDelete';
 import InfoModal from '@/components/EventForm/parts/InfoModal';
+import { deleteEvent } from '@/api';
 
 interface TableItemActivityProps {
   slug: string;
   title: string;
-  onDeleteEventState: (slug: string) => void;
+  onUpdateEvents: () => void;
 }
 
 const TableItemActivity: FC<TableItemActivityProps> = ({
   slug,
   title,
-  onDeleteEventState,
+
+  onUpdateEvents,
 }) => {
   const theme = useTheme();
   const isNotMobile = useMediaQuery(theme.breakpoints.up('md'));
@@ -31,15 +33,19 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
     setConfirmModal(false);
   };
 
-  const onDeleteItem = async () => {
-    onCloseConfirmModal();
+  const onClickConfirm = async () => {
+    setConfirmModal(false);
+    await deleteEvent(slug);
+  };
 
-    try {
-      await onDeleteEventState(slug);
-      setSuccessInfo(true);
-    } catch (error) {
-      console.log(error);
-    }
+  const onDeleteItem = async () => {
+    await onClickConfirm();
+    setSuccessInfo(true);
+  };
+
+  const onCloseSuccessInfoModal = async () => {
+    await onUpdateEvents();
+    setSuccessInfo(false);
   };
 
   const onEditItem = () => {
@@ -79,7 +85,7 @@ const TableItemActivity: FC<TableItemActivityProps> = ({
       />
       <InfoModal
         open={successInfo}
-        onClose={() => setSuccessInfo(false)}
+        onClose={onCloseSuccessInfoModal}
         text="Подія була успішно видалена."
       />
     </>

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { Stack } from '@mui/material';
 import PageTemplate from '../Common/PageTemplate';
 import { ListContainer, ShowMoreBtn } from './parts/styles';
-import { getEvents, deleteEvent } from '@/api';
+import { getEvents } from '@/api';
 import { IEvent } from '@/types/events';
 import EventTable from './parts/EventTable';
 import Loader from '../Common/Loader';
@@ -31,7 +31,7 @@ const EventList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const updateState = async () => {
+  const onUpdateEventsState = async () => {
     for (let i = 0; i <= page; i++) {
       const response = await getEvents(i);
       if (i === 0) {
@@ -48,20 +48,11 @@ const EventList = () => {
     [totalPages, page]
   );
 
-  const onDeleteEvent = async (slug: string) => {
-    try {
-      await deleteEvent(slug);
-      await updateState();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <PageTemplate title="Редагувати події">
       <ListContainer>
         <>
-          <EventTable events={events} onDeleteEvent={onDeleteEvent} />
+          <EventTable events={events} onUpdateEvents={onUpdateEventsState} />
           <Loader visible={isLoading} />
           {isShowMoreDisplay && (
             <Stack alignItems="center">

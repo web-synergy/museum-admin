@@ -16,10 +16,10 @@ import { EventStatus } from '@/assets/constants/formEnums';
 
 interface EventTableProps {
   events: IEvent[] | undefined;
-  onDeleteEvent: (id: string) => void;
+  onUpdateEvents: () => void;
 }
 
-const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
+const EventTable: FC<EventTableProps> = ({ events, onUpdateEvents }) => {
   return (
     <TableContainer component="div">
       <Table aria-label="events list">
@@ -45,7 +45,7 @@ const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
                 <TableCell sx={{ fontWeight: 400 }}>
                   {DateTime.fromISO(event.created).toLocaleString()}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ overflowWrap: 'anywhere' }}>
                   {event.title}
                   {event.status === EventStatus.DRAFT && (
                     <Typography
@@ -62,7 +62,7 @@ const EventTable: FC<EventTableProps> = ({ events, onDeleteEvent }) => {
                   <TableItemActivity
                     slug={event.slug}
                     title={event.title}
-                    onDeleteEventState={onDeleteEvent}
+                    onUpdateEvents={onUpdateEvents}
                   />
                 </TableCell>
               </TableRow>
