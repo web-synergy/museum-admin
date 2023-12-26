@@ -46,7 +46,7 @@ const EventForm: FC<EventFormProps> = ({ defaultValues, type, slug }) => {
   const isFieldWasChanged = Object.keys(formState.dirtyFields);
   const dateError = useMemo(() => {
     if (begin && end) {
-      return DateTime.fromISO(begin) >= DateTime.fromISO(end);
+      return DateTime.fromISO(begin) > DateTime.fromISO(end);
     }
     return false;
   }, [begin, end]);
